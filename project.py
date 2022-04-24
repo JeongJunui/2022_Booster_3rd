@@ -53,6 +53,11 @@ class Book:
     def get_Book_info(self,ind): # 책 정보 확인
         return self.__book[ind,:]# 인덱스에 해당하는 책 정보를 리턴
 
+    def get_Book_Rented(self,ind):
+        return self.__book[ind,7]
+    def set_Book_Rented(self,ind,rt):
+        self.__book[ind,7]=rt
+        
     def search_Book_ByTitle(self,title): # 책 제목으로 검색 (IF-003)
         """
         for s in len(str(title)): # 검색된 문자열을 문자열 길이만큼 반복문으로 돌림
@@ -109,6 +114,12 @@ class User:
         
     def get_User_info(self,ind): # 회원 정보 확인
         return self.__user[ind,:]# 인덱스에 해당하는 책 정보 리턴
+    
+    def get_User_Rented(self,ind):# 대출한 도서 갯수 반환
+        return self.__user[ind,7]
+
+    def set_User_Rented(self,ind,ud):
+        self.__user[ind,7]+=ud#+1 혹은 -1을 받아서 계산
 
     def add_User_Info(self,inf): # 회원 등록 (IF-008)
         self.__user=np.append(self.__book,inf,axis=0) # 행 방향으로 정보 추가
