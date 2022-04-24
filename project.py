@@ -306,12 +306,6 @@ def Book_Add():
     btn_cancel = Button(panedwindow1, text="취소", command=lambda: panedwindow1.pack_forget())
     btn_cancel.grid(row=8, column=1, padx=100)
 
-    # pw = Label(root, text="asdasdasdd", width=160, height=40)
-    # pw.place(x=200, y=200)
-
-    # frame1 = Frame(root, relief="solid", bd=2)
-    # frame1.pack(side="left", fill="both", expand=True)
-
 
 # 도서 조회
 def Book_Search():
@@ -472,7 +466,7 @@ def Book_Show(event):
     labelUrl.grid(row=6, column=0, padx=100)
     textUrl.grid(row=6, column=1, padx=100)
     
-    labelRent = Label(new, text="대출여부 : ") # -> Url으로 되어있어서 수정함 
+    labelRent = Label(new, text="대출여부 : ") 
     textRent = Entry(new)
     labelRent.grid(row=7, column=0, padx=100)
     textRent.grid(row=7, column=1, padx=100)
@@ -607,17 +601,17 @@ def User_Search():
     title = Label(panedwindow1, text="회원 조회")
     title.grid(row=0, column=1, padx=100)
 
-    label_book_name = Label(panedwindow1, text="이름 : ") # 회원 이름인데 왜 book_name인가?
-    label_book_name.grid(row=1, column=0, padx=100)
-    text_book_name = Entry(panedwindow1)
-    text_book_name.grid(row=1, column=1, padx=100)
+    label_user_name = Label(panedwindow1, text="이름 : ")
+    label_user_name.grid(row=1, column=0, padx=100)
+    text_user_name = Entry(panedwindow1)
+    text_user_name.grid(row=1, column=1, padx=100)
     btn_view = Button(panedwindow1, text="조회")
     btn_view.grid(row=1, column=2, padx=100)
 
-    label_author = Label(panedwindow1, text="연락처 : ") # 연락처인데 왜 author인가 ?
-    label_author.grid(row=2, column=0, padx=100)
-    text_author = Entry(panedwindow1)
-    text_author.grid(row=2, column=1, padx=100)
+    label_phone = Label(panedwindow1, text="연락처 : ")
+    label_phone.grid(row=2, column=0, padx=100)
+    text_phone = Entry(panedwindow1)
+    text_phone.grid(row=2, column=1, padx=100)
 
     treeview = tkinter.ttk.Treeview(panedwindow1,
                                     column=["t_name", "t_birth", "t_hp", "t_gender", "t_email", "t_check", "t_check_for_exit"],
@@ -657,7 +651,6 @@ def User_Search():
     btn_cancel.grid(row=4, column=1, padx=100)
 
 def User_Show(event):
-    # item = self.tree.selection()[0]
     global new
     
     #def print_user_info(ind): # 조회한 회원의 정보 출력을 위한 메소드
@@ -725,35 +718,35 @@ def User_Show(event):
     labelBirth.grid(row=2, column=0, padx=100)
     textBirth.grid(row=2, column=1, padx=100)
 
-    labelHP = Label(new, text="전화번호 : ") #Author라고 되어있어서 HP로 수정함
+    labelHP = Label(new, text="전화번호 : ")
     textHP = Entry(new)
     labelHP.grid(row=3, column=0, padx=100)
     textHP.grid(row=3, column=1, padx=100)
 
-    labelGender = Label(new, text="성별 : ") #Pub으로 되어있어서 Gender로 수정함
+    labelGender = Label(new, text="성별 : ")
     textGender = Entry(new)
     labelGender.grid(row=4, column=0, padx=100)
     textGender.grid(row=4, column=1, padx=100)
 
-    labelEmail = Label(new, text="이메일: ") #Price로 되어있어서 Email로 수정
+    labelEmail = Label(new, text="이메일: ")
     textEmail = Entry(new)
     labelEmail.grid(row=5, column=0, padx=100)
     textEmail.grid(row=5, column=1, padx=100)
 
-    labelPicture = Label(new, text="사진 : ") #Url로 되어있어서 Picture로 수정
+    labelPicture = Label(new, text="사진 : ") 
     textPicture = Entry(new)
     labelPicture.grid(row=6, column=0, padx=100)
     textPicture.grid(row=6, column=1, padx=100)
 
-    labelRent = Label(new, text="대출여부 : ") #Url로 되어있어서 Rent로 수정
+    labelRent = Label(new, text="대출여부 : ")
     textRent = Entry(new)
     labelRent.grid(row=7, column=0, padx=100)
     textRent.grid(row=7, column=1, padx=100)
 
-    labelUrl = Label(new, text="탈퇴여부 : ") # 탈퇴 여부인데 왜 Url인가?
-    textUrl = Entry(new)
-    labelUrl.grid(row=8, column=0, padx=100)
-    textUrl.grid(row=8, column=1, padx=100)
+    labelExit = Label(new, text="탈퇴여부 : ")
+    textExit = Entry(new)
+    labelExit.grid(row=8, column=0, padx=100)
+    textExit.grid(row=8, column=1, padx=100)
 
     btn_check_dup = Button(new, text="수정")
     btn_check_dup.grid(row=9, column=0, padx=100)
@@ -769,8 +762,6 @@ def User_Show(event):
 def Rent_User_Search():
     panedwindow1 = PanedWindow(relief="raised", bd=2)
     panedwindow1.pack(expand=True)
-
-    # 먼저 회원을 선택 -> ?
 
     def print_rent_user(ind): # 이름 검색을 누를시에 회원 리스트와 대출여부가 출력되게 하는 메소드
         #User_Search에서 했던 것처럼 -> user_search에서 ?
@@ -797,17 +788,17 @@ def Rent_User_Search():
     title = Label(panedwindow1, text="도서 대여 - 회원 선택")
     title.grid(row=0, column=1, padx=100)
 
-    label_book_name = Label(panedwindow1, text="이름 : ") #회원 이름인데 왜 book_name인가?
-    label_book_name.grid(row=1, column=0, padx=100)
-    text_book_name = Entry(panedwindow1)
-    text_book_name.grid(row=1, column=1, padx=100)
+    label_user_name = Label(panedwindow1, text="이름 : ")
+    label_user_name.grid(row=1, column=0, padx=100)
+    text_user_name = Entry(panedwindow1)
+    text_user_name.grid(row=1, column=1, padx=100)
     btn_view = Button(panedwindow1, text="조회")
     btn_view.grid(row=1, column=2, padx=100)
 
-    label_author = Label(panedwindow1, text="연락처 : ") #연락처인데 왜 author인가?
-    label_author.grid(row=2, column=0, padx=100)
-    text_author = Entry(panedwindow1)
-    text_author.grid(row=2, column=1, padx=100)
+    label_phone = Label(panedwindow1, text="연락처 : ")
+    label_phone.grid(row=2, column=0, padx=100)
+    text_phone = Entry(panedwindow1)
+    text_phone.grid(row=2, column=1, padx=100)
 
     treeview = tkinter.ttk.Treeview(panedwindow1,
                                     column=["t_name", "t_birth", "t_hp", "t_gender", "t_email", "t_check"],
@@ -847,7 +838,6 @@ def Rent_User_Search():
     btn_cancel.grid(row=4, column=1, padx=100)
 
 def Rent_Book_Search(before):
-    # 이전 창을 닫습니다. -> gui
     def check_book_rent(title): # 도서 정보를 검색시에 해당 도서의 대출 여부 정보를 불러오는 메소드
         #Book_Search에서 도서명으로 검색했던 것처럼
         #BO.search_Book_ByTitle(title)
@@ -918,7 +908,6 @@ def Rent_Book_Search(before):
 
 
 def Rent_Show(event):
-    # item = self.tree.selection()[0]
     global new
 
     def save_rent(SEQ,ISBN,PHONE,DATE,RETURN_DATE,RETURN_YN): # 대출 완료 버튼을 눌렀을 시에 대출 정보를 저장하는 메소드 -> gui (버튼작용)
@@ -1086,7 +1075,6 @@ def Rent_Search():
 
 
 def Rent_State_Show(event):
-    # item = self.tree.selection()[0]
     global new
     
     def book_return(ind): # 도서 반납 메소드
