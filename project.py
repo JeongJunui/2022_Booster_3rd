@@ -57,6 +57,7 @@ class Book:
         return self.__book[ind,7]
     def set_Book_Rented(self,ind,rt):
         self.__book[ind,7]=rt
+        self.save_to_csv()
         
     def search_Book_ByTitle(self,title): # 책 제목으로 검색 (IF-003)
         """
@@ -120,6 +121,7 @@ class User:
 
     def set_User_Rented(self,ind,ud):
         self.__user[ind,7]+=ud#+1 혹은 -1을 받아서 계산
+        self.save_to_csv()
 
     def add_User_Info(self,inf): # 회원 등록 (IF-008)
         self.__user=np.append(self.__book,inf,axis=0) # 행 방향으로 정보 추가
@@ -160,6 +162,9 @@ class Rent:
         rentdf=pd.DataFrame(self.__rent, columns=rent_col)
         rentdf.to_csv('./Rent.csv', encoding='UTF-8')
         
+    def get_Rent_Info(self,ind):
+        return self.__rent[ind,:]
+    
     def rent_Book(self,isbn,phone,dat): # 도서대출  (IF-013)
         add_info=np.array([int(self.__rent.size/6),isbn,phone,dat,dat+timedelta(days=14),False])# 대출 정보를 numpy 형태로 변환
         # 날짜 형식 계산은 나중에 추가할 예정
@@ -204,9 +209,9 @@ def Book_Add():
     isConfirmed=False # 체크를 했는가 저장하는 boolean 변수, 기본값은 False
     def get_user(): # ISBN 중복 확인을 위해 도서 리스트를 불러오는 위한 메소드
         if BO.get_IsIn("""textISBN에서 문자열 불러와서 집어넣기"""): # ISBN 집어넣어서 있으면 True(등록된 거 있음), 없으면 False 받아옴
-            print(" 이미 등록된 도서입니다.")
+            root.messagebox.showinfo("중복확인결과"," 이미 등록된 도서입니다.")
         else:
-            print("등록 가능한 도서입니다.")
+            root.messagebox.showinfo("중복확인결과","등록 가능한 도서입니다.")
             isConfirmed=True # 체크-> True
             confirmedISBN="""textISBN에서 불러온 문자열""" # 중복확인한 거 저장
 
@@ -214,22 +219,25 @@ def Book_Add():
         add_book_list=np.array([])
     
         if: #등록버튼을 눌렀을 때 isConfirmed가 False면 체크를 안 했다는 소리이므로 중복확인하라고 메세지박스 띄우고 리턴(빠꾸) -> 버튼처리
-            print("중복확인을 하세요")
+            root.messagebox.showinfo("경고","중복확인을 하세요")
             return 0
         else:
             if textISBN!=confirmedISBN:
                 isConfirmed=False
-                print("중복확인을 다시 하세요")
+                root.messagebox.showinfo("경고","중복확인을 다시 하세요")
                 return 0
             
             if textBookName=='' and textAuthor=='' and textPub=='': # 도서명,저자,출판사 셋중 하나를 입력하지 않았을경우 경고메세지 출력
+                textWrite=""
                 if textBookName=='':
-                    print("도서명이 입력되어있지 않습니다.") # 팝업창 처리
+                    textWrite+="도서명이 입력되어있지 않습니다.\n" # 팝업창 처리
                 elif textAuthor=='':
-                    print("저자명이 입력되어있지 않습니다.") # 팝업창 처리
+                    textWrite+="저자명이 입력되어있지 않습니다.\n" # 팝업창 처리
                 elif textPub=='':
-                    print("출판사가 입력되어있지 않습니다.") # 팝업창 처리
-                print("필수사항을 입력해주세요.")
+                    textWrite+="출판사가 입력되어있지 않습니다.\n" # 팝업창 처리
+                textWrite+="필수사항을 입력해주세요."
+                root.messagebox.showinfo("경고",textWrite)
+                return 0
         
         add_book_list=np.append(textISBN)
         add_book_list=np.append(textBookName)
@@ -239,7 +247,7 @@ def Book_Add():
         add_book_list=np.append(textUrl)
         add_book_list=np.append(textDesc)
         BO.add_Book_Info(add_book_list)
-        print("도서 등록이 완료되었습니다.") # 팝업창
+        root.messagebox.showinfo("알림","도서 등록이 완료되었습니다.")# 팝업창
         confirmedISBN="" # 중복 등록 방지를 위해 초기화
         isConfirmed=False
 
@@ -391,13 +399,16 @@ def Book_Show(event):
         modify_list=np.array([])
 
         if textBookName=='' and textAuthor=='' and textPub=='': # 도서명,저자,출판사 셋중 하나를 입력하지 않았을경우 경고메세지 출력
-                if textBookName=='':
-                    print("도서명이 입력되어있지 않습니다.") # 팝업창 처리
-                elif textAuthor=='':
-                    print("저자명이 입력되어있지 않습니다.") # 팝업창 처리
-                elif textPub=='':
-                    print("출판사가 입력되어있지 않습니다.") # 팝업창 처리
-                print("필수사항을 입력해주세요.")
+            textWrite=""
+            if textBookName=='':
+                textWrite+="도서명이 입력되어있지 않습니다.\n" # 팝업창 처리
+            elif textAuthor=='':
+                textWrite+="저자명이 입력되어있지 않습니다.\n" # 팝업창 처리
+            elif textPub=='':
+                textWrite+="출판사가 입력되어있지 않습니다.\n" # 팝업창 처리
+            textWrite+="필수사항을 입력해주세요."
+            root.messagebox.showinfo("경고",textWrite)
+            return 0
 
         modify_list=np.append(textISBN)
         modify_list=np.append(textBookName)
@@ -489,15 +500,19 @@ def User_Add():
             return 0
         else:
             if textName=='' and textBirth=='' and textGender=='' and textEmail=='': # 이름,생년월일,성별,이메일 넷중 하나를 입력하지 않았을경우 경고메세지 
+                
+                textWrite=""
                 if textName=='':
-                    print("회원명이 입력되어있지 않습니다.") # 팝업창 처리
+                    textWrite+="회원명이 입력되어있지 않습니다.\n" # 팝업창 처리
                 elif textBirth=='':
-                    print("생년월일이 입력되어있지 않습니다.") # 팝업창 처리
+                    textWrite+="생년월일이 입력되어있지 않습니다.\n" # 팝업창 처리
                 elif textGender=='':
-                    print("성별이 입력되어있지 않습니다.") # 팝업창 처리
+                    textWrite+="성별이 입력되어있지 않습니다.\n" # 팝업창 처리
                 elif textEmail=='':
-                    print("이메일이 입력되어있지 않습니다.") 
-                print("필수사항을 입력해주세요.")
+                    textWrite+="이메일이 입력되어있지 않습니다.\n"
+                textWrite+="필수사항을 입력해주세요."
+                root.messagebox.showinfo("경고",textWrite)
+                return 0
         
         d=dt.datetime.now().strftime('%Y-%m-%d')
         add_user_list=np.append(textName)
@@ -650,15 +665,18 @@ def User_Show(event):
         modify_user_list=np.array([])
 
         if textName=='' and textBirth=='' and textGender=='' and textEmail=='': # 이름,생년월일,성별,이메일 넷중 하나를 입력하지 않았을경우 경고메세지 
+            textWrite=""
             if textName=='':
-                print("회원명이 입력되어있지 않습니다.") # 팝업창 처리
+                textWrite+="회원명이 입력되어있지 않습니다.\n" # 팝업창 처리
             elif textBirth=='':
-                print("생년월일이 입력되어있지 않습니다.") # 팝업창 처리
+                textWrite+="생년월일이 입력되어있지 않습니다.\n" # 팝업창 처리
             elif textGender=='':
-                print("성별이 입력되어있지 않습니다.") # 팝업창 처리
+                textWrite+="성별이 입력되어있지 않습니다.\n" # 팝업창 처리
             elif textEmail=='':
-                print("이메일이 입력되어있지 않습니다.") 
-            print("필수사항을 입력해주세요.")
+                textWrite+="이메일이 입력되어있지 않습니다.\n"
+            textWrite+="필수사항을 입력해주세요."
+            root.messagebox.showinfo("경고",textWrite)
+            return 0
 
         d=dt.datetime.now().strftime('%Y-%m-%d')
         modify_user_list=np.append(textName)
