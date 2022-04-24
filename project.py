@@ -25,6 +25,8 @@ book_list=np.append(book_list,df2)
 book_list=np.reshape(book_list,(int(book_list.size/9),9))
 book_list=book_list[:,1:]
 
+#rent, user, book_list 이 세개는 csv 파일에서 불러와서 인터페이스에 집어넣고 나면 안 써야 됩니다. 코드 본문에서 _list 쓰지 말고 인터페이스 경유해서 정보 받으세요
+
 class Book:
     
     def __init__(self,book): #생성자
@@ -53,9 +55,9 @@ class Book:
     def get_Book_info(self,ind): # 책 정보 확인
         return self.__book[ind,:]# 인덱스에 해당하는 책 정보를 리턴
 
-    def get_Book_Rented(self,ind):
+    def get_IsRented(self,ind):
         return self.__book[ind,7]
-    def set_Book_Rented(self,ind,rt):
+    def set_IsRented(self,ind,rt):
         self.__book[ind,7]=rt
         self.save_to_csv()
         
@@ -116,10 +118,10 @@ class User:
     def get_User_info(self,ind): # 회원 정보 확인
         return self.__user[ind,:]# 인덱스에 해당하는 책 정보 리턴
     
-    def get_User_Rented(self,ind):# 대출한 도서 갯수 반환
+    def get_IsRented(self,ind):# 대출한 도서 갯수 반환
         return self.__user[ind,7]
 
-    def set_User_Rented(self,ind,ud):
+    def set_IsRented(self,ind,ud):
         self.__user[ind,7]+=ud#+1 혹은 -1을 받아서 계산
         self.save_to_csv()
 
@@ -209,9 +211,9 @@ def Book_Add():
     isConfirmed=False # 체크를 했는가 저장하는 boolean 변수, 기본값은 False
     def get_user(): # ISBN 중복 확인을 위해 도서 리스트를 불러오는 위한 메소드
         if BO.get_IsIn("""textISBN에서 문자열 불러와서 집어넣기"""): # ISBN 집어넣어서 있으면 True(등록된 거 있음), 없으면 False 받아옴
-            root.messagebox.showinfo("중복확인결과"," 이미 등록된 도서입니다.")
+            messagebox.showinfo("중복확인결과"," 이미 등록된 도서입니다.")
         else:
-            root.messagebox.showinfo("중복확인결과","등록 가능한 도서입니다.")
+            messagebox.showinfo("중복확인결과","등록 가능한 도서입니다.")
             isConfirmed=True # 체크-> True
             confirmedISBN="""textISBN에서 불러온 문자열""" # 중복확인한 거 저장
 
@@ -219,15 +221,16 @@ def Book_Add():
         add_book_list=np.array([])
     
         if: #등록버튼을 눌렀을 때 isConfirmed가 False면 체크를 안 했다는 소리이므로 중복확인하라고 메세지박스 띄우고 리턴(빠꾸) -> 버튼처리
-            root.messagebox.showinfo("경고","중복확인을 하세요")
+            messagebox.showinfo("경고","중복확인을 하세요")
             return 0
         else:
             if textISBN!=confirmedISBN:
                 isConfirmed=False
-                root.messagebox.showinfo("경고","중복확인을 다시 하세요")
+                messagebox.showinfo("경고","중복확인을 다시 하세요")
                 return 0
             
             if textBookName=='' and textAuthor=='' and textPub=='': # 도서명,저자,출판사 셋중 하나를 입력하지 않았을경우 경고메세지 출력
+                #이거 and 말고 or 써야됩니다
                 textWrite=""
                 if textBookName=='':
                     textWrite+="도서명이 입력되어있지 않습니다.\n" # 팝업창 처리
@@ -236,7 +239,7 @@ def Book_Add():
                 elif textPub=='':
                     textWrite+="출판사가 입력되어있지 않습니다.\n" # 팝업창 처리
                 textWrite+="필수사항을 입력해주세요."
-                root.messagebox.showinfo("경고",textWrite)
+                messagebox.showinfo("경고",textWrite)
                 return 0
         
         add_book_list=np.append(textISBN)
@@ -246,8 +249,9 @@ def Book_Add():
         add_book_list=np.append(textPrice)
         add_book_list=np.append(textUrl)
         add_book_list=np.append(textDesc)
+        #대출 여부 초기값 True로 배열에 추가해야 됩니다
         BO.add_Book_Info(add_book_list)
-        root.messagebox.showinfo("알림","도서 등록이 완료되었습니다.")# 팝업창
+        messagebox.showinfo("알림","도서 등록이 완료되었습니다.")# 팝업창
         confirmedISBN="" # 중복 등록 방지를 위해 초기화
         isConfirmed=False
 
@@ -318,10 +322,12 @@ def Book_Search():
 
     def print_book_list(): # 도서 조회시 관련 도서의 리스트를 화면에 출력해주는 메소드
         #treeValue랑 연계 
+        searched_list=np.array([])
         if book_textbox.get(): # 도서명이 입력된 경우
-            print(BO.search_Book_ByTitle(text_book_name)) # 제목으로 도서 검색하는 함수 호출
+            searched_list=BO.search_Book_ByTitle(text_book_name) # 제목으로 도서 검색하는 함수 호출
         elif author_textbox.get(): # 저자명이 입력된 경우
-            print(BO.search_Book_ByAuthor(text_author)) # 책 저자로 검색하는 함수 호출
+            searched_list=BO.search_Book_ByAuthor(text_author) # 책 저자로 검색하는 함수 호출
+        #이 다음에 treeValue에 추가하는 작업할 예정
 
     def get_book(): # 도서 정보를 불러오는 메소드
         #print(BS.get_Book_info()) # 책 정보 확인 ( 도서 정보 리스트 출력 )
@@ -407,7 +413,7 @@ def Book_Show(event):
             elif textPub=='':
                 textWrite+="출판사가 입력되어있지 않습니다.\n" # 팝업창 처리
             textWrite+="필수사항을 입력해주세요."
-            root.messagebox.showinfo("경고",textWrite)
+            messagebox.showinfo("경고",textWrite)
             return 0
 
         modify_list=np.append(textISBN)
@@ -416,6 +422,7 @@ def Book_Show(event):
         modify_list=np.append(textPub)
         modify_list=np.append(textPrice)
         modify_list=np.append(textUrl)
+        #도서 설명이 빠져있네요
         modify_list=np.append(textRent)
         BO.add_Book_Info(modify_list)
         print("도서 수정이 완료되었습니다.") # 팝업창
@@ -423,11 +430,11 @@ def Book_Show(event):
         #isbn이 수정되는걸 체크해야되나 ?
 
     def delete_book(): # 삭제 버튼을 눌렀을 때 해당된 도서 정보가 원래의 도서 리스트에서 삭제되어 도서 리스트에 저장 하기 위한 메소드
-        if book_list[ind:8]==True:
-            root.messagebox.showinfo("경고","대출중인 도서는 삭제할 수 없습니다.")
+        if book_list[ind:8]==True:#BO.get_IsRented(ind)로 불러오시면 됩니다. 좀전에 
+            messagebox.showinfo("경고","대출중인 도서는 삭제할 수 없습니다.")
         else:
             BO.drop_Book_Info()  # 도서 삭제 함수 호출
-            root.messagebox.showinfo("알림","해당 도서가 삭제되었습니다.")# 팝업창
+            messagebox.showinfo("알림","해당 도서가 삭제되었습니다.")# 팝업창
             
     def get_book(): # 도서 정보를 불러오는 메소드
         #print(BS)
@@ -486,7 +493,7 @@ def User_Add():
     
     def check_user(): # 회원 중복 확인을 위한 메소드
         if US.get_IsIn(textHP): # 중복되는 전화번호 있으면 True, 없으면 False
-            useradd_msgbox.showinfo(text="이미 등록된 회원입니다.") # 팝업창
+            messagebox.showinfo(text="이미 등록된 회원입니다.") # 팝업창
         else:
             useradd_msgbox.showinfo(text="등록 가능한 회원입니다.") # 팝업창
             isConfirmed=True # 중복 확인했으므로 True
@@ -496,11 +503,11 @@ def User_Add():
         add_user_list=np.array([])
     
         if: # 등록버튼을 눌렀을 때 isConfirmed가 False면 체크를 안 했다는 소리이므로 중복확인하라고 메세지박스 띄우고 리턴(빠꾸) -> 버튼처리
-            root.messagebox.showinfo("경고","중복확인을 하세요")
+            messagebox.showinfo("경고","중복확인을 하세요")
             return 0
         else:
             if textName=='' and textBirth=='' and textGender=='' and textEmail=='': # 이름,생년월일,성별,이메일 넷중 하나를 입력하지 않았을경우 경고메세지 
-                
+                #여기도 and 말고 or
                 textWrite=""
                 if textName=='':
                     textWrite+="회원명이 입력되어있지 않습니다.\n" # 팝업창 처리
@@ -511,7 +518,7 @@ def User_Add():
                 elif textEmail=='':
                     textWrite+="이메일이 입력되어있지 않습니다.\n"
                 textWrite+="필수사항을 입력해주세요."
-                root.messagebox.showinfo("경고",textWrite)
+                messagebox.showinfo("경고",textWrite)
                 return 0
         
         d=dt.datetime.now().strftime('%Y-%m-%d')
@@ -520,9 +527,11 @@ def User_Add():
         add_user_list=np.append(textHP)
         add_user_list=np.append(textGender)
         add_user_list=np.append(textEmail)
-        add_user_list=np.append(textUrl)
+        add_user_list=np.append(textUrl)#Url?
+        #가입일자 추가가 안 되어있네요
+        #탈퇴일자도 빈 값으로 추가를 해주세요
         US.add_User_Info(add_user_list)
-        print("회원 등록이 완료되었습니다.") # 팝업창
+        messagebox.showinfo("알림","회원 등록이 완료되었습니다.")# 팝업창
         confirmedHP="" # 중복 등록 방지를 위해 초기화
         isConfirmed=False
 
@@ -581,6 +590,7 @@ def User_Add():
 def User_Search():
 
     def get_user(ind): # 회원 정보를 불러오는 메소드
+        #위에 Book_Search에서 하셨던 대로 하시면 되는데...
         User.search_User_ByName(name) # 1. 이름으로 회원조회 -> 선택하는 과정 추가 ( 원하는 이름 선택)-> gui?
         user=User.search_list[name,2] # 이름 선택
         User.get_User_info(user) # 해당 회원의 정보 출력
@@ -665,6 +675,7 @@ def User_Show(event):
         modify_user_list=np.array([])
 
         if textName=='' and textBirth=='' and textGender=='' and textEmail=='': # 이름,생년월일,성별,이메일 넷중 하나를 입력하지 않았을경우 경고메세지 
+            #and 말고 or
             textWrite=""
             if textName=='':
                 textWrite+="회원명이 입력되어있지 않습니다.\n" # 팝업창 처리
@@ -675,10 +686,11 @@ def User_Show(event):
             elif textEmail=='':
                 textWrite+="이메일이 입력되어있지 않습니다.\n"
             textWrite+="필수사항을 입력해주세요."
-            root.messagebox.showinfo("경고",textWrite)
+            messagebox.showinfo("경고",textWrite)
             return 0
 
         d=dt.datetime.now().strftime('%Y-%m-%d')
+        #가입일자를 다시 읽어올 필요는 없습니다
         modify_user_list=np.append(textName)
         modify_user_list=np.append(textBirth)
         modify_user_list=np.append(textHP)
@@ -686,16 +698,16 @@ def User_Show(event):
         modify_user_list=np.append(textEmail)
         modify_user_list=np.append(textUrl)
         US.set_User_Info(modify_user_list)
-        print("도서 수정이 완료되었습니다.") # 팝업창
+        messagebox.showinfo("알림","도서 수정이 완료되었습니다.")# 팝업창
         
     def delete_user(ind): # 삭제 버튼을 눌렀을 때 해당 회원 정보가 원래의 회원 리스트에서 삭제되어 회원 리스트에 저장하기 위한 메소드
         
-        if user_list[ind,7]!=False: # 사용자가 도서 대출 중일 때
-            print("도서 대출 중인 회원은 탈퇴할 수 없습니다.")
+        if user_list[ind,7]!=False: # 사용자가 도서 대출 중일 때 #US.get_IsRented(ind) 쓰시면 됩니다. 리턴 값은 대출 중인 책 권수(int형)
+            messagebox.showinfo("경고","도서 대출 중인 회원은 탈퇴할 수 없습니다.")
         else:
-            print("회원탈퇴가 완료되었습니다.")
             d=dt.datetime.now() # 반납 예정일 저장
             US.drop_User_Info(ind,d) # 회원탈퇴 메소드 호출
+            messagebox.showinfo("알림","회원탈퇴가 완료되었습니다.")
 
     def get_user(name,phone): # 회원 정보를 불러오는 메소드
         #User.search_User_ByName(name) # 이름으로 회원 조회했을시
@@ -773,8 +785,8 @@ def Rent_User_Search():
             #print("%d권 대출 중",user_list[ind,8],axis='\n') # 대출여부 출력
         
     def update_rent_situation(ind,isbn,phone,dat): # 선택 버튼을 눌렀을 시에 해당 회원의 대출 여부가 도서 대출 중으로 바뀌어 저장하는 메소드
-        if US.user_list[ind,8]==3: # 대출 진행 불가능 -> 해당 회원이 3권을 빌린 상태인지를 먼저 체크해야 함
-            print("대출할 수 있는 최대 권수를 3권입니다.")
+        if US.user_list[ind,8]==3: # 대출 진행 불가능 -> 해당 회원이 3권을 빌린 상태인지를 먼저 체크해야 함#US.get_IsRented(ind)로 불러오시면 
+            messagebox.showinfo("경고","대출할 수 있는 최대 권수는 3권입니다.")
         
         #US.user_list[ind,8]+=1 # 대출 권수 1추가 
         #RE.rent_Book(isbn,phone,dat) # 대출 여부
@@ -842,8 +854,8 @@ def Rent_Book_Search(before):
         #book_list[ind,8] # 해당 도서의 대출 여부 정보 
 
     def update_rent_situation(ind): # 선택 버튼을 눌렀을 시에 대출 상태가 대출중으로 바뀌어 저장되게하고, 대출 정보 화면을 띄어주게 하는 메소드
-        if book_list[ind,8]==TRUE:
-            print("이미 대출 중인 도서입니다.")
+        if book_list[ind,8]==TRUE:#BO.get_IsRented(ind)
+            messagebox.showinfo("경고","이미 대출 중인 도서입니다.")
         else:
             book_list[ind,8]==TRUE
             
@@ -1160,7 +1172,7 @@ def Rent_State_Show(event):
     labelBackCheck.grid(row=8, column=2, padx=100)
     textBackCheck.grid(row=8, column=3, padx=100)
 
-    btn_check_dup = Button(new, text="반납하기")
+    btn_check_dup = Button(new, text="반납하기", command=book_return)
     btn_check_dup.grid(row=9, column=1, padx=100)
 
     btn_check_dup = Button(new, text="취소", command=lambda: new.destroy())
