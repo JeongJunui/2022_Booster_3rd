@@ -186,30 +186,6 @@ class book_add: #도서 등록하는 GUI를 출력하는 클래스
             print("등록 가능한 도서입니다.")
         
     def add_book(inf): # 등록 버튼을 눌렀을 때 등록한 도서의 정보가 원래 도서 리스트에 추가해 주는 메소드
-        bookadd_label=Label("도서등록")
-        ISBN_label=Label("ISBN")
-        ISBN_textbox=Text(root,width=17,height=3)
-        ISBN_textbox.pack()
-        ISBN_btn=Button(root,text="중복확인",command=get_user)
-        root.title("ISBN의 중복 확인")
-        messagebox.showinfo("ISBN의 중복 확인",get_user) #메세지박스(박스제목,박스내용)
-
-        bookname_label=Label("도서명 : ")
-        bookname_textbox=Text(root,width=20,height=3)
-        author_label=Label("저자 : ")
-        author_textbox=Text(root,width=20,height=3)
-        publisher_label=Label("출판사 : ")
-        publisher_textbox=Text(root,width=20,height=3)
-        price_label=Label("가격 : ")
-        price_textbox=Text(root,width=20,height=3)
-        URL_label=Label("관련URL : ")
-        URL_textbox=Text(root,width=20,height=3)
-        bookex_label=Label("도서 설명 : ")
-        bookex_textbox=Text(root,width=20,height=3)
-
-        add_btn=Button(root,text="등록")
-        Cancel_btn=Button(root,text="취소")
-
         BO.add_Book_Info(inf) # 도서 등록 메소드 불러옴
 
 class book_search: # 도서 조회 GUI를 출력하는 클래스
@@ -224,13 +200,6 @@ class book_search: # 도서 조회 GUI를 출력하는 클래스
         book_show.print_book_info() # 조회한 책의 정보를 출력하는 메소드
 
     def print_book_list(): # 도서 조회시 관련 도서의 리스트를 화면에 출력해주는 메소드
-        
-        booksearch_label=Label("도서 조회 : ")
-        bookname_label=Label("도서명 : ")
-        book_textbox=Text(root,width=15,height=3)
-        author_label=Label("저자 : ")
-        author_textbox=Text(root,width=17,height=3)
-        
         if book_textbox.get(): # 도서명이 입력된 경우
             print(BO.search_Book_ByTitle()) # 제목으로 도서 검색하는 함수 호출
         elif author_textbox.get(): # 저자명이 입력된 경우
@@ -240,23 +209,7 @@ class book_search: # 도서 조회 GUI를 출력하는 클래스
         print(BO) # 책 정보 확인 ( 도서 정보 리스트 출력 )
         
 class book_show: # 선택한 도서 정보 GUI를 출력하는 클래스
-    
-    bookinfor_label=Label("도서 정보 - ISBN:9788970504773") # --> 도서가 바뀔때마다 바뀌도록 
-    ISBN_label=Label("ISBN : ")
-    ISBN_textbox=Text(root,width=20,height=3)
-    bookname_label=Label("도서명 : ")
-    bookname_textbox=Text(root,width=20,height=3)
-    author_label=Label("저자 : ")
-    author_textbox=Text(root,width=20,height=3)
-    publisher_label=Label("출판사 : ")
-    publisher_textbox=Text(root,width=20,height=3)
-    price_label=Label("가격 : ")
-    price_textbox=Text(root,width=20,height=3)
-    URL_label=Label("관련URL : ")
-    URL_textbox=Text(root,width=20,height=3)
-    bookloan_label=Label("대출여부 : ")
-    bookloan_textbox=Text(root,width=20,height=3)
-
+   
     #def onClick(): # 클릭 이벤트 처리를 위한 메소드
 
     def print_book_info(ind): # 조회한 책의 정보 출력을 위한 메소드
@@ -284,21 +237,6 @@ US=User(user_list)
 
 class user_add: # 회원 등록 GUI를 출력하는 클래스
 
-    useradd_label=Label("회원 등록")
-    username_label=Label("이 름 : ")
-    username_textbox=Text(root,width=20,height=3)
-    userbirth_label=Label("생년월일 : ")
-    userbirth_textbox=Text(root,width=20,height=3)
-    userphone_label=Label("전화번호 : ")
-    userphone_textbox=Text(root,width=20,height=3)
-    usergender_label=Label("성 별 : ")
-    usergender_textbox=Text(root,width=20,height=3)
-    useremail_label=Label("이메일 : ")
-    useremail_textbox=Text(root,width=20,height=3)
-    userimage_label=Label("사 진 : ")
-    userimage_textbox=Text(root,width=20,height=3)
-
-
     #def onClick(): # 클릭 이벤트 처리를 위한 메소드
 
     def check_user(): # 회원 중복 확인을 위한 메소드
@@ -316,10 +254,6 @@ class user_add: # 회원 등록 GUI를 출력하는 클래스
 
 class user_saerch: # 회원 조회 GUI를 출력하는 클래스
 
-    usersearch_label=Label("회원 조회")
-    username_label=Label("이름 : ")
-    userphone_label=Label("연락처 : ")
-
     #def onClick(): # 클릭 이벤트 처리를 위한 메소드
 
     #def column(column,option): # 표 열의 속성을 설정하는 메소드
@@ -332,15 +266,6 @@ class user_saerch: # 회원 조회 GUI를 출력하는 클래스
     #def get_user_show(): # 회원 조회 시 회원을 선택했을 때 book show 클래스를 불러오는 메소드 -> 새창을 띄우는것 gui?
 
 class user_show: # 선택한 회원 정보 GUI를 출력하는 클래스
-
-    userInfo_label=Label("회원 정보")
-    name_label=Label("이름")
-    birth_label=Label("생년월일")
-    phone_label=Label("전화번호")
-    gender_label=Label("성별")
-    mail_label=Label("이메일")
-    rent_check_label=Label("대출여부")
-    withdrawal_check_label=Label("탈퇴여부")
 
     #def onClick(): # 클릭 이벤트 처리를 위한 메소드
 
