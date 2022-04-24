@@ -1,3 +1,5 @@
+#실행 전에 background.png 파일 제가 올린 gui 폴더에서 다운해서 소스코드랑 같은 폴더 내에 집어 넣고 돌려야 함요
+
 from cgitb import text
 import pandas as pd
 import numpy as np
