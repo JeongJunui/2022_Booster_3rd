@@ -424,10 +424,10 @@ def Book_Show(event):
 
     def delete_book(): # 삭제 버튼을 눌렀을 때 해당된 도서 정보가 원래의 도서 리스트에서 삭제되어 도서 리스트에 저장 하기 위한 메소드
         if book_list[ind:8]==True:
-            print("대출중인 도서는 삭제할 수 없습니다.")
+            root.messagebox.showinfo("경고","대출중인 도서는 삭제할 수 없습니다.")
         else:
             BO.drop_Book_Info()  # 도서 삭제 함수 호출
-            print("해당 도서가 삭제되었습니다.") # 팝업창
+            root.messagebox.showinfo("알림","해당 도서가 삭제되었습니다.")# 팝업창
             
     def get_book(): # 도서 정보를 불러오는 메소드
         #print(BS)
@@ -470,7 +470,7 @@ def Book_Show(event):
     labelRent.grid(row=7, column=0, padx=100)
     textRent.grid(row=7, column=1, padx=100)
 
-    btn_check_dup = Button(new, text="수정")
+    btn_check_dup = Button(new, text="수정",command=modify_book)
     btn_check_dup.grid(row=8, column=0, padx=100)
 
     btn_check_dup = Button(new, text="등록")
@@ -496,7 +496,7 @@ def User_Add():
         add_user_list=np.array([])
     
         if: # 등록버튼을 눌렀을 때 isConfirmed가 False면 체크를 안 했다는 소리이므로 중복확인하라고 메세지박스 띄우고 리턴(빠꾸) -> 버튼처리
-            print("중복확인을 하세요")
+            root.messagebox.showinfo("경고","중복확인을 하세요")
             return 0
         else:
             if textName=='' and textBirth=='' and textGender=='' and textEmail=='': # 이름,생년월일,성별,이메일 넷중 하나를 입력하지 않았을경우 경고메세지 
