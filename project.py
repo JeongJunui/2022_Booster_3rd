@@ -241,7 +241,7 @@ def Book_Add():
                 messagebox.showinfo("경고","중복확인을 다시 하세요")
                 return 0
             
-            if textBookName=='' or textAuthor=='' or textPub=='': # 도서명,저자,출판사 셋중 하나를 입력하지 않았을경우 경고메세지 출력
+            if textBookName.get()=='' or textAuthor.get()=='' or textPub.get()=='': # 도서명,저자,출판사 셋중 하나를 입력하지 않았을경우 경고메세지 출력
                 #이거 and 말고 or 써야됩니다
                 textWrite=""
                 if textBookName=='':
@@ -254,13 +254,14 @@ def Book_Add():
                 messagebox.showinfo("경고",textWrite)
                 return 0
         
-        add_book_list=np.append(textISBN)
-        add_book_list=np.append(textBookName)
-        add_book_list=np.append(textAuthor)
-        add_book_list=np.append(textPub)
-        add_book_list=np.append(textPrice)
-        add_book_list=np.append(textUrl)
-        add_book_list=np.append(textDesc)
+        add_book_list=np.append(textISBN.get())
+        add_book_list=np.append(textBookName.get())
+        add_book_list=np.append(textAuthor.get())
+        add_book_list=np.append(textPub.get())
+        add_book_list=np.append(textPrice.get())
+        add_book_list=np.append(textUrl.get())
+        add_book_list=np.append(textDesc.get())
+        add_book_list=np.append(True)
         #대출 여부 초기값 True로 배열에 추가해야 됩니다
         BO.add_Book_Info(add_book_list)
         messagebox.showinfo("알림","도서 등록이 완료되었습니다.")# 팝업창
@@ -330,12 +331,12 @@ def Book_Search():
         #treeview랑 연계 
         searched_list=np.array([])
         if book_textbox.get(): # 도서명이 입력된 경우
-            searched_list=BO.search_Book_ByTitle(text_book_name) # 제목으로 도서 검색하는 함수 호출
+            searched_list=BO.search_Book_ByTitle(text_book_name.get()) # 제목으로 도서 검색하는 함수 호출
         elif author_textbox.get(): # 저자명이 입력된 경우
-            searched_list=BO.search_Book_ByAuthor(text_author) # 책 저자로 검색하는 함수 호출
+            searched_list=BO.search_Book_ByAuthor(text_author.get()) # 책 저자로 검색하는 함수 호출
         treeview.delete(*treeview.get_children())#treeview 전체를 지우는 문장
         #treeview에 넣을 데이터 정제 과정
-        treeV=[(),()]#2차원 배열
+        treeV=[[] for i in range(8)]#2차원 배열
         for i in range(int(searched_list.size)/8):
             if searched_list[i,7]:#대출 여부에 따라 문장을 다르게 삽입
                 treeV[i,0]="X"
@@ -423,33 +424,33 @@ def Book_Show(event):
         #BO.set_Book_Info() # 도서 수정 함수 호출
         modify_list=np.array([])
 
-        if textBookName=='' or textAuthor=='' or textPub=='': # 도서명,저자,출판사 셋중 하나를 입력하지 않았을경우 경고메세지 출력
+        if textBookName.get()=='' or textAuthor.get()=='' or textPub.get()=='': # 도서명,저자,출판사 셋중 하나를 입력하지 않았을경우 경고메세지 출력
             textWrite=""
-            if textBookName=='':
+            if textBookName.get()=='':
                 textWrite+="도서명이 입력되어있지 않습니다.\n" # 팝업창 처리
-            elif textAuthor=='':
+            elif textAuthor.get()=='':
                 textWrite+="저자명이 입력되어있지 않습니다.\n" # 팝업창 처리
-            elif textPub=='':
+            elif textPub.get()=='':
                 textWrite+="출판사가 입력되어있지 않습니다.\n" # 팝업창 처리
             textWrite+="필수사항을 입력해주세요."
             messagebox.showinfo("경고",textWrite)
             return 0
 
-        modify_list=np.append(textISBN)
-        modify_list=np.append(textBookName)
-        modify_list=np.append(textAuthor)
-        modify_list=np.append(textPub)
-        modify_list=np.append(textPrice)
-        modify_list=np.append(textUrl)
+        modify_list=np.append(textISBN.get())
+        modify_list=np.append(textBookName.get())
+        modify_list=np.append(textAuthor.get())
+        modify_list=np.append(textPub.get())
+        modify_list=np.append(textPrice.get())
+        modify_list=np.append(textUrl.get())
         #도서 설명이 빠져있네요
         modify_list=np.append(textRent)
         BO.add_Book_Info(modify_list)
         print("도서 수정이 완료되었습니다.") # 팝업창
         
-        #isbn이 수정되는걸 체크해야되나 ?
+        #isbn이 수정되는걸 체크해야되나 ?<-애초에 수정되면 안 되니 isbn을 아예 못 건드리게 하는게 좋을 거 같음
 
     def delete_book(): # 삭제 버튼을 눌렀을 때 해당된 도서 정보가 원래의 도서 리스트에서 삭제되어 도서 리스트에 저장 하기 위한 메소드
-        if BO.get_IsRented(isbn):#book_list[ind:8]==True:#BO.get_IsRented(ind)로 불러오시면 됩니다. 좀전에 
+        if BO.get_IsRented(textIsbn.get()):#book_list[ind:8]==True:#BO.get_IsRented(ind)로 불러오시면 됩니다. 좀전에 
             messagebox.showinfo("경고","대출중인 도서는 삭제할 수 없습니다.")
         else:
             BO.drop_Book_Info()  # 도서 삭제 함수 호출
@@ -525,28 +526,32 @@ def User_Add():
             messagebox.showinfo("경고","중복확인을 하세요")
             return 0
         else:
-            if textName=='' or textBirth=='' or textGender=='' or textEmail=='': # 이름,생년월일,성별,이메일 넷중 하나를 입력하지 않았을경우 경고메세지 
+            if textName.get()=='' or textBirth.get()=='' or textGender.get()=='' or textEmail.get()=='': # 이름,생년월일,성별,이메일 넷중 하나를 입력하지 않았을경우 경고메세지 
                 #여기도 and 말고 or
                 textWrite=""
-                if textName=='':
+                if textName.get()=='':
                     textWrite+="회원명이 입력되어있지 않습니다.\n" # 팝업창 처리
-                elif textBirth=='':
+                elif textBirth.get()=='':
                     textWrite+="생년월일이 입력되어있지 않습니다.\n" # 팝업창 처리
-                elif textGender=='':
+                elif textGender.get()=='':
                     textWrite+="성별이 입력되어있지 않습니다.\n" # 팝업창 처리
-                elif textEmail=='':
+                elif textEmail.get()=='':
                     textWrite+="이메일이 입력되어있지 않습니다.\n"
                 textWrite+="필수사항을 입력해주세요."
                 messagebox.showinfo("경고",textWrite)
                 return 0
         
         d=dt.datetime.now().strftime('%Y-%m-%d')
-        add_user_list=np.append(textName)
-        add_user_list=np.append(textBirth)
-        add_user_list=np.append(textHP)
-        add_user_list=np.append(textGender)
-        add_user_list=np.append(textEmail)
-        add_user_list=np.append(textUrl)#Url?
+        add_user_list=np.append(textName.get())
+        add_user_list=np.append(textBirth.get())
+        add_user_list=np.append(textHP.get())
+        add_user_list=np.append(textGender.get())
+        add_user_list=np.append(textEmail.get())
+        #add_user_list=np.append(textUrl.get())#Url?
+        #필요없는 값 같아서 주석처리
+        add_user_list=np.append(dt.datetime.now().strftime('%Y-%m-%d'))
+        add_user_list=np.append(np.nan)
+        add_user_list=np.append(0)
         #가입일자 추가가 안 되어있네요
         #탈퇴일자도 빈 값으로 추가를 해주세요
         US.add_User_Info(add_user_list)
@@ -689,19 +694,19 @@ def User_Show(event):
         #print(US.book[ind,6]) # 대출여부 출력
         #print(US.book[ind,7]) # 탈퇴여부 출력
 
-    def modify_user(ind): # 수정 버튼을 눌렀을 때 원래 회원 정보의 내용이 바뀌어서 저장되게 하기 위한 메소드
+    def modify_user(phnoe): # 수정 버튼을 눌렀을 때 원래 회원 정보의 내용이 바뀌어서 저장되게 하기 위한 메소드
         modify_user_list=np.array([])
 
-        if textName=='' or textBirth=='' or textGender=='' or textEmail=='': # 이름,생년월일,성별,이메일 넷중 하나를 입력하지 않았을경우 경고메세지 
+        if textName.get()=='' or textBirth.get()=='' or textGender.get()=='' or textEmail.get()=='': # 이름,생년월일,성별,이메일 넷중 하나를 입력하지 않았을경우 경고메세지 
             #and 말고 or
             textWrite=""
-            if textName=='':
+            if textName.get()=='':
                 textWrite+="회원명이 입력되어있지 않습니다.\n" # 팝업창 처리
-            elif textBirth=='':
+            elif textBirth.get()=='':
                 textWrite+="생년월일이 입력되어있지 않습니다.\n" # 팝업창 처리
-            elif textGender=='':
+            elif textGender.get()=='':
                 textWrite+="성별이 입력되어있지 않습니다.\n" # 팝업창 처리
-            elif textEmail=='':
+            elif textEmail.get()=='':
                 textWrite+="이메일이 입력되어있지 않습니다.\n"
             textWrite+="필수사항을 입력해주세요."
             messagebox.showinfo("경고",textWrite)
@@ -709,22 +714,24 @@ def User_Show(event):
 
         d=dt.datetime.now().strftime('%Y-%m-%d')
         #가입일자를 다시 읽어올 필요는 없습니다
-        modify_user_list=np.append(textName)
-        modify_user_list=np.append(textBirth)
-        modify_user_list=np.append(textHP)
-        modify_user_list=np.append(textGender)
-        modify_user_list=np.append(textEmail)
-        modify_user_list=np.append(textUrl)
+        modify_user_list=np.append(textName.get())
+        modify_user_list=np.append(textBirth.get())
+        modify_user_list=np.append(textHP.get())
+        modify_user_list=np.append(textGender.get())
+        modify_user_list=np.append(textEmail.get())
+        #modify_user_list=np.append(textUrl.get())
+        modify_user_list=np.append()#가입일 그대로 가져올 것
+        modify_user_list=np.append(np.nan)#탈퇴한 회원은 수정하지 않는다는 전제조건 하에 작업
         US.set_User_Info(modify_user_list)
         messagebox.showinfo("알림","도서 수정이 완료되었습니다.")# 팝업창
         
-    def delete_user(ind): # 삭제 버튼을 눌렀을 때 해당 회원 정보가 원래의 회원 리스트에서 삭제되어 회원 리스트에 저장하기 위한 메소드
+    def delete_user(phone): # 삭제 버튼을 눌렀을 때 해당 회원 정보가 원래의 회원 리스트에서 삭제되어 회원 리스트에 저장하기 위한 메소드
         
-        if user_list[ind,7]!=False: # 사용자가 도서 대출 중일 때 #US.get_IsRented(ind) 쓰시면 됩니다. 리턴 값은 대출 중인 책 권수(int형)
+        if US.get_IsRented(phone)!=0: # 사용자가 도서 대출 중일 때 #US.get_IsRented(ind) 쓰시면 됩니다. 리턴 값은 대출 중인 책 권수(int형)
             messagebox.showinfo("경고","도서 대출 중인 회원은 탈퇴할 수 없습니다.")
         else:
             d=dt.datetime.now() # 반납 예정일 저장
-            US.drop_User_Info(ind,d) # 회원탈퇴 메소드 호출
+            US.drop_User_Info(phone,d) # 회원탈퇴 메소드 호출
             messagebox.showinfo("알림","회원탈퇴가 완료되었습니다.")
 
     def get_user(name,phone): # 회원 정보를 불러오는 메소드
@@ -773,7 +780,7 @@ def User_Show(event):
     labelExit.grid(row=8, column=0, padx=100)
     textExit.grid(row=8, column=1, padx=100)
 
-    btn_check_dup = Button(new, text="수정")
+    btn_check_dup = Button(new, text="수정",command=modify_user)
     btn_check_dup.grid(row=9, column=0, padx=100)
 
     btn_check_dup = Button(new, text="등록")
