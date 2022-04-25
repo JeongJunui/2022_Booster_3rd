@@ -441,7 +441,7 @@ def Book_Show(event):
             messagebox.showinfo("경고",textWrite)
             return 0
 
-        modify_list=np.append(textISBN.get())
+        modify_list=np.append(int(textISBN.get()))
         modify_list=np.append(textBookName.get())
         modify_list=np.append(textAuthor.get())
         modify_list=np.append(textPub.get())
