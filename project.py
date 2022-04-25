@@ -459,7 +459,7 @@ def Book_Show(event):
             BO.drop_Book_Info()  # 도서 삭제 함수 호출
             messagebox.showinfo("알림","해당 도서가 삭제되었습니다.")# 팝업창
             
-    def get_book(): # 도서 정보를 불러오는 메소드
+    #def get_book(): # 도서 정보를 불러오는 메소드
         #print(BS)
         #print_book_info랑 겹치는 거 같은데 일단 보류
 
@@ -616,7 +616,7 @@ def User_Add():
 #회원 조회
 def User_Search():
 
-    def get_user(ind): # 회원 정보를 불러오는 메소드
+    #def get_user(ind): # 회원 정보를 불러오는 메소드
         #위에 Book_Search에서 하셨던 대로 하시면 되는데...
         
         #User.search_User_ByName(name) # 1. 이름으로 회원조회 -> 선택하는 과정 추가 ( 원하는 이름 선택)-> gui?
@@ -628,7 +628,6 @@ def User_Search():
         #User.get_User_info(user) # 해당 회원의 정보 출력
         
     #def get_user_show(): # 회원 조회 시 회원을 선택했을 때 book show 클래스를 불러오는 메소드 -> 새창을 띄우는것 gui
-      
     panedwindow1 = PanedWindow(relief="raised", bd=2)
     panedwindow1.pack(expand=True)
 
@@ -738,7 +737,7 @@ def User_Show(event):
             US.drop_User_Info(phone,d) # 회원탈퇴 메소드 호출
             messagebox.showinfo("알림","회원탈퇴가 완료되었습니다.")
 
-    def get_user(name,phone): # 회원 정보를 불러오는 메소드
+    #def get_user(name,phone): # 회원 정보를 불러오는 메소드
         #User.search_User_ByName(name) # 이름으로 회원 조회했을시
         #User.search_User_ByPhone(phone) # 연락처로 회원 조회했을시
 
@@ -799,7 +798,7 @@ def Rent_User_Search():
     panedwindow1 = PanedWindow(relief="raised", bd=2)
     panedwindow1.pack(expand=True)
 
-    def print_rent_user(ind): # 이름 검색을 누를시에 회원 리스트와 대출여부가 출력되게 하는 메소드
+    #def print_rent_user(ind): # 이름 검색을 누를시에 회원 리스트와 대출여부가 출력되게 하는 메소드
         #User_Search에서 했던 것처럼 -> user_search에서 ?
         
         #US.get_User_info(ind) # 해당 이름의 회원들 정보 불러오는 메소드
@@ -874,7 +873,7 @@ def Rent_User_Search():
     btn_cancel.grid(row=4, column=1, padx=100)
 
 def Rent_Book_Search(before):
-    def check_book_rent(title): # 도서 정보를 검색시에 해당 도서의 대출 여부 정보를 불러오는 메소드
+    #def check_book_rent(title): # 도서 정보를 검색시에 해당 도서의 대출 여부 정보를 불러오는 메소드
         #Book_Search에서 도서명으로 검색했던 것처럼
         #BO.search_Book_ByTitle(title)
         #book_list[ind,8] # 해당 도서의 대출 여부 정보 
@@ -882,12 +881,12 @@ def Rent_Book_Search(before):
     def update_rent_situation(ind): # 선택 버튼을 눌렀을 시에 대출 상태가 대출중으로 바뀌어 저장되게하고, 대출 정보 화면을 띄어주게 하는 메소드
         if BO.get_IsRented(ind):#BO.get_IsRented(ind)
             messagebox.showinfo("경고","이미 대출 중인 도서입니다.")
-        else:
+        #else:
             #book_list[ind,8]==TRUE
             
         #rent_show 클래스를 불러와야 함 ( 대출 정보 화면 띄워주기 ) -> gui
 
-    def get_book(ind): # 도서 정보를 불러오는 메소드
+    #def get_book(ind): # 도서 정보를 불러오는 메소드
         #BO.get_Book_info(ind)
     before.pack_forget()
 
@@ -946,16 +945,16 @@ def Rent_Book_Search(before):
 def Rent_Show(event):
     global new
 
-    def save_rent(SEQ,ISBN,PHONE,DATE,RETURN_DATE,RETURN_YN): # 대출 완료 버튼을 눌렀을 시에 대출 정보를 저장하는 메소드 -> gui (버튼작용)
+    #def save_rent(SEQ,ISBN,PHONE,DATE,RETURN_DATE,RETURN_YN): # 대출 완료 버튼을 눌렀을 시에 대출 정보를 저장하는 메소드 -> gui (버튼작용)
         #Rent.save_to_csv(SEQ,ISBN,PHONE,DATE,RETURN_DATE,RETURN_YN) 
 
-    def get_rent_book_info(ind): # 대출할 도서의 정보를 불러오는 메소드
+    #def get_rent_book_info(ind): # 대출할 도서의 정보를 불러오는 메소드
         #BO.get_Book_info(ind)
 
-    def get_rent_user_info(ind): # 대출할 회원의 정보를 불러오는 메소드
+    #def get_rent_user_info(ind): # 대출할 회원의 정보를 불러오는 메소드
         #US.get_User_info(ind)
 
-    def set_return_date(ind): # 반납 날짜를 지정하는 메소드
+    #def set_return_date(ind): # 반납 날짜를 지정하는 메소드
         #date=rent_list[ind,4]
         #date=datetime.strptime(date,'%Y.%m.%d')
         #date=date+timedelta(days=14)
@@ -1041,7 +1040,7 @@ def Rent_Show(event):
 # 대여 책 조회
 def Rent_Search():
     
-    def get_rent(): # 대출 정보를 불러오는 메소드 --> 도서정보,회원정보를 불러오는것?
+    #def get_rent(): # 대출 정보를 불러오는 메소드 --> 도서정보,회원정보를 불러오는것?
         #Book.search_Book_ByTitle(title) # 1. 도서명으로 검색
         #isbn=Book.search_list[title,1] # 결과값에서 isbn을 추출함
         #Rent.search_Rent_ByBook(isbn) # 해당 isbn으로 대출조회
@@ -1113,14 +1112,14 @@ def Rent_Search():
 def Rent_State_Show(event):
     global new
     
-    def book_return(ind): # 도서 반납 메소드
+    #def book_return(ind): # 도서 반납 메소드
         #Rent.back_Book(ind)
 
-    def get_rent_book_info(ind): # 대출된 도서의 정보를 불러오는 메소드
+    #def get_rent_book_info(ind): # 대출된 도서의 정보를 불러오는 메소드
         #Rent 인터페이스에서 불러온 정보에서 ISBN을 불러와서 Book 인터페이스에서 재검색하는 식으로 해야되는 해당 인터페이스 추가
         #Rent.getRentInfo(ind)
 
-    def get_rent_user_info(): # 대출을 실행한 회원의 정보를 불러오는 메소드 -> 해당 책을 빌린 사람의 정보
+    #def get_rent_user_info(): # 대출을 실행한 회원의 정보를 불러오는 메소드 -> 해당 책을 빌린 사람의 정보
         #user= #도서대출 저장하는 메소드에서 회원이름을 뽑아옴
         #User.get_User_info(user)
 
@@ -1196,7 +1195,7 @@ def Rent_State_Show(event):
     labelBackCheck.grid(row=8, column=2, padx=100)
     textBackCheck.grid(row=8, column=3, padx=100)
 
-    btn_check_dup = Button(new, text="반납하기", command=book_return)
+    btn_check_dup = Button(new, text="반납하기"""", command=book_return""")
     btn_check_dup.grid(row=9, column=1, padx=100)
 
     btn_check_dup = Button(new, text="취소", command=lambda: new.destroy())
