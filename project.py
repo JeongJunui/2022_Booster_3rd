@@ -348,7 +348,7 @@ def Book_Search():
             for j in range(1,6):#대출여부 외에는 배치순서 동일하니 for문 처리
                 treeV.append(searched_list[i,j-1])
             treeview.insert("", "end", text="", values=treeV, iid=i)
-            treeview.bind("<Double-1>", onDetailViewForBook)
+            treeview.bind("<Double-1>", Book_Show)
         #이하 treeview에 추가하는 for문
         #for i in range(int(searched_list.size)/8):
             #treeview.insert("", "end", text="", values=searched_list[i,:], iid=i)
