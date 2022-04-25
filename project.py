@@ -232,7 +232,7 @@ def Book_Add():
     def add_book():
         add_book_list=np.array([])
     
-        if: #등록버튼을 눌렀을 때 isConfirmed가 False면 체크를 안 했다는 소리이므로 중복확인하라고 메세지박스 띄우고 리턴(빠꾸) -> 버튼처리
+        if isConfirmed==False: #등록버튼을 눌렀을 때 isConfirmed가 False면 체크를 안 했다는 소리이므로 중복확인하라고 메세지박스 띄우고 리턴(빠꾸) -> 버튼처리
             messagebox.showinfo("경고","중복확인을 하세요")
             return 0
         else:
@@ -330,9 +330,9 @@ def Book_Search():
     def print_book_list(): # 도서 조회시 관련 도서의 리스트를 화면에 출력해주는 메소드
         #treeview랑 연계 
         searched_list=np.array([])
-        if book_textbox.get(): # 도서명이 입력된 경우
+        if text_book_name.get(): # 도서명이 입력된 경우
             searched_list=BO.search_Book_ByTitle(text_book_name.get()) # 제목으로 도서 검색하는 함수 호출
-        elif author_textbox.get(): # 저자명이 입력된 경우
+        elif text_author.get(): # 저자명이 입력된 경우
             searched_list=BO.search_Book_ByAuthor(text_author.get()) # 책 저자로 검색하는 함수 호출
         else:
             messagebox.showinfo("경고","도서명과 저자명 둘 중 하나라")
