@@ -80,7 +80,7 @@ class Book:
         found_ind=np.where(self.__book[:,1])
         for i in found_ind:
             search_list=np.append(search_list,self.__book[i,:])# 제목이 동일하면 리스트에 추가
-        search_list=np.reshape(search_list,(int(search_list,size/8),8))
+        search_list=np.reshape(search_list,(int(search_list.size/8),8))
         return search_list # 반환 값 : 도서 목록
     # 일부만 일치해도 검색할 수 있게 개선 필요함
     
@@ -89,7 +89,7 @@ class Book:
         found_ind=np.where(self.__book[:,2])
         for i in found_ind:
             search_list=np.append(search_list,self.__book[i,:])# 저자가 동일하면 리스트에 추가
-        search_list=np.reshape(search_list,(int(search_list,size/8),8))
+        search_list=np.reshape(search_list,(int(search_list.size/8),8))
         return search_list # 반환 값 : 도서 목록
     
     def set_Book_Info(self,ind,inf): # 도서 수정 (IF-005)
@@ -136,7 +136,7 @@ class User:
         found_ind=np.where(self.__user[:,1])
         for i in found_ind:
             search_list=np.append(search_list,self.__user[i,:])# 이름이 동일하면 리스트에 추가
-        search_list=np.reshape(search_list,(int(search_list,size/8),8))
+        search_list=np.reshape(search_list,(int(search_list.size/8),8))
         return search_list# 반환 값 : 회원 목록
 
     def search_User_ByPhone(self,phone): # 연락처로 회원 조회 (IF-010)
@@ -144,7 +144,7 @@ class User:
         found_ind=np.where(self.__user[:,0])
         for i in found_ind:
             search_list=np.append(search_list,self.__user[i,:])# 연락처가 동일하면 리스트에 추가
-        search_list=np.reshape(search_list,(int(search_list,size/8),8))
+        search_list=np.reshape(search_list,(int(search_list.size/8),8))
         return search_list# 반환 값 : 회원 목록
     # 일부만 일치해도 검색할 수 있게 개선 필요함
     
@@ -180,7 +180,7 @@ class Rent:
         found_ind=np.where(self.__rent[:,1])
         for i in found_ind:
             search_list=np.append(search_list,self.__user[i,:])# ISBN이 동일하면 리스트에 추가
-        search_list=np.reshape(search_list,(int(search_list,size/6),6))
+        search_list=np.reshape(search_list,(int(search_list.size/6),6))
         return search_list # 반환 값 : 대출 목록
 
     def search_Rent_ByUser(self, phone): # 연락처로 대출 조회 (IF-015)
@@ -188,7 +188,7 @@ class Rent:
         found_ind=np.where(self.__rent[:,2])
         for i in found_ind:
             search_list=np.append(search_list,self.__user[i,:])# 연락처가 동일하면 리스트에 추가
-        search_list=np.reshape(search_list,(int(search_list,size/6),6))
+        search_list=np.reshape(search_list,(int(search_list.size/6),6))
         return search_list # 반환 값 : 대출 목록
         
     def back_Book(self,ind): # 도서 반납 (IF-016)
@@ -317,13 +317,26 @@ def Book_Search():
         #gui 불러오는 거니까 건드리지 않아도 됨
 
     def print_book_list(): # 도서 조회시 관련 도서의 리스트를 화면에 출력해주는 메소드
-        #treeValue랑 연계 
+        #treeview랑 연계 
         searched_list=np.array([])
         if book_textbox.get(): # 도서명이 입력된 경우
             searched_list=BO.search_Book_ByTitle(text_book_name) # 제목으로 도서 검색하는 함수 호출
         elif author_textbox.get(): # 저자명이 입력된 경우
             searched_list=BO.search_Book_ByAuthor(text_author) # 책 저자로 검색하는 함수 호출
-        #이 다음에 treeValue에 추가하는 작업할 예정
+        treeview.delete(*treeview.get_children())#treeview 전체를 지우는 문장
+        #treeview에 넣을 데이터 정제 과정
+        treeV=[(),()]#2차원 배열
+        for i in range(int(searched_list.size)/8):
+            if searched_list[i,7]:#대출 여부에 따라 문장을 다르게 삽입
+                treeV[i,0]="X"
+            else:
+                treeV[i,0]="대출 중"
+            for j in range(1,6):#대출여부 외에는 배치순서 동일하니 for문 처리
+                treeV[i,j]=searched_list[i,j-1]
+        #이하 treeview에 추가하는 for문
+        for i in range(int(searched_list.size)/8):
+            treeview.insert("", "end", text="", values=searched_list[i,:], iid=i)
+            treeview.bind("<Double-1>", onDetailViewForBook)
 
     def get_book(): # 도서 정보를 불러오는 메소드
         #print(BS.get_Book_info()) # 책 정보 확인 ( 도서 정보 리스트 출력 )
@@ -846,7 +859,7 @@ def Rent_Book_Search(before):
         #book_list[ind,8] # 해당 도서의 대출 여부 정보 
 
     def update_rent_situation(ind): # 선택 버튼을 눌렀을 시에 대출 상태가 대출중으로 바뀌어 저장되게하고, 대출 정보 화면을 띄어주게 하는 메소드
-        if book_list[ind,8]==TRUE:#BO.get_IsRented(ind)
+        if BO.get_IsRented(ind):#BO.get_IsRented(ind)
             messagebox.showinfo("경고","이미 대출 중인 도서입니다.")
         else:
             book_list[ind,8]==TRUE
