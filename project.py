@@ -39,7 +39,7 @@ class Book:
     #def get_AllInfo(self): # 저장할 때 정보를 전부 불러오는 용도, 우선은 사용하지 않아 더미 데이터 처리
         #return self.__book
 
-    def save_to_csv(self): # 변동사항 생길 때마다 저장
+    def save_to_csv(self): # 변동사항 생길 때마다 저장(IF-007)
         book_col=["ISBN","TITLE","AUTHOR","PUB","PRICE","LINK","DESCRIP","PRE"] # 열 이름
         bookdf=pd.DataFrame(self.__book, columns=book_col) # numpy 배열을 DataFrame 형식으로 변환
         bookdf.to_csv('./Book.csv', encoding='UTF-8') # to_csv는 numpy 배열에서 작동하지 않아 DataFrame으로 변환한 것
@@ -58,10 +58,10 @@ class Book:
         ind=np.where(self.__book[:,0]==isbn)#내부 인덱스를 찾아냄
         return self.__book[ind,:]# 인덱스에 해당하는 책 정보를 리턴
 
-    def get_IsRented(self,isbn):
+    def get_IsRented(self,isbn):#IF-008
         ind=np.where(self.__book[:,0]==isbn)#내부 인덱스를 찾아냄
         return self.__book[ind,7]
-    def set_IsRented(self,isbn,rt):
+    def set_IsRented(self,isbn,rt):#IF-009
         ind=np.where(self.__book[:,0]==isbn)#내부 인덱스를 찾아냄
         self.__book[ind,7]=rt
         self.save_to_csv()
@@ -95,8 +95,8 @@ class Book:
         search_list=np.reshape(search_list,(int(search_list.size/8),8))
         return search_list # 반환 값 : 도서 목록
     
-    def set_Book_Info(self,isbn,inf): # 도서 수정 (IF-005)
-        ind=np.where(self.__book[:,0]==isbn)#내부 인덱스를 찾아냄
+    def set_Book_Info(self,inf): # 도서 수정 (IF-005)
+        ind=np.where(self.__book[:,0]==inf[0])#내부 인덱스를 찾아냄
         self.__user[ind,:]=inf# 인덱스 값에 해당하는 책 정보 삽입
         self.save_to_csv()
    
@@ -112,11 +112,11 @@ class User:
     def get_Phonelist(self): #접근자
         return self.__user[:0]
     
-    def save_to_csv(self): # 변동사항 생길 때마다 저장
+    def save_to_csv(self): # 변동사항 생길 때마다 저장(IF-016)
         user_col=["PHONE","NAME,BIRTH","GENDER","MAIL","REG_DATE","OUT_DATE","RENT_CNT"]
         userdf=pd.DataFrame(self.__user, columns=user_col)
         userdf.to_csv('./User.csv', encoding='UTF-8')
-    def get_IsIn(self,phone): # 폰번호가 안에 있는가 확인 (IF-007)
+    def get_IsIn(self,phone): # 폰번호가 안에 있는가 확인 (IF-010)
         if phone in self.__user[:,0]: # 있으면 True 반환
             return True
         else:
@@ -126,20 +126,20 @@ class User:
         ind=np.where(self.__user[:,0]==phone)#내부 인덱스를 찾아냄
         return self.__user[ind,:]# 인덱스에 해당하는 책 정보 리턴
     
-    def get_IsRented(self,phone):# 대출한 도서 갯수 반환
+    def get_IsRented(self,phone):# 대출한 도서 갯수 반환(IF-017)
         ind=np.where(self.__user[:,0]==phone)#내부 인덱스를 찾아냄
         return self.__user[ind,7]
 
-    def set_IsRented(self,phone,ud):
+    def set_IsRented(self,phone,ud):#(IF-018)
         ind=np.where(self.__book[:,0]==phone)#내부 인덱스를 찾아냄
         self.__user[ind,7]+=ud#+1 혹은 -1을 받아서 계산
         self.save_to_csv()
 
-    def add_User_Info(self,inf): # 회원 등록 (IF-008)
+    def add_User_Info(self,inf): # 회원 등록 (IF-011)
         self.__user=np.append(self.__book,inf,axis=0) # 행 방향으로 정보 추가
         self.save_to_csv()
     
-    def search_User_ByName(self,name): # 이름으로 회원 조회 (IF-009)
+    def search_User_ByName(self,name): # 이름으로 회원 조회 (IF-012)
         search_list=np.array([])# 검색된 회원 정보 저장할 리스트
         found_ind=np.where(self.__user[:,1])
         for i in found_ind:
@@ -147,7 +147,7 @@ class User:
         search_list=np.reshape(search_list,(int(search_list.size/8),8))
         return search_list# 반환 값 : 회원 목록
 
-    def search_User_ByPhone(self,phone): # 연락처로 회원 조회 (IF-010)
+    def search_User_ByPhone(self,phone): # 연락처로 회원 조회 (IF-013)
         search_list=np.array([])# 검색된 회원 정보 저장할 리스트
         found_ind=np.where(self.__user[:,0])
         for i in found_ind:
@@ -156,12 +156,12 @@ class User:
         return search_list# 반환 값 : 회원 목록
     # 일부만 일치해도 검색할 수 있게 개선 필요함
     
-    def set_User_Info(self,phone,inf): # 회원 수정 (IF-011)
-        ind=np.where(self.__book[:,0]==phone)#내부 인덱스를 찾아냄
+    def set_User_Info(self,inf): # 회원 수정 (IF-014)
+        ind=np.where(self.__book[:,0]==inf[0])#내부 인덱스를 찾아냄
         self.__user[ind,:]=inf# 인덱스 값에 해당하는 회원 정보 삽입
         self.save_to_csv()
 
-    def drop_User_Info(self,phone,dat): # 회원 탈퇴 (IF-012)
+    def drop_User_Info(self,phone,dat): # 회원 탈퇴 (IF-015)
         ind=np.where(self.__book[:,0]==phone)#내부 인덱스를 찾아냄
         self.__user[ind,6]=dat# 인덱스 값에 해당하는 회원 탈퇴일자 저장
         self.save_to_csv()
@@ -171,7 +171,7 @@ class Rent:
     def __init__(self,rent): # 생성자
         self.__rent=rent
             
-    def save_to_csv(self): # 변동사항 생길 때마다 저장
+    def save_to_csv(self): # 변동사항 생길 때마다 저장(IF-023)
         rent_col=["SEQ","ISBN","PHONE","DATE","RETURN_DATE","RETURN_YN"]
         rentdf=pd.DataFrame(self.__rent, columns=rent_col)
         rentdf.to_csv('./Rent.csv', encoding='UTF-8')
@@ -179,13 +179,13 @@ class Rent:
     def get_Rent_Info(self,ind):#실제 인덱스 번호가 아니라 대출 테이블 내에 저장된 인덱스 번호를 넣을 것
         return self.__rent[ind-1,:]
     
-    def rent_Book(self,isbn,phone,dat): # 도서대출  (IF-013)
+    def rent_Book(self,isbn,phone,dat): # 도서대출  (IF-019)
         add_info=np.array([int(self.__rent.size/6)+1,isbn,phone,dat,dat+timedelta(days=14),False])# 대출 정보를 numpy 형태로 변환
         # 날짜 형식 계산은 나중에 추가할 예정
         self.__rent=np.append(self.__rent,add_info,axis=0)# 대출 목록에 추가
         self.save_to_csv()
         
-    def search_Rent_ByBook(self,isbn): # ISBN으로 대출 조회 (IF-014)
+    def search_Rent_ByBook(self,isbn): # ISBN으로 대출 조회 (IF-020)
         search_list=np.array([]) # 검색된 대출 정보 저장할 리스트
         found_ind=np.where(self.__rent[:,1])
         for i in found_ind:
@@ -193,7 +193,7 @@ class Rent:
         search_list=np.reshape(search_list,(int(search_list.size/6),6))
         return search_list # 반환 값 : 대출 목록
 
-    def search_Rent_ByUser(self, phone): # 연락처로 대출 조회 (IF-015)
+    def search_Rent_ByUser(self, phone): # 연락처로 대출 조회 (IF-021)
         search_list=np.array([]) # 검색된 대출 정보 저장할 리스트
         found_ind=np.where(self.__rent[:,2])
         for i in found_ind:
@@ -201,7 +201,7 @@ class Rent:
         search_list=np.reshape(search_list,(int(search_list.size/6),6))
         return search_list # 반환 값 : 대출 목록
         
-    def back_Book(self,ind): # 도서 반납 (IF-016)
+    def back_Book(self,ind): # 도서 반납 (IF-022)
         self.__rent[ind-1,5]=True # 인덱스 값에 해당하는 대출 반납처리
         self.save_to_csv()
 
