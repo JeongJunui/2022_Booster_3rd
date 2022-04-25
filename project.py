@@ -323,7 +323,7 @@ def Book_Add():
 # 도서 조회
 def Book_Search():
 
-    def get_book_show(): # 도서 조회시 도서를 선택했을 때 book show 클래스를 불러오는 메소드 -> gui?
+    #def get_book_show(): # 도서 조회시 도서를 선택했을 때 book show 클래스를 불러오는 메소드 -> gui?
         #book_show.print_book_info() # 조회한 책의 정보를 출력하는 메소드
         #gui 불러오는 거니까 건드리지 않아도 됨
 
@@ -334,6 +334,8 @@ def Book_Search():
             searched_list=BO.search_Book_ByTitle(text_book_name.get()) # 제목으로 도서 검색하는 함수 호출
         elif author_textbox.get(): # 저자명이 입력된 경우
             searched_list=BO.search_Book_ByAuthor(text_author.get()) # 책 저자로 검색하는 함수 호출
+        else:
+            messagebox.showinfo("경고","도서명과 저자명 둘 중 하나라")
         treeview.delete(*treeview.get_children())#treeview 전체를 지우는 문장
         #treeview에 넣을 데이터 정제 과정
         treeV=[[] for i in range(8)]#2차원 배열
@@ -349,7 +351,7 @@ def Book_Search():
             treeview.insert("", "end", text="", values=searched_list[i,:], iid=i)
             treeview.bind("<Double-1>", onDetailViewForBook)
 
-    def get_book(): # 도서 정보를 불러오는 메소드
+    #def get_book(): # 도서 정보를 불러오는 메소드
         #print(BS.get_Book_info()) # 책 정보 확인 ( 도서 정보 리스트 출력 )
         #get_book_show랑 역할 겹치는 거 같은데 일단 보류
     
@@ -363,7 +365,7 @@ def Book_Search():
     label_book_name.grid(row=1, column=0, padx=100)
     text_book_name = Entry(panedwindow1)
     text_book_name.grid(row=1, column=1, padx=100)
-    btn_view = Button(panedwindow1, text="조회")
+    btn_view = Button(panedwindow1, text="조회", command=print_book_list)
     btn_view.grid(row=1, column=2, padx=100)
 
     label_author = Label(panedwindow1, text="저자 : ")
@@ -442,9 +444,10 @@ def Book_Show(event):
         modify_list=np.append(textPub.get())
         modify_list=np.append(textPrice.get())
         modify_list=np.append(textUrl.get())
-        #도서 설명이 빠져있네요
+        modify_list=np.append(np.nan)
+        #도서 설명이 빠져있어서 일단 null값으로 설정함
         modify_list=np.append(textRent)
-        BO.add_Book_Info(modify_list)
+        BO.set_Book_Info(modify_list)
         print("도서 수정이 완료되었습니다.") # 팝업창
         
         #isbn이 수정되는걸 체크해야되나 ?<-애초에 수정되면 안 되니 isbn을 아예 못 건드리게 하는게 좋을 거 같음
@@ -522,7 +525,7 @@ def User_Add():
     def add_user(): # 등록 버튼을 누를시에 이름, 생년월일, 전화번호, 성별, 이메일, 사진의 정보를 받아 원래 회원 리스트에 추가해주는 메소드
         add_user_list=np.array([])
     
-        if: # 등록버튼을 눌렀을 때 isConfirmed가 False면 체크를 안 했다는 소리이므로 중복확인하라고 메세지박스 띄우고 리턴(빠꾸) -> 버튼처리
+        if isConfirmed==False: # 등록버튼을 눌렀을 때 isConfirmed가 False면 체크를 안 했다는 소리이므로 중복확인하라고 메세지박스 띄우고 리턴(빠꾸) -> 버튼처리
             messagebox.showinfo("경고","중복확인을 하세요")
             return 0
         else:
@@ -615,13 +618,14 @@ def User_Search():
 
     def get_user(ind): # 회원 정보를 불러오는 메소드
         #위에 Book_Search에서 하셨던 대로 하시면 되는데...
-        User.search_User_ByName(name) # 1. 이름으로 회원조회 -> 선택하는 과정 추가 ( 원하는 이름 선택)-> gui?
-        user=User.search_list[name,2] # 이름 선택
-        User.get_User_info(user) # 해당 회원의 정보 출력
         
-        User.search_User_ByPhone(phone) # 2. 연락처로 회원조회 ->  선택하는 과정 추가 ( 원하는 전화번호 선택)-> gui?
-        user=User.search_list[phone,1]
-        User.get_User_info(user) # 해당 회원의 정보 출력
+        #User.search_User_ByName(name) # 1. 이름으로 회원조회 -> 선택하는 과정 추가 ( 원하는 이름 선택)-> gui?
+        #user=User.search_list[name,2] # 이름 선택
+        #User.get_User_info(user) # 해당 회원의 정보 출력
+        
+        #User.search_User_ByPhone(phone) # 2. 연락처로 회원조회 ->  선택하는 과정 추가 ( 원하는 전화번호 선택)-> gui?
+        #user=User.search_list[phone,1]
+        #User.get_User_info(user) # 해당 회원의 정보 출력
         
     #def get_user_show(): # 회원 조회 시 회원을 선택했을 때 book show 클래스를 불러오는 메소드 -> 새창을 띄우는것 gui
       
@@ -694,7 +698,7 @@ def User_Show(event):
         #print(US.book[ind,6]) # 대출여부 출력
         #print(US.book[ind,7]) # 탈퇴여부 출력
 
-    def modify_user(phnoe): # 수정 버튼을 눌렀을 때 원래 회원 정보의 내용이 바뀌어서 저장되게 하기 위한 메소드
+    def modify_user(): # 수정 버튼을 눌렀을 때 원래 회원 정보의 내용이 바뀌어서 저장되게 하기 위한 메소드
         modify_user_list=np.array([])
 
         if textName.get()=='' or textBirth.get()=='' or textGender.get()=='' or textEmail.get()=='': # 이름,생년월일,성별,이메일 넷중 하나를 입력하지 않았을경우 경고메세지 
@@ -720,13 +724,13 @@ def User_Show(event):
         modify_user_list=np.append(textGender.get())
         modify_user_list=np.append(textEmail.get())
         #modify_user_list=np.append(textUrl.get())
-        modify_user_list=np.append()#가입일 그대로 가져올 것
+        modify_user_list=np.append(np.nan)#가입일 그대로 가져올 것, 우선은 공백처리
         modify_user_list=np.append(np.nan)#탈퇴한 회원은 수정하지 않는다는 전제조건 하에 작업
         US.set_User_Info(modify_user_list)
         messagebox.showinfo("알림","도서 수정이 완료되었습니다.")# 팝업창
         
-    def delete_user(phone): # 삭제 버튼을 눌렀을 때 해당 회원 정보가 원래의 회원 리스트에서 삭제되어 회원 리스트에 저장하기 위한 메소드
-        
+    def delete_user(): # 삭제 버튼을 눌렀을 때 해당 회원 정보가 원래의 회원 리스트에서 삭제되어 회원 리스트에 저장하기 위한 메소드
+        phone=textHP.get()
         if US.get_IsRented(phone)!=0: # 사용자가 도서 대출 중일 때 #US.get_IsRented(ind) 쓰시면 됩니다. 리턴 값은 대출 중인 책 권수(int형)
             messagebox.showinfo("경고","도서 대출 중인 회원은 탈퇴할 수 없습니다.")
         else:
@@ -879,12 +883,12 @@ def Rent_Book_Search(before):
         if BO.get_IsRented(ind):#BO.get_IsRented(ind)
             messagebox.showinfo("경고","이미 대출 중인 도서입니다.")
         else:
-            book_list[ind,8]==TRUE
+            #book_list[ind,8]==TRUE
             
         #rent_show 클래스를 불러와야 함 ( 대출 정보 화면 띄워주기 ) -> gui
 
     def get_book(ind): # 도서 정보를 불러오는 메소드
-        BO.get_Book_info(ind)
+        #BO.get_Book_info(ind)
     before.pack_forget()
 
     panedwindow1 = PanedWindow(relief="raised", bd=2)
@@ -943,19 +947,19 @@ def Rent_Show(event):
     global new
 
     def save_rent(SEQ,ISBN,PHONE,DATE,RETURN_DATE,RETURN_YN): # 대출 완료 버튼을 눌렀을 시에 대출 정보를 저장하는 메소드 -> gui (버튼작용)
-        Rent.save_to_csv(SEQ,ISBN,PHONE,DATE,RETURN_DATE,RETURN_YN) 
+        #Rent.save_to_csv(SEQ,ISBN,PHONE,DATE,RETURN_DATE,RETURN_YN) 
 
     def get_rent_book_info(ind): # 대출할 도서의 정보를 불러오는 메소드
-        BO.get_Book_info(ind)
+        #BO.get_Book_info(ind)
 
     def get_rent_user_info(ind): # 대출할 회원의 정보를 불러오는 메소드
-        US.get_User_info(ind)
+        #US.get_User_info(ind)
 
     def set_return_date(ind): # 반납 날짜를 지정하는 메소드
-        date=rent_list[ind,4]
-        date=datetime.strptime(date,'%Y.%m.%d')
-        date=date+timedelta(days=14)
-        rent_list[ind,4]=date
+        #date=rent_list[ind,4]
+        #date=datetime.strptime(date,'%Y.%m.%d')
+        #date=date+timedelta(days=14)
+        #rent_list[ind,4]=date
 
     new = Toplevel()
 
@@ -1038,13 +1042,13 @@ def Rent_Show(event):
 def Rent_Search():
     
     def get_rent(): # 대출 정보를 불러오는 메소드 --> 도서정보,회원정보를 불러오는것?
-        Book.search_Book_ByTitle(title) # 1. 도서명으로 검색
-        isbn=Book.search_list[title,1] # 결과값에서 isbn을 추출함
-        Rent.search_Rent_ByBook(isbn) # 해당 isbn으로 대출조회
+        #Book.search_Book_ByTitle(title) # 1. 도서명으로 검색
+        #isbn=Book.search_list[title,1] # 결과값에서 isbn을 추출함
+        #Rent.search_Rent_ByBook(isbn) # 해당 isbn으로 대출조회
 
-        User.search_User_ByName(name) # 2. 회원명으로 검색
-        phone=User.search_list[name,1] # 결과값에서 전화번호를 추출
-        Rent.search_Rent_ByUser(phone) # 해당 전화번호로 대출조회
+        #User.search_User_ByName(name) # 2. 회원명으로 검색
+        #phone=User.search_list[name,1] # 결과값에서 전화번호를 추출
+        #Rent.search_Rent_ByUser(phone) # 해당 전화번호로 대출조회
         
     #def get_rent_state_show(): # 대출 조회 시, 확인을 원하는 대출 내역을 선택했을 때 get_rent_state_show() 클래스를 불러오는 메소드-> gui
 
@@ -1110,15 +1114,15 @@ def Rent_State_Show(event):
     global new
     
     def book_return(ind): # 도서 반납 메소드
-        Rent.back_Book(ind)
+        #Rent.back_Book(ind)
 
     def get_rent_book_info(ind): # 대출된 도서의 정보를 불러오는 메소드
         #Rent 인터페이스에서 불러온 정보에서 ISBN을 불러와서 Book 인터페이스에서 재검색하는 식으로 해야되는 해당 인터페이스 추가
-        Rent.getRentInfo(ind)
+        #Rent.getRentInfo(ind)
 
     def get_rent_user_info(): # 대출을 실행한 회원의 정보를 불러오는 메소드 -> 해당 책을 빌린 사람의 정보
         #user= #도서대출 저장하는 메소드에서 회원이름을 뽑아옴
-        User.get_User_info(user)
+        #User.get_User_info(user)
 
     #def get_rent_info(): # 상단 대출 정보를 표시하는 메소드 -> gui
 
