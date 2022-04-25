@@ -8,9 +8,9 @@ import tkinter.ttk
 from tkinter import messagebox
 import datetime as dt #날짜 관련 관리하는 라이브러리
 
-df=pd.read_csv('./Rent.csv', encoding='UTF-8') # cvs파일 불러옴
-df1=pd.read_csv('./User.csv', encoding='UTF-8')
-df2=pd.read_csv('./Book.csv', encoding='UTF-8')
+df=pd.read_csv('Rent.csv', encoding='UTF-8') # cvs파일 불러옴
+df1=pd.read_csv('User.csv', encoding='UTF-8')
+df2=pd.read_csv('Book.csv', encoding='UTF-8')
 
 rent_list=np.array([]) # 넘파이 빈리스트 생성
 rent_list=np.append(rent_list,df) # 값들을 append를 사용해 추가
@@ -1234,7 +1234,7 @@ my_button1 = Button(my_frame, text="도서 대여")
 my_button1.grid(row=0, column=2, padx=100)
 my_button1 = Button(my_frame, text="도서 대여", command=Rent_User_Search)
 my_button1.grid(row=1, column=2, padx=100)
-my_button1 = Button(my_frame, text="대출 조회 반납" , command=searchRentBookInfo)
+my_button1 = Button(my_frame, text="대출 조회 반납" , command=Rent_Search)
 my_button1.grid(row=2, column=2, padx=100)
 
 # Execute tkinter
