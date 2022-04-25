@@ -54,12 +54,15 @@ class Book:
         self.__book=np.append(self.__book,inf,asix=0)# 행 방향으로 정보 추가
         self.save_to_csv()
         
-    def get_Book_info(self,ind): # 책 정보 확인
+    def get_Book_info(self,isbn): # 책 정보 확인
+        ind=np.where(self.__book[:,0]==isbn)#내부 인덱스를 찾아냄
         return self.__book[ind,:]# 인덱스에 해당하는 책 정보를 리턴
 
-    def get_IsRented(self,ind):
+    def get_IsRented(self,isbn):
+        ind=np.where(self.__book[:,0]==isbn)#내부 인덱스를 찾아냄
         return self.__book[ind,7]
-    def set_IsRented(self,ind,rt):
+    def set_IsRented(self,isbn,rt):
+        ind=np.where(self.__book[:,0]==isbn)#내부 인덱스를 찾아냄
         self.__book[ind,7]=rt
         self.save_to_csv()
         
@@ -92,11 +95,13 @@ class Book:
         search_list=np.reshape(search_list,(int(search_list.size/8),8))
         return search_list # 반환 값 : 도서 목록
     
-    def set_Book_Info(self,ind,inf): # 도서 수정 (IF-005)
+    def set_Book_Info(self,isbn,inf): # 도서 수정 (IF-005)
+        ind=np.where(self.__book[:,0]==isbn)#내부 인덱스를 찾아냄
         self.__user[ind,:]=inf# 인덱스 값에 해당하는 책 정보 삽입
         self.save_to_csv()
    
-    def drop_Book_Info(self,ind): # 도서 삭제 (IF-006)
+    def drop_Book_Info(self,isbn): # 도서 삭제 (IF-006)
+        ind=np.where(self.__book[:,0]==isbn)#내부 인덱스를 찾아냄
         self.__book=np.delete(self.__book,ind)# 인덱스 값에 해당하는 정보 삭제
         self.save_to_csv()
         
@@ -117,13 +122,16 @@ class User:
         else:
             return False
         
-    def get_User_info(self,ind): # 회원 정보 확인
+    def get_User_info(self,phone): # 회원 정보 확인
+        ind=np.where(self.__user[:,0]==phone)#내부 인덱스를 찾아냄
         return self.__user[ind,:]# 인덱스에 해당하는 책 정보 리턴
     
-    def get_IsRented(self,ind):# 대출한 도서 갯수 반환
+    def get_IsRented(self,phone):# 대출한 도서 갯수 반환
+        ind=np.where(self.__user[:,0]==phone)#내부 인덱스를 찾아냄
         return self.__user[ind,7]
 
-    def set_IsRented(self,ind,ud):
+    def set_IsRented(self,phone,ud):
+        ind=np.where(self.__book[:,0]==phone)#내부 인덱스를 찾아냄
         self.__user[ind,7]+=ud#+1 혹은 -1을 받아서 계산
         self.save_to_csv()
 
@@ -148,11 +156,13 @@ class User:
         return search_list# 반환 값 : 회원 목록
     # 일부만 일치해도 검색할 수 있게 개선 필요함
     
-    def set_User_Info(self,ind,inf): # 회원 수정 (IF-011)
+    def set_User_Info(self,phone,inf): # 회원 수정 (IF-011)
+        ind=np.where(self.__book[:,0]==phone)#내부 인덱스를 찾아냄
         self.__user[ind,:]=inf# 인덱스 값에 해당하는 회원 정보 삽입
         self.save_to_csv()
 
-    def drop_User_Info(self,ind,dat): # 회원 탈퇴 (IF-012)
+    def drop_User_Info(self,phone,dat): # 회원 탈퇴 (IF-012)
+        ind=np.where(self.__book[:,0]==phone)#내부 인덱스를 찾아냄
         self.__user[ind,6]=dat# 인덱스 값에 해당하는 회원 탈퇴일자 저장
         self.save_to_csv()
         # 회원 탈퇴 시 재가입을 할 수도 있는경우를 위해회원을 삭제 하는 것이 아니라 탈퇴 날짜를 지정해줌
@@ -166,11 +176,11 @@ class Rent:
         rentdf=pd.DataFrame(self.__rent, columns=rent_col)
         rentdf.to_csv('./Rent.csv', encoding='UTF-8')
         
-    def get_Rent_Info(self,ind):
-        return self.__rent[ind,:]
+    def get_Rent_Info(self,ind):#실제 인덱스 번호가 아니라 대출 테이블 내에 저장된 인덱스 번호를 넣을 것
+        return self.__rent[ind-1,:]
     
     def rent_Book(self,isbn,phone,dat): # 도서대출  (IF-013)
-        add_info=np.array([int(self.__rent.size/6),isbn,phone,dat,dat+timedelta(days=14),False])# 대출 정보를 numpy 형태로 변환
+        add_info=np.array([int(self.__rent.size/6)+1,isbn,phone,dat,dat+timedelta(days=14),False])# 대출 정보를 numpy 형태로 변환
         # 날짜 형식 계산은 나중에 추가할 예정
         self.__rent=np.append(self.__rent,add_info,axis=0)# 대출 목록에 추가
         self.save_to_csv()
@@ -192,7 +202,7 @@ class Rent:
         return search_list # 반환 값 : 대출 목록
         
     def back_Book(self,ind): # 도서 반납 (IF-016)
-        self.__rent[ind,5]=True # 인덱스 값에 해당하는 대출 반납처리
+        self.__rent[ind-1,5]=True # 인덱스 값에 해당하는 대출 반납처리
         self.save_to_csv()
 
 BO=Book(book_list)
@@ -231,7 +241,7 @@ def Book_Add():
                 messagebox.showinfo("경고","중복확인을 다시 하세요")
                 return 0
             
-            if textBookName=='' and textAuthor=='' and textPub=='': # 도서명,저자,출판사 셋중 하나를 입력하지 않았을경우 경고메세지 출력
+            if textBookName=='' or textAuthor=='' or textPub=='': # 도서명,저자,출판사 셋중 하나를 입력하지 않았을경우 경고메세지 출력
                 #이거 and 말고 or 써야됩니다
                 textWrite=""
                 if textBookName=='':
@@ -413,7 +423,7 @@ def Book_Show(event):
         #BO.set_Book_Info() # 도서 수정 함수 호출
         modify_list=np.array([])
 
-        if textBookName=='' and textAuthor=='' and textPub=='': # 도서명,저자,출판사 셋중 하나를 입력하지 않았을경우 경고메세지 출력
+        if textBookName=='' or textAuthor=='' or textPub=='': # 도서명,저자,출판사 셋중 하나를 입력하지 않았을경우 경고메세지 출력
             textWrite=""
             if textBookName=='':
                 textWrite+="도서명이 입력되어있지 않습니다.\n" # 팝업창 처리
@@ -439,7 +449,7 @@ def Book_Show(event):
         #isbn이 수정되는걸 체크해야되나 ?
 
     def delete_book(): # 삭제 버튼을 눌렀을 때 해당된 도서 정보가 원래의 도서 리스트에서 삭제되어 도서 리스트에 저장 하기 위한 메소드
-        if book_list[ind:8]==True:#BO.get_IsRented(ind)로 불러오시면 됩니다. 좀전에 
+        if BO.get_IsRented(isbn):#book_list[ind:8]==True:#BO.get_IsRented(ind)로 불러오시면 됩니다. 좀전에 
             messagebox.showinfo("경고","대출중인 도서는 삭제할 수 없습니다.")
         else:
             BO.drop_Book_Info()  # 도서 삭제 함수 호출
@@ -515,7 +525,7 @@ def User_Add():
             messagebox.showinfo("경고","중복확인을 하세요")
             return 0
         else:
-            if textName=='' and textBirth=='' and textGender=='' and textEmail=='': # 이름,생년월일,성별,이메일 넷중 하나를 입력하지 않았을경우 경고메세지 
+            if textName=='' or textBirth=='' or textGender=='' or textEmail=='': # 이름,생년월일,성별,이메일 넷중 하나를 입력하지 않았을경우 경고메세지 
                 #여기도 and 말고 or
                 textWrite=""
                 if textName=='':
@@ -682,7 +692,7 @@ def User_Show(event):
     def modify_user(ind): # 수정 버튼을 눌렀을 때 원래 회원 정보의 내용이 바뀌어서 저장되게 하기 위한 메소드
         modify_user_list=np.array([])
 
-        if textName=='' and textBirth=='' and textGender=='' and textEmail=='': # 이름,생년월일,성별,이메일 넷중 하나를 입력하지 않았을경우 경고메세지 
+        if textName=='' or textBirth=='' or textGender=='' or textEmail=='': # 이름,생년월일,성별,이메일 넷중 하나를 입력하지 않았을경우 경고메세지 
             #and 말고 or
             textWrite=""
             if textName=='':
@@ -791,7 +801,7 @@ def Rent_User_Search():
             #print("%d권 대출 중",user_list[ind,8],axis='\n') # 대출여부 출력
         
     def update_rent_situation(ind,isbn,phone,dat): # 선택 버튼을 눌렀을 시에 해당 회원의 대출 여부가 도서 대출 중으로 바뀌어 저장하는 메소드
-        if US.user_list[ind,8]==3: # 대출 진행 불가능 -> 해당 회원이 3권을 빌린 상태인지를 먼저 체크해야 함#US.get_IsRented(ind)로 불러오시면 
+        if US.get_IsRented(phone)==3:#US.user_list[ind,8]==3: # 대출 진행 불가능 -> 해당 회원이 3권을 빌린 상태인지를 먼저 체크해야 함#US.get_IsRented(ind)로 불러오시면 
             messagebox.showinfo("경고","대출할 수 있는 최대 권수는 3권입니다.")
         
         #US.user_list[ind,8]+=1 # 대출 권수 1추가 
