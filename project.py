@@ -222,7 +222,7 @@ def Book_Add():
     confirmedISBN="" # 중복확인한 ISBN 임시저장하는 문자열 변수, 체크할 때마다 저장할 것
     isConfirmed=False # 체크를 했는가 저장하는 boolean 변수, 기본값은 False
     def get_user(): # ISBN 중복 확인을 위해 도서 리스트를 불러오는 위한 메소드
-        if BO.get_IsIn(textISBN.get()): # ISBN 집어넣어서 있으면 True(등록된 거 있음), 없으면 False 받아옴
+        if BO.get_IsIn(int(textISBN.get())): # ISBN 집어넣어서 있으면 True(등록된 거 있음), 없으면 False 받아옴
             messagebox.showinfo("중복확인결과"," 이미 등록된 도서입니다.")
         else:
             messagebox.showinfo("중복확인결과","등록 가능한 도서입니다.")
