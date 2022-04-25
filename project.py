@@ -254,7 +254,7 @@ def Book_Add():
                 messagebox.showinfo("경고",textWrite)
                 return 0
         
-        add_book_list=np.append(textISBN.get())
+        add_book_list=np.append(int(textISBN.get()))
         add_book_list=np.append(textBookName.get())
         add_book_list=np.append(textAuthor.get())
         add_book_list=np.append(textPub.get())
@@ -456,10 +456,10 @@ def Book_Show(event):
         #isbn이 수정되는걸 체크해야되나 ?<-애초에 수정되면 안 되니 isbn을 아예 못 건드리게 하는게 좋을 거 같음
 
     def delete_book(): # 삭제 버튼을 눌렀을 때 해당된 도서 정보가 원래의 도서 리스트에서 삭제되어 도서 리스트에 저장 하기 위한 메소드
-        if BO.get_IsRented(textISBN.get()):#book_list[ind:8]==True:#BO.get_IsRented(ind)로 불러오시면 됩니다. 좀전에 
+        if BO.get_IsRented(int(textISBN.get())):#book_list[ind:8]==True:#BO.get_IsRented(ind)로 불러오시면 됩니다. 좀전에 
             messagebox.showinfo("경고","대출중인 도서는 삭제할 수 없습니다.")
         else:
-            BO.drop_Book_Info()  # 도서 삭제 함수 호출
+            BO.drop_Book_Info(int(textISBN.get()))  # 도서 삭제 함수 호출
             messagebox.showinfo("알림","해당 도서가 삭제되었습니다.")# 팝업창
             
     #def get_book(): # 도서 정보를 불러오는 메소드
@@ -518,12 +518,12 @@ def User_Add():
     isConfirmed=False # 중복 확인했는지 여부 저장하는 boolean 변수, 기본값은 False
     
     def check_user(): # 회원 중복 확인을 위한 메소드
-        if US.get_IsIn(textHP): # 중복되는 전화번호 있으면 True, 없으면 False
+        if US.get_IsIn(textHP.get()): # 중복되는 전화번호 있으면 True, 없으면 False
             messagebox.showinfo(text="이미 등록된 회원입니다.") # 팝업창
         else:
             messagebox.showinfo(text="등록 가능한 회원입니다.") # 팝업창
             isConfirmed=True # 중복 확인했으므로 True
-            confirmedHP=textHP # 중복 확인한 전화번호 저장
+            confirmedHP=textHP.get() # 중복 확인한 전화번호 저장
     
     def add_user(): # 등록 버튼을 누를시에 이름, 생년월일, 전화번호, 성별, 이메일, 사진의 정보를 받아 원래 회원 리스트에 추가해주는 메소드
         add_user_list=np.array([])
