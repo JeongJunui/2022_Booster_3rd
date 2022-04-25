@@ -80,7 +80,7 @@ class Book:
 
         """
         search_list=np.array([])# 검색된 책 정보 저장할 리스트
-        found_ind=np.where(self.__book[:,1])
+        found_ind=np.where(self.__book[:,1]==title)
         for i in found_ind:
             search_list=np.append(search_list,self.__book[i,:])# 제목이 동일하면 리스트에 추가
         search_list=np.reshape(search_list,(int(search_list.size/8),8))
@@ -89,7 +89,7 @@ class Book:
     
     def search_Book_ByAuthor(self,author): # 책 저자로 검색 (IF-004)
         search_list=np.array([])# 검색된 책 정보 저장할 리스트
-        found_ind=np.where(self.__book[:,2])
+        found_ind=np.where(self.__book[:,2]==author)
         for i in found_ind:
             search_list=np.append(search_list,self.__book[i,:])# 저자가 동일하면 리스트에 추가
         search_list=np.reshape(search_list,(int(search_list.size/8),8))
@@ -141,7 +141,7 @@ class User:
     
     def search_User_ByName(self,name): # 이름으로 회원 조회 (IF-012)
         search_list=np.array([])# 검색된 회원 정보 저장할 리스트
-        found_ind=np.where(self.__user[:,1])
+        found_ind=np.where(self.__user[:,1]==name)
         for i in found_ind:
             search_list=np.append(search_list,self.__user[i,:])# 이름이 동일하면 리스트에 추가
         search_list=np.reshape(search_list,(int(search_list.size/8),8))
@@ -149,7 +149,7 @@ class User:
 
     def search_User_ByPhone(self,phone): # 연락처로 회원 조회 (IF-013)
         search_list=np.array([])# 검색된 회원 정보 저장할 리스트
-        found_ind=np.where(self.__user[:,0])
+        found_ind=np.where(self.__user[:,0]==phone)
         for i in found_ind:
             search_list=np.append(search_list,self.__user[i,:])# 연락처가 동일하면 리스트에 추가
         search_list=np.reshape(search_list,(int(search_list.size/8),8))
@@ -187,7 +187,7 @@ class Rent:
         
     def search_Rent_ByBook(self,isbn): # ISBN으로 대출 조회 (IF-020)
         search_list=np.array([]) # 검색된 대출 정보 저장할 리스트
-        found_ind=np.where(self.__rent[:,1])
+        found_ind=np.where(self.__rent[:,1]==isbn)
         for i in found_ind:
             search_list=np.append(search_list,self.__user[i,:])# ISBN이 동일하면 리스트에 추가
         search_list=np.reshape(search_list,(int(search_list.size/6),6))
@@ -195,7 +195,7 @@ class Rent:
 
     def search_Rent_ByUser(self, phone): # 연락처로 대출 조회 (IF-021)
         search_list=np.array([]) # 검색된 대출 정보 저장할 리스트
-        found_ind=np.where(self.__rent[:,2])
+        found_ind=np.where(self.__rent[:,2]==phone)
         for i in found_ind:
             search_list=np.append(search_list,self.__user[i,:])# 연락처가 동일하면 리스트에 추가
         search_list=np.reshape(search_list,(int(search_list.size/6),6))
@@ -339,7 +339,7 @@ def Book_Search():
         treeview.delete(*treeview.get_children())#treeview 전체를 지우는 문장
         #treeview에 넣을 데이터 정제 과정
         #treeV=[[for i in range(8)] for j in range(int(searched_list.size)/8)]#2차원 배열
-        for i in range(int(searched_list.size)/8):
+        for i in range(int(searched_list.size/8)):
             treeV=[]#
             if searched_list[i,7]:#대출 여부에 따라 문장을 다르게 삽입
                 treeV.append("X")
@@ -347,7 +347,7 @@ def Book_Search():
                 treeV.append("대출 중")
             for j in range(1,6):#대출여부 외에는 배치순서 동일하니 for문 처리
                 treeV.append(searched_list[i,j-1])
-            treeview.insert("", "end", text="", values=searched_list[i,:], iid=i)
+            treeview.insert("", "end", text="", values=treeV, iid=i)
             treeview.bind("<Double-1>", onDetailViewForBook)
         #이하 treeview에 추가하는 for문
         #for i in range(int(searched_list.size)/8):
