@@ -278,7 +278,7 @@ def Book_Add():
     labelISBN.grid(row=1, column=0, padx=100)
     textISBN = Entry(panedwindow1) #ISBN 넣는 텍스트박스
     textISBN.grid(row=1, column=1, padx=100)
-    btn_check_dup = Button(panedwindow1, text="등록")
+    btn_check_dup = Button(panedwindow1, text="등록", command=get_user)
     btn_check_dup.grid(row=1, column=2, padx=100)
 
     labelBookName = Label(panedwindow1, text="도서명 : ")
@@ -313,7 +313,7 @@ def Book_Add():
     labelDesc.grid(row=7, column=0, padx=100)
     textDesc.grid(row=7, column=1, padx=100)
 
-    btn_book_register = Button(panedwindow1, text="등록")
+    btn_book_register = Button(panedwindow1, text="등록", command=add_book)
     btn_book_register.grid(row=8, column=0, padx=100)
     # command=lambda: panedwindow1.pack_forget() -> 현재 panedwindow1 창을 닫음.
     btn_cancel = Button(panedwindow1, text="취소", command=lambda: panedwindow1.pack_forget())
@@ -335,21 +335,24 @@ def Book_Search():
         elif text_author.get(): # 저자명이 입력된 경우
             searched_list=BO.search_Book_ByAuthor(text_author.get()) # 책 저자로 검색하는 함수 호출
         else:
-            messagebox.showinfo("경고","도서명과 저자명 둘 중 하나라")
+            messagebox.showinfo("경고","도서명과 저자명 둘 중 하나라도 입력하시오")
         treeview.delete(*treeview.get_children())#treeview 전체를 지우는 문장
         #treeview에 넣을 데이터 정제 과정
-        treeV=[[] for i in range(8)]#2차원 배열
+        #treeV=[[for i in range(8)] for j in range(int(searched_list.size)/8)]#2차원 배열
         for i in range(int(searched_list.size)/8):
+            treeV=[]#
             if searched_list[i,7]:#대출 여부에 따라 문장을 다르게 삽입
-                treeV[i,0]="X"
+                treeV.append("X")
             else:
-                treeV[i,0]="대출 중"
+                treeV.append("대출 중")
             for j in range(1,6):#대출여부 외에는 배치순서 동일하니 for문 처리
-                treeV[i,j]=searched_list[i,j-1]
-        #이하 treeview에 추가하는 for문
-        for i in range(int(searched_list.size)/8):
+                treeV.append(searched_list[i,j-1])
             treeview.insert("", "end", text="", values=searched_list[i,:], iid=i)
             treeview.bind("<Double-1>", onDetailViewForBook)
+        #이하 treeview에 추가하는 for문
+        #for i in range(int(searched_list.size)/8):
+            #treeview.insert("", "end", text="", values=searched_list[i,:], iid=i)
+            #treeview.bind("<Double-1>", onDetailViewForBook)
 
     #def get_book(): # 도서 정보를 불러오는 메소드
         #print(BS.get_Book_info()) # 책 정보 확인 ( 도서 정보 리스트 출력 )
