@@ -180,7 +180,7 @@ class Rent:
         return self.__rent[ind-1,:]
     
     def rent_Book(self,isbn,phone,dat): # 도서대출  (IF-019)
-        add_info=np.array([int(self.__rent.size/6)+1,isbn,phone,dat,dat+timedelta(days=14),False])# 대출 정보를 numpy 형태로 변환
+        add_info=np.array([int(self.__rent.size/6)+1,isbn,phone,dat,dat+dt.timedelta(days=14),False])# 대출 정보를 numpy 형태로 변환
         # 날짜 형식 계산은 나중에 추가할 예정
         self.__rent=np.append(self.__rent,add_info,axis=0)# 대출 목록에 추가
         self.save_to_csv()
@@ -222,12 +222,12 @@ def Book_Add():
     confirmedISBN="" # 중복확인한 ISBN 임시저장하는 문자열 변수, 체크할 때마다 저장할 것
     isConfirmed=False # 체크를 했는가 저장하는 boolean 변수, 기본값은 False
     def get_user(): # ISBN 중복 확인을 위해 도서 리스트를 불러오는 위한 메소드
-        if BO.get_IsIn("""textISBN에서 문자열 불러와서 집어넣기"""): # ISBN 집어넣어서 있으면 True(등록된 거 있음), 없으면 False 받아옴
+        if BO.get_IsIn(textISBN.get()): # ISBN 집어넣어서 있으면 True(등록된 거 있음), 없으면 False 받아옴
             messagebox.showinfo("중복확인결과"," 이미 등록된 도서입니다.")
         else:
             messagebox.showinfo("중복확인결과","등록 가능한 도서입니다.")
             isConfirmed=True # 체크-> True
-            confirmedISBN="""textISBN에서 불러온 문자열""" # 중복확인한 거 저장
+            confirmedISBN=textISBN.get() # 중복확인한 거 저장
 
     def add_book():
         add_book_list=np.array([])
@@ -244,11 +244,11 @@ def Book_Add():
             if textBookName.get()=='' or textAuthor.get()=='' or textPub.get()=='': # 도서명,저자,출판사 셋중 하나를 입력하지 않았을경우 경고메세지 출력
                 #이거 and 말고 or 써야됩니다
                 textWrite=""
-                if textBookName=='':
+                if textBookName.get()=='':
                     textWrite+="도서명이 입력되어있지 않습니다.\n" # 팝업창 처리
-                elif textAuthor=='':
+                elif textAuthor.get()=='':
                     textWrite+="저자명이 입력되어있지 않습니다.\n" # 팝업창 처리
-                elif textPub=='':
+                elif textPub.get()=='':
                     textWrite+="출판사가 입력되어있지 않습니다.\n" # 팝업창 처리
                 textWrite+="필수사항을 입력해주세요."
                 messagebox.showinfo("경고",textWrite)
@@ -411,7 +411,7 @@ def Book_Search():
     for i in range(len(treeValueList)):
         treeview.insert("", "end", text="", values=treeValueList[i], iid=i)
         treeview.bind("<Double-1>", Book_Show)
-    
+
     btn_cancel = Button(panedwindow1, text="취소", command=lambda: panedwindow1.pack_forget())
     btn_cancel.grid(row=4, column=1, padx=100)
 
@@ -456,7 +456,7 @@ def Book_Show(event):
         #isbn이 수정되는걸 체크해야되나 ?<-애초에 수정되면 안 되니 isbn을 아예 못 건드리게 하는게 좋을 거 같음
 
     def delete_book(): # 삭제 버튼을 눌렀을 때 해당된 도서 정보가 원래의 도서 리스트에서 삭제되어 도서 리스트에 저장 하기 위한 메소드
-        if BO.get_IsRented(textIsbn.get()):#book_list[ind:8]==True:#BO.get_IsRented(ind)로 불러오시면 됩니다. 좀전에 
+        if BO.get_IsRented(textISBN.get()):#book_list[ind:8]==True:#BO.get_IsRented(ind)로 불러오시면 됩니다. 좀전에 
             messagebox.showinfo("경고","대출중인 도서는 삭제할 수 없습니다.")
         else:
             BO.drop_Book_Info()  # 도서 삭제 함수 호출
@@ -521,7 +521,7 @@ def User_Add():
         if US.get_IsIn(textHP): # 중복되는 전화번호 있으면 True, 없으면 False
             messagebox.showinfo(text="이미 등록된 회원입니다.") # 팝업창
         else:
-            useradd_msgbox.showinfo(text="등록 가능한 회원입니다.") # 팝업창
+            messagebox.showinfo(text="등록 가능한 회원입니다.") # 팝업창
             isConfirmed=True # 중복 확인했으므로 True
             confirmedHP=textHP # 중복 확인한 전화번호 저장
     
