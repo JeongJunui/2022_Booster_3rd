@@ -278,7 +278,7 @@ def Book_Add():
     labelISBN.grid(row=1, column=0, padx=100)
     textISBN = Entry(panedwindow1) #ISBN 넣는 텍스트박스
     textISBN.grid(row=1, column=1, padx=100)
-    btn_check_dup = Button(panedwindow1, text="등록", command=get_user)
+    btn_check_dup = Button(panedwindow1, text="중복확인", command=get_user)
     btn_check_dup.grid(row=1, column=2, padx=100)
 
     labelBookName = Label(panedwindow1, text="도서명 : ")
