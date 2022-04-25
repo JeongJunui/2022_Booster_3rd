@@ -410,7 +410,7 @@ def Book_Search():
 
     for i in range(len(treeValueList)):
         treeview.insert("", "end", text="", values=treeValueList[i], iid=i)
-        treeview.bind("<Double-1>", onDetailViewForBook)
+        treeview.bind("<Double-1>", Book_Show)
 
     btn_cancel = Button(panedwindow1, text="취소", command=lambda: panedwindow1.pack_forget())
     btn_cancel.grid(row=4, column=1, padx=100)
@@ -681,7 +681,7 @@ def User_Search():
 
     for i in range(len(treeValueList)):
         treeview.insert("", "end", text="", values=treeValueList[i], iid=i)
-        treeview.bind("<Double-1>", Book_Show)
+        treeview.bind("<Double-1>", User_Show)
 
     btn_cancel = Button(panedwindow1, text="취소", command=lambda: panedwindow1.pack_forget())
     btn_cancel.grid(row=4, column=1, padx=100)
@@ -867,9 +867,9 @@ def Rent_User_Search():
 
     for i in range(len(treeValueList)):
         treeview.insert("", "end", text="", values=treeValueList[i], iid=i)
-        treeview.bind("<Double-1>", onDetailViewForMemeber)
+        treeview.bind("<Double-1>", User_Show)
 
-    btn_cancel = Button(panedwindow1, text="선택", command=lambda: rentBookForDetail(panedwindow1))
+    btn_cancel = Button(panedwindow1, text="선택", command=lambda: Book_Show(panedwindow1))
     btn_cancel.grid(row=4, column=0, padx=100)
 
     btn_cancel = Button(panedwindow1, text="취소", command=lambda: panedwindow1.pack_forget())
@@ -939,7 +939,7 @@ def Rent_Book_Search(before):
 
     for i in range(len(treeValueList)):
         treeview.insert("", "end", text="", values=treeValueList[i], iid=i)
-        treeview.bind("<Double-1>", onWantRentBookView)
+        treeview.bind("<Double-1>", Rent_Show)
 
     btn_cancel = Button(panedwindow1, text="취소", command=lambda: panedwindow1.pack_forget())
     btn_cancel.grid(row=3, column=1, padx=100)
@@ -1106,7 +1106,7 @@ def Rent_Search():
 
     for i in range(len(treeValueList)):
         treeview.insert("", "end", text="", values=treeValueList[i], iid=i)
-        treeview.bind("<Double-1>", onSearchRentBookInfoView)
+        treeview.bind("<Double-1>", Rent_State_Show)
 
     btn_cancel = Button(panedwindow1, text="취소", command=lambda: panedwindow1.pack_forget())
     btn_cancel.grid(row=4, column=1, padx=100)
