@@ -214,7 +214,6 @@ root = Tk()
 
 # Adjust size
 root.geometry("1454x936")
-root.resizable(0, 0)
 
 # 버튼 클릭 이벤트 핸들러
 def Book_Add():
