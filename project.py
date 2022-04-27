@@ -269,52 +269,54 @@ def Book_Add():
     panedwindow1.pack(expand=True)
 
     title = Label(panedwindow1, text="도서 등록")
-    title.grid(row=0, column=1, padx=100)
+    title.grid(row=0, column=1, padx=50)
 
     labelISBN = Label(panedwindow1, text="ISBN : ")
-    labelISBN.grid(row=1, column=0, padx=100)
+    labelISBN.grid(row=1, column=0, padx=50, pady=10)
     textISBN = Entry(panedwindow1) #ISBN 넣는 텍스트박스
-    textISBN.grid(row=1, column=1, padx=100)
+    textISBN.grid(row=1, column=1, padx=0, pady=10)
     btn_check_dup = Button(panedwindow1, text="중복확인", command=get_user)
-    btn_check_dup.grid(row=1, column=2, padx=100)
+    btn_check_dup.grid(row=1, column=2, padx=50, pady=10)
 
     labelBookName = Label(panedwindow1, text="도서명 : ")
     textBookName = Entry(panedwindow1) #도서명 넣는 텍스트박스
-    labelBookName.grid(row=2, column=0, padx=100)
-    textBookName.grid(row=2, column=1, padx=100)
+    labelBookName.grid(row=2, column=0, padx=50, pady=10)
+    textBookName.grid(row=2, column=1, padx=0, pady=10)
 
     labelAuthor = Label(panedwindow1, text="저자 : ")
     textAuthor = Entry(panedwindow1) #저자 넣는 텍스트박스
-    labelAuthor.grid(row=3, column=0, padx=100)
-    textAuthor.grid(row=3, column=1, padx=100)
+    labelAuthor.grid(row=3, column=0, padx=50)
+    textAuthor.grid(row=3, column=1, padx=0)
 
 
     labelPub = Label(panedwindow1, text="출판사 : ")
     textPub = Entry(panedwindow1) #출판사 넣는 텍스트박스
-    labelPub.grid(row=4, column=0, padx=100)
-    textPub.grid(row=4, column=1, padx=100)
+    labelPub.grid(row=4, column=0, padx=50, pady=10)
+    textPub.grid(row=4, column=1, padx=0, pady=10)
 
     labelPrice = Label(panedwindow1, text="가격 : ")
     textPrice = Entry(panedwindow1) #가격 넣는 텍스트박스
-    labelPrice.grid(row=5, column=0, padx=100)
-    textPrice.grid(row=5, column=1, padx=100)
+    labelPrice.grid(row=5, column=0, padx=50)
+    textPrice.grid(row=5, column=1, padx=0)
+    label_price_msg = Label(panedwindow1, text="가격은 쉼표 없이 숫자만 입력하세요!", fg = "red")
+    label_price_msg.grid(row=6, column=1, padx=0)
 
 
     labelUrl = Label(panedwindow1, text="관련URL : ")
     textUrl = Entry(panedwindow1) #URL 넣는 텍스트박스
-    labelUrl.grid(row=6, column=0, padx=100)
-    textUrl.grid(row=6, column=1, padx=100)
+    labelUrl.grid(row=7, column=0, padx=50, pady=10)
+    textUrl.grid(row=7, column=1, padx=0, pady=10)
 
     labelDesc = Label(panedwindow1, text="도서설명 : ")
     textDesc = Entry(panedwindow1) #도서설명 넣는 텍스트박스
-    labelDesc.grid(row=7, column=0, padx=100)
-    textDesc.grid(row=7, column=1, padx=100)
+    labelDesc.grid(row=8, column=0, padx=50)
+    textDesc.grid(row=8, column=1, padx=0)
 
     btn_book_register = Button(panedwindow1, text="등록", command=add_book)
-    btn_book_register.grid(row=8, column=0, padx=100)
+    btn_book_register.grid(row=9, column=0, padx=50, pady=10)
     # command=lambda: panedwindow1.pack_forget() -> 현재 panedwindow1 창을 닫음.
     btn_cancel = Button(panedwindow1, text="취소", command=lambda: panedwindow1.pack_forget())
-    btn_cancel.grid(row=8, column=1, padx=100)
+    btn_cancel.grid(row=9, column=1, padx=50, pady=10)
 
 
 # 도서 조회
