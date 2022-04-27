@@ -936,7 +936,10 @@ def Rent_Book_Search(before):
 
     for i in range(len(treeValueList)):
         treeview.insert("", "end", text="", values=treeValueList[i], iid=i)
-        treeview.bind("<Double-1>", Rent_Show)
+        treeview.bind("<Double-1>", Book_Show)
+
+    btn_select = Button(panedwindow1, text="선택", command=lambda: Rent_Show(panedwindow1))
+    btn_select.grid(row=3, column=0, padx=100)
 
     btn_cancel = Button(panedwindow1, text="취소", command=lambda: panedwindow1.pack_forget())
     btn_cancel.grid(row=3, column=1, padx=100)
