@@ -568,50 +568,53 @@ def User_Add():
     panedwindow1.pack(expand=True)
 
     title = Label(panedwindow1, text="회원 등록")
-    title.grid(row=0, column=1, padx=100)
+    title.grid(row=0, column=1, padx=50)
 
     labelName = Label(panedwindow1, text="이름 : ")
-    labelName.grid(row=1, column=0, padx=100)
+    labelName.grid(row=1, column=0, padx=50, pady=10)
     textName = Entry(panedwindow1) #이름 저장하는 텍스트박스
-    textName.grid(row=1, column=1, padx=100)
+    textName.grid(row=1, column=1, padx=0, pady=10)
 
 
     labelBirth = Label(panedwindow1, text="생년월일 : ")
     textBirth = Entry(panedwindow1) #생년월일 저장하는 텍스트박스
-    labelBirth.grid(row=2, column=0, padx=100)
-    textBirth.grid(row=2, column=1, padx=100)
+    labelBirth.grid(row=2, column=0, padx=50)
+    textBirth.grid(row=2, column=1, padx=0)
+    label_Birth_msg = Label(panedwindow1, text="생년월일은 yyyy.mm.dd 형태로 입력해주세요!", fg = "red")
+    label_Birth_msg.grid(row=3, column=1, padx=0)
 
     labelHP = Label(panedwindow1, text="전화번호 : ")
     textHP = Entry(panedwindow1) #전화번호 저장하는 텍스트박스
-    labelHP.grid(row=3, column=0, padx=100)
-    textHP.grid(row=3, column=1, padx=100)
+    labelHP.grid(row=4, column=0, padx=50, pady=10)
+    textHP.grid(row=4, column=1, padx=0, pady=10)
+    label_HP_msg = Label(panedwindow1, text="전화번호는 010-0000-0000 형태로 '-'을 포함하여 입력해주세요!", fg = "red")
+    label_HP_msg.grid(row=5, column=1, padx=0)
     btn_check = Button(panedwindow1, text="중복확인", command=check_user)
-    btn_check.grid(row=3, column=2, padx=100)
+    btn_check.grid(row=4, column=2, padx=50, pady=10)
 
 
     labelGender = Label(panedwindow1, text="성별 : ")
     textGender = Entry(panedwindow1) #성별 저장하는 텍스트박스
-    labelGender.grid(row=4, column=0, padx=100)
-    textGender.grid(row=4, column=1, padx=100)
+    labelGender.grid(row=6, column=0, padx=50)
+    textGender.grid(row=6, column=1, padx=0)
 
     labelEmail = Label(panedwindow1, text="이메일 : ")
     textEmail = Entry(panedwindow1) #이메일 저장하는 텍스트박스
-    labelEmail.grid(row=5, column=0, padx=100)
-    textEmail.grid(row=5, column=1, padx=100)
+    labelEmail.grid(row=7, column=0, padx=50, pady=10)
+    textEmail.grid(row=7, column=1, padx=0, pady=10)
 
 
     labelPicture = Label(panedwindow1, text="사 진 : ") 
     textPicture = Entry(panedwindow1) #사진 저장하는 텍스트박스
-    labelPicture.grid(row=6, column=0, padx=100)
-    textPicture.grid(row=6, column=1, padx=100)
+    labelPicture.grid(row=8, column=0, padx=50)
+    textPicture.grid(row=8, column=1, padx=0)
     btn_check = Button(panedwindow1, text="찾기")
-    btn_check.grid(row=6, column=2, padx=100)
+    btn_check.grid(row=8, column=2, padx=50)
 
     btn_book_register = Button(panedwindow1, text="등록", command=add_user)
-    btn_book_register.grid(row=7, column=0, padx=100)
+    btn_book_register.grid(row=9, column=0, padx=50, pady=10)
     btn_cancel = Button(panedwindow1, text="취소", command=lambda: panedwindow1.pack_forget())
-    btn_cancel.grid(row=7, column=1, padx=100)
-
+    btn_cancel.grid(row=9, column=1, padx=50, pady=10)
 
 #회원 조회
 def User_Search():
