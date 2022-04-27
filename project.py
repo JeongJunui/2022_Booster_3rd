@@ -868,8 +868,8 @@ def Rent_User_Search():
         treeview.insert("", "end", text="", values=treeValueList[i], iid=i)
         treeview.bind("<Double-1>", User_Show)
 
-    btn_cancel = Button(panedwindow1, text="선택", command=lambda: Book_Show(panedwindow1))
-    btn_cancel.grid(row=4, column=0, padx=100)
+    btn_select = Button(panedwindow1, text="선택", command=lambda: Rent_Book_Search(panedwindow1))
+    btn_select.grid(row=4, column=0, padx=100)
 
     btn_cancel = Button(panedwindow1, text="취소", command=lambda: panedwindow1.pack_forget())
     btn_cancel.grid(row=4, column=1, padx=100)
