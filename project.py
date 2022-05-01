@@ -369,19 +369,19 @@ def Book_Search():
     panedwindow1.pack(expand=True)
 
     title = Label(panedwindow1, text="도서 조회")
-    title.grid(row=0, column=1, padx=100)
+    title.grid(row=0, column=1, padx=10, pady=10)
 
     label_book_name = Label(panedwindow1, text="도서명 : ")
-    label_book_name.grid(row=1, column=0, padx=100)
+    label_book_name.grid(row=1, column=0, padx=10, pady=10)
     text_book_name = Entry(panedwindow1)
-    text_book_name.grid(row=1, column=1, padx=100)
+    text_book_name.grid(row=1, column=1, padx=10, pady=10)
     btn_view = Button(panedwindow1, text="조회", command=print_book_list)
-    btn_view.grid(row=1, column=2, padx=100)
+    btn_view.grid(row=1, column=2, padx=10, pady=10)
 
     label_author = Label(panedwindow1, text="저자 : ")
-    label_author.grid(row=2, column=0, padx=100)
+    label_author.grid(row=2, column=0, padx=10, pady=10)
     text_author = Entry(panedwindow1)
-    text_author.grid(row=2, column=1, padx=100)
+    text_author.grid(row=2, column=1, padx=10, pady=10)
 
     treeview = tkinter.ttk.Treeview(panedwindow1,
                                     column=["t_check", "t_isbn", "t_title", "t_author", "t_pub", "t_price", "t_url"],
@@ -392,29 +392,29 @@ def Book_Search():
     treeview.column("t_check", width=100, anchor="center")
     treeview.heading("t_check", text="대출 여부", anchor="center")
 
-    treeview.column("t_isbn", width=50, anchor="center")
+    treeview.column("t_isbn", width=100, anchor="center")
     treeview.heading("t_isbn", text="ISBN", anchor="center")
 
-    treeview.column("t_title", width=50, anchor="center")
+    treeview.column("t_title", width=100, anchor="center")
     treeview.heading("t_title", text="제목", anchor="center")
 
-    treeview.column("t_author", width=50, anchor="center")
+    treeview.column("t_author", width=100, anchor="center")
     treeview.heading("t_author", text="저자", anchor="center")
 
-    treeview.column("t_pub", width=50, anchor="center")
+    treeview.column("t_pub", width=100, anchor="center")
     treeview.heading("t_pub", text="출판사", anchor="center")
 
-    treeview.column("t_price", width=50, anchor="center")
+    treeview.column("t_price", width=100, anchor="center")
     treeview.heading("t_price", text="가격", anchor="center")
 
-    treeview.column("t_url", width=50, anchor="center")
+    treeview.column("t_url", width=100, anchor="center")
     treeview.heading("t_url", text="관련URL", anchor="center")
 
 
     treeview["show"] = "headings"
 
     btn_cancel = Button(panedwindow1, text="취소", command=lambda: panedwindow1.pack_forget())
-    btn_cancel.grid(row=4, column=1, padx=100)
+    btn_cancel.grid(row=4, column=1, padx=10, pady=10)
 
 def Book_Show():
     # item = self.tree.selection()[0]
@@ -691,19 +691,19 @@ def User_Search():
     panedwindow1.pack(expand=True)
 
     title = Label(panedwindow1, text="회원 조회")
-    title.grid(row=0, column=1, padx=100)
+    title.grid(row=0, column=1, padx=10, pady=10)
 
     label_user_name = Label(panedwindow1, text="이름 : ")
-    label_user_name.grid(row=1, column=0, padx=100)
+    label_user_name.grid(row=1, column=0, padx=10, pady=10)
     text_user_name = Entry(panedwindow1)
-    text_user_name.grid(row=1, column=1, padx=100)
+    text_user_name.grid(row=1, column=1, padx=10, pady=10)
     btn_view = Button(panedwindow1, text="조회",command=get_user)
-    btn_view.grid(row=1, column=2, padx=100)
+    btn_view.grid(row=1, column=2, padx=10, pady=10)
 
     label_phone = Label(panedwindow1, text="연락처 : ")
-    label_phone.grid(row=2, column=0, padx=100)
+    label_phone.grid(row=2, column=0, padx=10, pady=10)
     text_phone = Entry(panedwindow1)
-    text_phone.grid(row=2, column=1, padx=100)
+    text_phone.grid(row=2, column=1, padx=10, pady=10)
 
     treeview = tkinter.ttk.Treeview(panedwindow1,
                                     column=["t_name", "t_birth", "t_hp", "t_gender", "t_email", "t_check", "t_check_for_exit"],
@@ -714,28 +714,28 @@ def User_Search():
     treeview.column("t_name", width=100, anchor="center")
     treeview.heading("t_name", text="이름", anchor="center")
 
-    treeview.column("t_birth", width=50, anchor="center")
+    treeview.column("t_birth", width=100, anchor="center")
     treeview.heading("t_birth", text="생년월일", anchor="center")
 
-    treeview.column("t_hp", width=50, anchor="center")
+    treeview.column("t_hp", width=100, anchor="center")
     treeview.heading("t_hp", text="전화번호", anchor="center")
 
-    treeview.column("t_gender", width=50, anchor="center")
+    treeview.column("t_gender", width=100, anchor="center")
     treeview.heading("t_gender", text="성별", anchor="center")
 
-    treeview.column("t_email", width=50, anchor="center")
+    treeview.column("t_email", width=100, anchor="center")
     treeview.heading("t_email", text="메일", anchor="center")
 
-    treeview.column("t_check", width=50, anchor="center")
+    treeview.column("t_check", width=100, anchor="center")
     treeview.heading("t_check", text="대출여부", anchor="center")
 
-    treeview.column("t_check_for_exit", width=50, anchor="center")
+    treeview.column("t_check_for_exit", width=100, anchor="center")
     treeview.heading("t_check_for_exit", text="탈퇴여부", anchor="center")
 
     treeview["show"] = "headings"
 
     btn_cancel = Button(panedwindow1, text="취소", command=lambda: panedwindow1.pack_forget())
-    btn_cancel.grid(row=4, column=1, padx=100)
+    btn_cancel.grid(row=4, column=1, padx=10, pady=10)
 
 def User_Show():
     global send_data
@@ -971,19 +971,19 @@ def Rent_User_Search():
             treeview.insert("", "end", text="", values=treeV, iid=treeV[2])
 
     title = Label(panedwindow1, text="도서 대여 - 회원 선택")
-    title.grid(row=0, column=1, padx=100)
+    title.grid(row=0, column=1, padx=10, pady=10)
 
     label_user_name = Label(panedwindow1, text="이름 : ")
-    label_user_name.grid(row=1, column=0, padx=100)
+    label_user_name.grid(row=1, column=0, padx=10, pady=10)
     text_user_name = Entry(panedwindow1)
-    text_user_name.grid(row=1, column=1, padx=100)
+    text_user_name.grid(row=1, column=1, padx=10, pady=10)
     btn_view = Button(panedwindow1, text="조회",command=print_rent_user)
-    btn_view.grid(row=1, column=2, padx=100)
+    btn_view.grid(row=1, column=2, padx=10, pady=10)
 
     label_phone = Label(panedwindow1, text="연락처 : ")
-    label_phone.grid(row=2, column=0, padx=100)
+    label_phone.grid(row=2, column=0, padx=10, pady=10)
     text_phone = Entry(panedwindow1)
-    text_phone.grid(row=2, column=1, padx=100)
+    text_phone.grid(row=2, column=1, padx=10, pady=10)
 
     treeview = tkinter.ttk.Treeview(panedwindow1,
                                     column=["t_name", "t_birth", "t_hp", "t_gender", "t_email", "t_check"],
@@ -994,29 +994,29 @@ def Rent_User_Search():
     treeview.column("t_name", width=100, anchor="center")
     treeview.heading("t_name", text="이름", anchor="center")
 
-    treeview.column("t_birth", width=50, anchor="center")
+    treeview.column("t_birth", width=100, anchor="center")
     treeview.heading("t_birth", text="생년월일", anchor="center")
 
-    treeview.column("t_hp", width=50, anchor="center")
+    treeview.column("t_hp", width=100, anchor="center")
     treeview.heading("t_hp", text="전화번호", anchor="center")
 
-    treeview.column("t_gender", width=50, anchor="center")
+    treeview.column("t_gender", width=100, anchor="center")
     treeview.heading("t_gender", text="성별", anchor="center")
 
-    treeview.column("t_email", width=50, anchor="center")
+    treeview.column("t_email", width=100, anchor="center")
     treeview.heading("t_email", text="이메일", anchor="center")
 
-    treeview.column("t_check", width=50, anchor="center")
+    treeview.column("t_check", width=100, anchor="center")
     treeview.heading("t_check", text="대출상태", anchor="center")
 
     treeview["show"] = "headings"
 
 
     btn_select = Button(panedwindow1, text="선택", command=lambda: update_rent_situation(panedwindow1))
-    btn_select.grid(row=4, column=0, padx=100)
+    btn_select.grid(row=4, column=0, padx=10, pady=10)
 
     btn_cancel = Button(panedwindow1, text="취소", command=lambda: panedwindow1.pack_forget())
-    btn_cancel.grid(row=4, column=1, padx=100)
+    btn_cancel.grid(row=4, column=1, padx=10, pady=10)
 
 def Rent_Book_Search(before):
     global send_data2
@@ -1061,14 +1061,14 @@ def Rent_Book_Search(before):
     panedwindow1.pack(expand=True)
 
     title = Label(panedwindow1, text="도서 대여 - 도서 선택")
-    title.grid(row=0, column=1, padx=100)
+    title.grid(row=0, column=1, padx=10, pady=10)
 
     label_member_name = Label(panedwindow1, text="도서 선택 : ") 
-    label_member_name.grid(row=1, column=0, padx=100)
+    label_member_name.grid(row=1, column=0, padx=10, pady=10)
     text_member_name = Entry(panedwindow1)
-    text_member_name.grid(row=1, column=1, padx=100)
+    text_member_name.grid(row=1, column=1, padx=10, pady=10)
     btn_view = Button(panedwindow1, text="조회", command=check_book_rent)
-    btn_view.grid(row=1, column=2, padx=100)
+    btn_view.grid(row=1, column=2, padx=10, pady=10)
 
     treeview = tkinter.ttk.Treeview(panedwindow1,
                                     column=["t_check", "t_isbn", "t_title", "t_author", "t_pub", "t_price", "t_url"],
@@ -1079,31 +1079,31 @@ def Rent_Book_Search(before):
     treeview.column("t_check", width=100, anchor="center")
     treeview.heading("t_check", text="대출 여부", anchor="center")
 
-    treeview.column("t_isbn", width=50, anchor="center")
+    treeview.column("t_isbn", width=100, anchor="center")
     treeview.heading("t_isbn", text="ISBN", anchor="center")
 
-    treeview.column("t_title", width=50, anchor="center")
+    treeview.column("t_title", width=100, anchor="center")
     treeview.heading("t_title", text="제목", anchor="center")
 
-    treeview.column("t_author", width=50, anchor="center")
+    treeview.column("t_author", width=100, anchor="center")
     treeview.heading("t_author", text="저자", anchor="center")
 
-    treeview.column("t_pub", width=50, anchor="center")
+    treeview.column("t_pub", width=100, anchor="center")
     treeview.heading("t_pub", text="출판사", anchor="center")
 
-    treeview.column("t_price", width=50, anchor="center")
+    treeview.column("t_price", width=100, anchor="center")
     treeview.heading("t_price", text="가격", anchor="center")
 
-    treeview.column("t_url", width=50, anchor="center")
+    treeview.column("t_url", width=100, anchor="center")
     treeview.heading("t_url", text="관련URL", anchor="center")
 
     treeview["show"] = "headings"
 
     btn_select = Button(panedwindow1, text="선택", command=lambda: update_rent_situation(panedwindow1))
-    btn_select.grid(row=3, column=0, padx=100)
+    btn_select.grid(row=3, column=0, padx=10, pady=10)
 
     btn_cancel = Button(panedwindow1, text="취소", command=lambda: panedwindow1.pack_forget())
-    btn_cancel.grid(row=3, column=1, padx=100)
+    btn_cancel.grid(row=3, column=1, padx=10, pady=10)
 
 
 def Rent_Show(before):
@@ -1292,19 +1292,19 @@ def Rent_Search():
     panedwindow1.pack(expand=True)
 
     title = Label(panedwindow1, text="대출 조회")
-    title.grid(row=0, column=1, padx=100)
+    title.grid(row=0, column=1, padx=10, pady=10)
 
     label_book_name = Label(panedwindow1, text="도서명 : ")
-    label_book_name.grid(row=1, column=0, padx=100)
+    label_book_name.grid(row=1, column=0, padx=10, pady=10)
     text_book_name = Entry(panedwindow1)
-    text_book_name.grid(row=1, column=1, padx=100)
+    text_book_name.grid(row=1, column=1, padx=10, pady=10)
     btn_view = Button(panedwindow1, text="조회",command=get_rent)
-    btn_view.grid(row=1, column=2, padx=100)
+    btn_view.grid(row=1, column=2, padx=10, pady=10)
 
     label_member = Label(panedwindow1, text="회원명 : ")
-    label_member.grid(row=2, column=0, padx=100)
+    label_member.grid(row=2, column=0, padx=10, pady=10)
     text_member = Entry(panedwindow1)
-    text_member.grid(row=2, column=1, padx=100)
+    text_member.grid(row=2, column=1, padx=10, pady=10)
 
 
     treeview = tkinter.ttk.Treeview(panedwindow1,
@@ -1316,28 +1316,28 @@ def Rent_Search():
     treeview.column("t_check", width=100, anchor="center")
     treeview.heading("t_check", text="대출 여부", anchor="center")
 
-    treeview.column("t_isbn", width=50, anchor="center")
+    treeview.column("t_isbn", width=100, anchor="center")
     treeview.heading("t_isbn", text="ISBN", anchor="center")
 
-    treeview.column("t_title", width=50, anchor="center")
+    treeview.column("t_title", width=100, anchor="center")
     treeview.heading("t_title", text="제목", anchor="center")
 
-    treeview.column("t_author", width=50, anchor="center")
+    treeview.column("t_author", width=100, anchor="center")
     treeview.heading("t_author", text="저자", anchor="center")
 
-    treeview.column("t_pub", width=50, anchor="center")
+    treeview.column("t_pub", width=100, anchor="center")
     treeview.heading("t_pub", text="출판사", anchor="center")
 
-    treeview.column("t_price", width=50, anchor="center")
+    treeview.column("t_price", width=100, anchor="center")
     treeview.heading("t_price", text="가격", anchor="center")
 
-    treeview.column("t_url", width=50, anchor="center")
+    treeview.column("t_url", width=100, anchor="center")
     treeview.heading("t_url", text="관련URL", anchor="center")
 
     treeview["show"] = "headings"
 
     btn_cancel = Button(panedwindow1, text="취소", command=lambda: panedwindow1.pack_forget())
-    btn_cancel.grid(row=4, column=1, padx=100)
+    btn_cancel.grid(row=4, column=1, padx=10, pady=10)
 
 
 def Rent_State_Show():
@@ -1474,28 +1474,28 @@ my_frame.configure(bg='#B2CCFF')
 my_frame.pack(pady=100)
 
 label2 = Label(my_frame, text="도서 관리 메뉴")
-label2.grid(row=0, column=0, padx=100)
+label2.grid(row=0, column=0, padx=100, pady=10)
 label2.configure(bg='#B2CCFF')
 my_button1 = Button(my_frame, text="도서 등록", command=Book_Add)
 my_button1.grid(row=1, column=0, padx=100)
 my_button2 = Button(my_frame, text="도서 조회 수정 삭제", command=Book_Search)
-my_button2.grid(row=2, column=0, padx=100)
+my_button2.grid(row=2, column=0, padx=100, pady=10)
 
 label3 = Label(my_frame, text="회원 관리 메뉴")
-label3.grid(row=0, column=1, padx=100)
+label3.grid(row=0, column=1, padx=100, pady=10)
 label3.configure(bg='#B2CCFF')
 my_button3 = Button(my_frame, text="회원 등록", command=User_Add)
 my_button3.grid(row=1, column=1, padx=100)
 my_button4 = Button(my_frame, text="회원 조회 수정 탈퇴", command=User_Search)
-my_button4.grid(row=2, column=1, padx=100)
+my_button4.grid(row=2, column=1, padx=100, pady=10)
 
 label4 = Label(my_frame, text="도서 대출 메뉴")
-label4.grid(row=0, column=2, padx=100)
+label4.grid(row=0, column=2, padx=100, pady=10)
 label4.configure(bg='#B2CCFF')
 my_button5 = Button(my_frame, text="도서 대여", command=Rent_User_Search)
 my_button5.grid(row=1, column=2, padx=100)
 my_button6 = Button(my_frame, text="대출 조회 반납" , command=Rent_Search)
-my_button6.grid(row=2, column=2, padx=100)
+my_button6.grid(row=2, column=2, padx=100, pady=10)
 
 # Execute tkinter
 root.mainloop()
