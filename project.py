@@ -276,6 +276,7 @@ def Book_Add():
         messagebox.showinfo("알림","도서 등록이 완료되었습니다.")# 팝업창
         confirmedISBN="" # 중복 등록 방지를 위해 초기화
         isConfirmed=False
+        panedwindow1.destroy()
 
     panedwindow1 = PanedWindow(relief="raised", bd=2)
     panedwindow1.pack(expand=True)
@@ -590,6 +591,7 @@ def User_Add():
         messagebox.showinfo("알림","회원 등록이 완료되었습니다.")# 팝업창
         confirmedHP="" # 중복 등록 방지를 위해 초기화
         isConfirmed=False
+        panedwindow1.destroy()
 
 
     panedwindow1 = PanedWindow(relief="raised", bd=2)
