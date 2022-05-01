@@ -219,8 +219,10 @@ root.geometry("1454x936")
 
 def Book_Add():
 
+    global confirmedISBN
     confirmedISBN="" # 중복확인한 ISBN 임시저장하는 문자열 변수, 체크할 때마다 저장할 것
-    isConfirmed=False # 체크를 했는가 저장하는 boolean 변수, 기본값은 False
+    global isConfirmed # 체크를 했는가 저장하는 boolean 변수, 기본값은 False
+    isConfirmed = False
     
     def get_user(): # ISBN 중복 확인을 위해 도서 리스트를 불러오는 위한 메소드
         global isConfirmed
@@ -530,14 +532,10 @@ def Book_Show():
 
 # 회원 등록 페이지
 def User_Add():
+    global confirmedHP
     confirmedHP="010-0000-0000" # 중복 확인한 전화번호 저장하는 문자열 변수, 체크할 때마다 저장할 것
-    isConfirmed=False # 중복 확인했는지 여부 저장하는 boolean 변수, 기본값은 False
-
-    def check_HP():#전화번호 형식 체크하는 함수
-        sli=textHP.get()
-        if(len(sli)!=13):
-            messagebox.showinfo("경고","전화번호 형식은 010-0000-0000 형태만 지원됩니다")
-            return True
+    global isConfirmed # 중복 확인했는지 여부 저장하는 boolean 변수, 기본값은 False
+    isConfirmed = False
     
     def check_user(): # 회원 중복 확인을 위한 메소드
         global isConfirmed
