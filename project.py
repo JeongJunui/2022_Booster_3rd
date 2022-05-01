@@ -11,26 +11,6 @@ import tkinter.ttk
 from tkinter import messagebox
 import datetime as dt #날짜 관련 관리하는 라이브러리
 
-"""
-df=pd.read_csv('csv/Rent.csv', encoding='UTF-8') # cvs파일 불러옴
-df1=pd.read_csv('csv/User.csv', encoding='UTF-8')
-df2=pd.read_csv('csv/Book.csv', encoding='UTF-8')
-
-rent_list=np.array([]) # 넘파이 빈리스트 생성
-rent_list=np.append(rent_list,df) # 값들을 append를 사용해 추가
-rent_list=np.reshape(rent_list,(int(rent_list.size/7),7)) # size행 8열로 모양 변환
-rent_list=rent_list[:,1:] #저장 시 생기는 인덱스 제거
-
-user_list=np.array([])
-user_list=np.append(user_list,df1)
-user_list=np.reshape(user_list,(int(user_list.size/9),9))
-user_list=user_list[:,1:]
-
-book_list=np.array([])
-book_list=np.append(book_list,df2)
-book_list=np.reshape(book_list,(int(book_list.size/9),9))
-book_list=book_list[:,1:]"""
-
 send_data=''
 send_data2=''
 
@@ -51,15 +31,11 @@ class Book:
     def get_Isbnlist(self): #접근자
         return self.__book[:0]
 
-    #def get_AllInfo(self): # 저장할 때 정보를 전부 불러오는 용도, 우선은 사용하지 않아 더미 데이터 처리
-        #return self.__book
-
     def save_to_csv(self): # 변동사항 생길 때마다 저장(IF-007)
         book_col=["ISBN","TITLE","AUTHOR","PUB","PRICE","LINK","DESCRIP","PRE"] # 열 이름
         print(self.__book)
         bookdf=pd.DataFrame(self.__book, columns=book_col) # numpy 배열을 DataFrame 형식으로 변환
         bookdf.to_csv('csv/Book.csv', encoding='UTF-8') # to_csv는 numpy 배열에서 작동하지 않아 DataFrame으로 변환한 것
-        #self.__road_from_csv()
     
     def get_IsIn(self,isbn): # isbn이 안에 있는가 확인 (IF-001)
         if isbn in self.__book[:,0]: # 있으면 True 반환
@@ -84,18 +60,7 @@ class Book:
         self.save_to_csv()
         
     def search_Book_ByTitle(self,title): # 책 제목으로 검색 (IF-003)
-        """
-        for s in len(str(title)): # 검색된 문자열을 문자열 길이만큼 반복문으로 돌림
-            stitle+=s # 반복하며 문자열이 추가 됨
-            if self.__book[:,1].at(stitle): # 만약 반복하다가 같은 문자열이 발견된다면
-                ind=np.where(self.__book[:,1]==stitle) # 일단 인덱스를 가져옴
-                if isChecked.at(ind): # 만약 이미 확인한 인덱스면
-                    continue # 넘어감
-                isChecked=np.append(isChecked,ind) # 확인을 했다는 의미로 추가
-                search_list=np.append(search_list,self.__book[ind,:])# 제목이 유사하므로 리스트에 추가
-        return search_list # 비슷한 문자열을 가진 도서목록을 출력해줌 
 
-        """
         search_list=np.array([])# 검색된 책 정보 저장할 리스트
         found_ind=np.where(self.__book[:,1]==title)
         for i in found_ind:
@@ -274,7 +239,7 @@ def Book_Add():
         global confirmedISBN
         add_book_list=np.array([])
     
-        if isConfirmed!=True: #등록버튼을 눌렀을 때 isConfirmed가 False면 체크를 안 했다는 소리이므로 중복확인하라고 메세지박스 띄우고 리턴(빠꾸) -> 버튼처리
+        if isConfirmed!=True: #등록버튼을 눌렀을 때 isConfirmed가 False면 체크를 안 했다는 소리이므로 중복확인하라고 메세지박스 띄움
             messagebox.showinfo("경고","중복확인을 하세요")
             return 0
         else:
@@ -1116,13 +1081,12 @@ def Rent_Book_Search(before):
         for i in range(int(searched_list.size/8)):
             treeV=[]#
             if searched_list[i,7]:#대출 여부에 따라 문장을 다르게 삽입
-                treeV.append("X")
+                treeV.append("x")
             else:
                 treeV.append("대출 중")
             for j in range(1,6):#대출여부 외에는 배치순서 동일하니 for문 처리
                 treeV.append(searched_list[i,j-1])
             treeview.insert("", "end", text="", values=treeV, iid=treeV[1])
-            #treeview.bind("<Double-1>", update_rent_situation)
 
     def update_rent_situation(before): # 선택 버튼을 눌렀을 시에 대출 상태가 대출중으로 바뀌어 저장되게하고, 대출 정보 화면을 띄어주게 하는 메소드
         isbn=int(treeview.selection()[0])
@@ -1135,13 +1099,7 @@ def Rent_Book_Search(before):
         global isChecked
         isChecked=True
         Rent_Show(before)
-        #else:
-            #book_list[ind,8]==TRUE
-            
-        #rent_show 클래스를 불러와야 함 ( 대출 정보 화면 띄워주기 ) -> gui
 
-    #def get_book(ind): # 도서 정보를 불러오는 메소드
-        #BO.get_Book_info(ind)
     before.pack_forget()
 
     panedwindow1 = PanedWindow(relief="raised", bd=2)
@@ -1185,13 +1143,6 @@ def Rent_Book_Search(before):
     treeview.heading("t_url", text="관련URL", anchor="center")
 
     treeview["show"] = "headings"
-
-    #treeValueList = [("대출중", 9788970504773, "따라하며 배우는 파이썬과 데이터 과학", "천인국", "생능출판", 26000, "https://~"),
-    #                 (" X ", 1234970504773, "예제 중심의 파이썬 입문", "황재호", "생능출판", 26000, "https://~")]
-
-    #for i in range(len(treeValueList)):
-    #    treeview.insert("", "end", text="", values=treeValueList[i], iid=i)
-    #    treeview.bind("<Double-1>", update_rent_situation)
 
     btn_select = Button(panedwindow1, text="선택", command=lambda: update_rent_situation(panedwindow1))
     btn_select.grid(row=3, column=0, padx=100)
@@ -1354,8 +1305,6 @@ def Rent_Search():
             messagebox.showinfo("경고","도서명과 회원명 둘 중 하나라도 입력하시오")
             return 0
         searched_list=searched_list[:,0]
-        #다시 찾은 뒤 합집합으로 모든 데이터 합치는 과정 필요
-        #np 합집합 함수는 np.union1d(x,y), for문으로 돌려서 하나씩 더하면 될 것(좀 많이 난해하니 나중에 제가 직접 작업하겠습니다)
         if searched_list.size!=1:
             adv_search=np.array([])
             if isBook:
@@ -1383,8 +1332,8 @@ def Rent_Search():
         #treeview에 넣을 데이터 정제 과정
         for i in range(int(searched_list.size/6)):
             treeV=[]#
-            if np.isnan(searched_list[i,5]):
-                treeV.append('X')
+            if searched_list[i,5] == True:
+                treeV.append('반납 완료')
             else:
                 treeV.append('대출 중')
             rentBookInfo=BO.get_Book_info(searched_list[i,1])[0]
