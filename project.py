@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 from cgitb import text
 #from curses import textpad
 from glob import glob
@@ -612,12 +613,11 @@ def User_Add():
         else:
             add_user_list=np.append(add_user_list,False)
         add_user_list=np.append(add_user_list,textEmail.get())
-        #add_user_list=np.append(textUrl.get())#Url?
-        #필요없는 값 같아서 주석처리
         add_user_list=np.append(add_user_list,dt.datetime.now().strftime('%Y.%m.%d'))
         add_user_list=np.append(add_user_list,'')
         add_user_list=np.append(add_user_list,0)
         #가입일자 추가가 안 되어있네요
+
         #탈퇴일자도 빈 값으로 추가를 해주세요
         US.add_User_Info(add_user_list)
         messagebox.showinfo("알림","회원 등록이 완료되었습니다.")# 팝업창
@@ -665,18 +665,20 @@ def User_Add():
     labelEmail.grid(row=7, column=0, padx=50, pady=10)
     textEmail.grid(row=7, column=1, padx=0, pady=10)
 
+    labelJoin = Label(panedwindow1, text="가입일 : ")
+    labelJoin.grid(row=8, column=0, padx=50, pady=10)
+    label_Join_msg = Label(panedwindow1, text="가입일은 자동으로 채워질 거예요!")
+    label_Join_msg.grid(row=8, column=1, padx=0)
 
-    labelPicture = Label(panedwindow1, text="사 진 : ") 
-    textPicture = Entry(panedwindow1) #사진 저장하는 텍스트박스
-    labelPicture.grid(row=8, column=0, padx=50)
-    textPicture.grid(row=8, column=1, padx=0)
-    btn_check = Button(panedwindow1, text="찾기")
-    btn_check.grid(row=8, column=2, padx=50)
+    labelJoin = Label(panedwindow1, text="탈퇴일 : ")
+    labelJoin.grid(row=9, column=0, padx=50, pady=10)
+    label_Join_msg = Label(panedwindow1, text="탈퇴일은 자동으로 채워질 거예요!")
+    label_Join_msg.grid(row=9, column=1, padx=0)
 
     btn_book_register = Button(panedwindow1, text="등록", command=add_user)
-    btn_book_register.grid(row=9, column=0, padx=50, pady=10)
+    btn_book_register.grid(row=10, column=0, padx=50, pady=10)
     btn_cancel = Button(panedwindow1, text="취소", command=lambda: panedwindow1.pack_forget())
-    btn_cancel.grid(row=9, column=1, padx=50, pady=10)
+    btn_cancel.grid(row=10, column=1, padx=50, pady=10)
 
 #회원 조회
 def User_Search():
@@ -699,11 +701,7 @@ def User_Search():
         #treeview에 넣을 데이터 정제 과정
         #treeV=[[for i in range(8)] for j in range(int(searched_list.size)/8)]#2차원 배열
         for i in range(int(searched_list.size/8)):
-            treeV=[]#
-            #if searched_list[i,7]:#대출 여부에 따라 문장을 다르게 삽입
-            #    treeV.append("X")
-            #else:
-            #    treeV.append("대출 중")
+            treeV=[]
             treeV.append(searched_list[i,1])
             treeV.append(searched_list[i,2])
             treeV.append(searched_list[i,0])
@@ -716,21 +714,13 @@ def User_Search():
                 treeV.append('O')
             else:
                 treeV.append('X')
-            if np.isnan(searched_list[i,6]):
+            if searched_list[i,6] == NULL:
                 treeV.append('X')
             else:
                 treeV.append('탈퇴한 회원')
             treeview.insert("", "end", text="", values=treeV, iid=treeV[2])
             treeview.bind("<Double-1>", get_user_show)
-        #위에 Book_Search에서 하셨던 대로 하시면 되는데...
         
-        #User.search_User_ByName(name) # 1. 이름으로 회원조회 -> 선택하는 과정 추가 ( 원하는 이름 선택)-> gui?
-        #user=User.search_list[name,2] # 이름 선택
-        #User.get_User_info(user) # 해당 회원의 정보 출력
-        
-        #User.search_User_ByPhone(phone) # 2. 연락처로 회원조회 ->  선택하는 과정 추가 ( 원하는 전화번호 선택)-> gui?
-        #user=User.search_list[phone,1]
-        #User.get_User_info(user) # 해당 회원의 정보 출력
     panedwindow1 = PanedWindow(relief="raised", bd=2)
     panedwindow1.pack(expand=True)
 
@@ -778,12 +768,6 @@ def User_Search():
 
     treeview["show"] = "headings"
 
-    #treeValueList = [("손다연", "2000.11.07", "010-1234-5678", "여", "123@naver.com", "도서 대출 중", "X")]
-
-    #for i in range(len(treeValueList)):
-    #    treeview.insert("", "end", text="", values=treeValueList[i], iid=i)
-    #    treeview.bind("<Double-1>", User_Show)
-
     btn_cancel = Button(panedwindow1, text="취소", command=lambda: panedwindow1.pack_forget())
     btn_cancel.grid(row=4, column=1, padx=100)
 
@@ -793,17 +777,6 @@ def User_Show():
     global new
     global isConfirmed
     isConfirmed=False
-    
-    #def print_user_info(ind): # 조회한 회원의 정보 출력을 위한 메소드
-        #US.get_User_info(ind)
-        #print(US.book[ind,1]) # 폰번호 출력
-        #print(US.book[ind,2]) # 이름 출력
-        #print(US.book[ind,3]) # 생년월일 출력
-        #print(US.book[ind,4]) # 성별 출력
-        #print(US.book[ind,5]) # 메일 출력
-        # 사진 찾기
-        #print(US.book[ind,6]) # 대출여부 출력
-        #print(US.book[ind,7]) # 탈퇴여부 출력
 
     def modify_user(): # 수정 버튼을 눌렀을 때 원래 회원 정보의 내용이 바뀌어서 저장되게 하기 위한 메소드
         global userInfo
@@ -866,10 +839,6 @@ def User_Show():
             messagebox.showinfo("알림","회원탈퇴가 완료되었습니다.")
             isConfirmed=True
 
-    #def get_user(name,phone): # 회원 정보를 불러오는 메소드
-        #User.search_User_ByName(name) # 이름으로 회원 조회했을시
-        #User.search_User_ByPhone(phone) # 연락처로 회원 조회했을시
-
     new = Toplevel()
     labelName = Label(new, text="이름 : ")
     labelName.grid(row=1, column=0, padx=100)
@@ -905,18 +874,25 @@ def User_Show():
     labelEmail.grid(row=5, column=0, padx=100)
     textEmail.grid(row=5, column=1, padx=100)
 
-    labelPicture = Label(new, text="사진 : ") 
-    textPicture = Entry(new)
-    labelPicture.grid(row=6, column=0, padx=100)
-    textPicture.grid(row=6, column=1, padx=100)
+    labelJoin = Label(new, text="가입일 : ") 
+    textJoin = Entry(new)
+    textJoin.insert(END,userInfo[0,5])
+    labelJoin.grid(row=6, column=0, padx=100)
+    textJoin.grid(row=6, column=1, padx=100)
+
+    labelExit = Label(new, text="탈퇴일 : ") 
+    textExit = Entry(new)
+    textExit.insert(END,userInfo[0,6])
+    labelExit.grid(row=7, column=0, padx=100)
+    textExit.grid(row=7, column=1, padx=100)
 
     labelRent = Label(new, text="대출여부 : ")
     textRent = Entry(new)
     ins_st=''
     ins_st+=str(userInfo[0,7])+'권 대출중'
     textRent.insert(END,ins_st)
-    labelRent.grid(row=7, column=0, padx=100)
-    textRent.grid(row=7, column=1, padx=100)
+    labelRent.grid(row=8, column=0, padx=100)
+    textRent.grid(row=8, column=1, padx=100)
 
     labelExit = Label(new, text="탈퇴여부 : ")
     textExit = Entry(new)
@@ -926,17 +902,17 @@ def User_Show():
     else:
         ins_st='O'
     textExit.insert(END,ins_st)
-    labelExit.grid(row=8, column=0, padx=100)
-    textExit.grid(row=8, column=1, padx=100)
+    labelExit.grid(row=9, column=0, padx=100)
+    textExit.grid(row=9, column=1, padx=100)
 
     btn_check_dup = Button(new, text="수정",command=modify_user)
-    btn_check_dup.grid(row=9, column=0, padx=100)
+    btn_check_dup.grid(row=10, column=0, padx=100)
 
-    btn_check_dup = Button(new, text="삭제",command=delete_user)
-    btn_check_dup.grid(row=9, column=1, padx=100)
+    btn_check_dup = Button(new, text="탈퇴",command=delete_user)
+    btn_check_dup.grid(row=10, column=1, padx=100)
 
     btn_check_dup = Button(new, text="취소", command=lambda: new.destroy())
-    btn_check_dup.grid(row=9, column=2, padx=100)
+    btn_check_dup.grid(row=10, column=2, padx=100)
 
 
 #책 대여하기
@@ -946,9 +922,6 @@ def Rent_User_Search():
         #ind,isbn,phone,dat
     global send_data
     def update_rent_situation(before): # 선택 버튼을 눌렀을 시에 해당 회원의 대출 여부가 도서 대출 중으로 바뀌어 저장하는 메소드
-        #if treeview.selection().count==0: 아무것도 선택하지 않은 것을 판별할 수 있는 메소드가 필요함
-        #    messagebox.showinfo("경고","회원을 선택하세요.")
-        #    return 0
         phone=treeview.selection()[0]
         if np.isnan(US.get_User_info(phone)[0,0,6])==False:
             messagebox.showinfo("경고","이미 탈퇴한 회원입니다.")
@@ -974,11 +947,7 @@ def Rent_User_Search():
         treeview.delete(*treeview.get_children())#treeview 전체를 지우는 문장
         #treeview에 넣을 데이터 정제 과정
         for i in range(int(searched_list.size/8)):
-            treeV=[]#
-            #if searched_list[i,7]:#대출 여부에 따라 문장을 다르게 삽입
-            #    treeV.append("X")
-            #else:
-            #    treeV.append("대출 중")
+            treeV=[]
             treeV.append(searched_list[i,1])
             treeV.append(searched_list[i,2])
             treeV.append(searched_list[i,0])
@@ -996,19 +965,6 @@ def Rent_User_Search():
             else:
                 treeV.append('탈퇴한 회원')
             treeview.insert("", "end", text="", values=treeV, iid=treeV[2])
-        #User_Search에서 했던 것처럼 -> user_search에서 ?
-        
-        #US.get_User_info(ind) # 해당 이름의 회원들 정보 불러오는 메소드
-        #for i in US.get_User_info(ind): # 해당 이름의 회원들의 정보를 출력
-            #print(US.book[ind,2],axis='\t') # 이름 출력
-            #print(US.book[ind,3],axis='\t') # 생년월일 출력
-            #print(US.book[ind,4],axis='\t') # 성별 출력
-            #print(US.book[ind,5],axis='\t') # 메일 출력
-            #print(US.book[ind,7],axis='\t') # 탈퇴여부 출력
-            #print("%d권 대출 중",user_list[ind,8],axis='\n') # 대출여부 출력
-
-    #def get_rent_book_search(): # book search 클래스 페이지로 넘어가는 메소드
-        #gui
 
     title = Label(panedwindow1, text="도서 대여 - 회원 선택")
     title.grid(row=0, column=1, padx=100)
@@ -1162,7 +1118,7 @@ def Rent_Show(before):
     global phone
     phone=userInfo[0,0]
 
-    def save_rent(): # 대출 완료 버튼을 눌렀을 시에 대출 정보를 저장하는 메소드 -> gui (버튼작용)
+    def save_rent(): # 대출 완료 버튼을 눌렀을 시에 대출 정보를 저장하는 메소드
         global isChecked
         global phone
         print(phone)
@@ -1178,18 +1134,6 @@ def Rent_Show(before):
         BO.set_IsRented(int(isbn),False)
         messagebox.showinfo("알림","대출이 완료되었습니다.\n반납 예정 일자는 "+dr+"입니다.")
         isChecked=True
-
-    #def get_rent_book_info(ind): # 대출할 도서의 정보를 불러오는 메소드
-        #BO.get_Book_info(ind)
-
-    #def get_rent_user_info(ind): # 대출할 회원의 정보를 불러오는 메소드
-        #US.get_User_info(ind)
-
-    #def set_return_date(ind): # 반납 날짜를 지정하는 메소드
-        #date=rent_list[ind,4]
-        #date=datetime.strptime(date,'%Y.%m.%d')
-        #date=date+timedelta(days=14)
-        #rent_list[ind,4]=date
 
     new = Toplevel()
 
@@ -1269,6 +1213,7 @@ def Rent_Show(before):
     textISBN = Entry(new)
     textISBN.insert(END,bookInfo[0,0])
     textISBN.grid(row=7, column=1, padx=100)
+
     labelBackDay = Label(new, text="반납 예정일 : ")
     textBackDay = Entry(new)
     d=d+dt.timedelta(days=14)
