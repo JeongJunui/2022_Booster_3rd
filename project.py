@@ -99,8 +99,6 @@ class Book:
         search_list=np.array([])# 검색된 책 정보 저장할 리스트
         found_ind=np.where(self.__book[:,1]==title)
         for i in found_ind:
-            if self.__book[i,0]==-1:
-                continue
             search_list=np.append(search_list,self.__book[i,:])# 제목이 동일하면 리스트에 추가
         search_list=np.reshape(search_list,(int(search_list.size/8),8))
         return search_list # 반환 값 : 도서 목록
@@ -110,8 +108,6 @@ class Book:
         search_list=np.array([])# 검색된 책 정보 저장할 리스트
         found_ind=np.where(self.__book[:,2]==author)
         for i in found_ind:
-            if self.__book[i,0]==-1:
-                continue
             search_list=np.append(search_list,self.__book[i,:])# 저자가 동일하면 리스트에 추가
         search_list=np.reshape(search_list,(int(search_list.size/8),8))
         return search_list # 반환 값 : 도서 목록
@@ -123,8 +119,7 @@ class Book:
    
     def drop_Book_Info(self,isbn): # 도서 삭제 (IF-006)
         ind=np.where(self.__book[:,0]==isbn)#내부 인덱스를 찾아냄
-        self.__book[ind,0]=-1
-        #self.__book=np.delete(self.__book,ind)# 인덱스 값에 해당하는 정보 삭제
+        self.__book=np.delete(self.__book,ind,axis=0)# 인덱스 값에 해당하는 정보 삭제
         self.save_to_csv()
         
 class User:
