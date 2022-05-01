@@ -251,7 +251,6 @@ def Book_Add():
                 return 0
             
             if textBookName.get()=='' or textAuthor.get()=='' or textPub.get()=='': # 도서명,저자,출판사 셋중 하나를 입력하지 않았을경우 경고메세지 출력
-                #이거 and 말고 or 써야됩니다
                 textWrite=""
                 if textBookName.get()=='':
                     textWrite+="도서명이 입력되어있지 않습니다.\n" # 팝업창 처리
@@ -273,7 +272,6 @@ def Book_Add():
         add_book_list=np.append(add_book_list,textUrl.get())
         add_book_list=np.append(add_book_list,textDesc.get())
         add_book_list=np.append(add_book_list,True)
-        #대출 여부 초기값 True로 배열에 추가해야 됩니다
         BO.add_Book_Info(add_book_list)
         messagebox.showinfo("알림","도서 등록이 완료되었습니다.")# 팝업창
         confirmedISBN="" # 중복 등록 방지를 위해 초기화
@@ -340,7 +338,6 @@ def Book_Search():
         global send_data
         send_data=int(treeview.selection()[0])
         Book_Show() # 조회한 책의 정보를 출력하는 메소드
-        #gui 불러오는 거니까 건드리지 않아도 됨
 
     def print_book_list(): # 도서 조회시 관련 도서의 리스트를 화면에 출력해주는 메소드
         #treeview랑 연계 
@@ -449,17 +446,16 @@ def Book_Show():
         modify_list=np.append(modify_list,textPub.get())
         modify_list=np.append(modify_list,textPrice.get())
         modify_list=np.append(modify_list,textUrl.get())
-        if bookInfo[0,6] == NULL:
-            modify_list=np.append(modify_list,'')
+        modify_list=np.append(modify_list,textInfo.get())
+        if textRent.get() == 'O':
+            modify_list=np.append(modify_list, False)
         else:
-            modify_list=np.append(modify_list,bookInfo[0,6])
-        #도서 설명이 빠져있어서 일단 긁어온 값 유지
-        modify_list=np.append(modify_list,bookInfo[0,7])
+            modify_list=np.append(modify_list, True)
+
         BO.set_Book_Info(modify_list)
         messagebox.showinfo("알림","도서 수정이 완료되었습니다.") # 팝업창
         bookInfo=BO.get_Book_info(textISBN.get())[0,:]
-        
-        #isbn이 수정되는걸 체크해야되나 ?<-애초에 수정되면 안 되니 isbn을 아예 못 건드리게 하는게 좋을 거 같음
+
 
     def delete_book(): # 삭제 버튼을 눌렀을 때 해당된 도서 정보가 원래의 도서 리스트에서 삭제되어 도서 리스트에 저장 하기 위한 메소드
         if BO.get_IsRented(int(textISBN.get()))==False:
@@ -468,15 +464,10 @@ def Book_Show():
             BO.drop_Book_Info(int(textISBN.get()))  # 도서 삭제 함수 호출
             messagebox.showinfo("알림","해당 도서가 삭제되었습니다.")# 팝업창
             
-    #def get_book(): # 도서 정보를 불러오는 메소드
-        #print(BS)
-        #print_book_info랑 겹치는 거 같은데 일단 보류
-
-
     new = Toplevel()
+    
     labelISBN = Label(new, text="ISBN : ")
     labelISBN.grid(row=1, column=0, padx=100)
-    
     textISBN = Entry(new)
     textISBN.insert(END,bookInfo[0,0])
     textISBN.grid(row=1, column=1, padx=100)
@@ -501,21 +492,21 @@ def Book_Show():
 
     labelPrice = Label(new, text="가격 : ")
     textPrice = Entry(new)
-    if(np.isnan(bookInfo[0,4])):
-        textPrice.insert(END,'')
-    else:
-        textPrice.insert(END,bookInfo[0,4])
+    textPrice.insert(END,bookInfo[0,4])
     labelPrice.grid(row=5, column=0, padx=100)
     textPrice.grid(row=5, column=1, padx=100)
 
     labelUrl = Label(new, text="관련URL : ")
     textUrl = Entry(new)
-    if(bookInfo[0,5] == NULL):
-        textUrl.insert(END,'')
-    else:
-        textUrl.insert(END,bookInfo[0,5])
+    textUrl.insert(END,bookInfo[0,5])
     labelUrl.grid(row=6, column=0, padx=100)
     textUrl.grid(row=6, column=1, padx=100)
+
+    labelInfo = Label(new, text="설명 : ")
+    textInfo = Entry(new)
+    textInfo.insert(END,bookInfo[0,6])
+    labelInfo.grid(row=7, column=0, padx=100)
+    textInfo.grid(row=7, column=1, padx=100)
     
     labelRent = Label(new, text="대출여부 : ") 
     textRent = Entry(new)
@@ -524,17 +515,17 @@ def Book_Show():
     else:
         textRent.insert(END,'O')
     #textRent.insert(END,bookInfo[0,7])
-    labelRent.grid(row=7, column=0, padx=100)
-    textRent.grid(row=7, column=1, padx=100)
+    labelRent.grid(row=8, column=0, padx=100)
+    textRent.grid(row=8, column=1, padx=100)
 
     btn_check_dup = Button(new, text="수정",command=modify_book)
-    btn_check_dup.grid(row=8, column=0, padx=100)
+    btn_check_dup.grid(row=9, column=0, padx=100)
 
     btn_check_dup = Button(new, text="삭제",command=delete_book)
-    btn_check_dup.grid(row=8, column=1, padx=100)
+    btn_check_dup.grid(row=9, column=1, padx=100)
 
     btn_check_dup = Button(new, text="취소", command=lambda: new.destroy())
-    btn_check_dup.grid(row=8, column=2, padx=100)
+    btn_check_dup.grid(row=9, column=2, padx=100)
 
 # 회원 등록 페이지
 def User_Add():
@@ -600,7 +591,6 @@ def User_Add():
         confirmedHP="" # 중복 등록 방지를 위해 초기화
         isConfirmed=False
 
-    # def search_photo(): # PC에서 사용자 사진을 찾도록 하는 메소드 --> gui
 
     panedwindow1 = PanedWindow(relief="raised", bd=2)
     panedwindow1.pack(expand=True)
@@ -659,7 +649,7 @@ def User_Add():
 #회원 조회
 def User_Search():
 
-    def get_user_show(event): # 회원 조회 시 회원을 선택했을 때 book show 클래스를 불러오는 메소드 -> 새창을 띄우는것 gui
+    def get_user_show(event): # 회원 조회 시 회원을 선택했을 때 book show 클래스를 불러오는 메소드
         global send_data
         send_data=treeview.selection()[0]
         User_Show()
@@ -789,8 +779,8 @@ def User_Show():
             modify_user_list=np.append(modify_user_list,False)
         modify_user_list=np.append(modify_user_list,textEmail.get())
         modify_user_list=np.append(modify_user_list,userInfo[0,5])
-        if np.isnan(userInfo[0,6]):
-            modify_user_list=np.append(modify_user_list,'')
+        if userInfo[0,6] == '0':
+            modify_user_list=np.append(modify_user_list,'0')
         else:
             modify_user_list=np.append(modify_user_list,userInfo[0,6])
         modify_user_list=np.append(modify_user_list,userInfo[0,7])
