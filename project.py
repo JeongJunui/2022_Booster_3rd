@@ -108,6 +108,7 @@ class User:
         userdf=pd.DataFrame(self.__user, columns=user_col)
         userdf.to_csv('csv/User.csv', encoding='UTF-8')
         self.__road_from_csv()
+
     def get_IsIn(self,phone): # 폰번호가 안에 있는가 확인 (IF-010)
         if phone in self.__user[:,0]: # 있으면 True 반환 np.isin(self.__user[:,0],phone)
             return True
@@ -582,7 +583,7 @@ def User_Add():
         global confirmedHP
         add_user_list=np.array([])
     
-        if isConfirmed==False: # 등록버튼을 눌렀을 때 isConfirmed가 False면 체크를 안 했다는 소리이므로 중복확인하라고 메세지박스 띄우고 리턴(빠꾸) -> 버튼처리
+        if isConfirmed!=True: # 등록버튼을 눌렀을 때 isConfirmed가 False면 체크를 안 했다는 소리이므로 중복확인하라고 메세지박스 띄우고 리턴(빠꾸) -> 버튼처리
             messagebox.showinfo("경고","중복확인을 하세요")
             return 0
         else:
@@ -804,8 +805,6 @@ def User_Show():
             messagebox.showinfo("경고","성별은 '남' 혹은 '여' 둘 중 하나로만 입력해야 합니다.")
             return 0
 
-        #d=dt.datetime.now().strftime('%Y-%m-%d')
-        #가입일자를 다시 읽어올 필요는 없습니다
         modify_user_list=np.append(modify_user_list,textHP.get())
         modify_user_list=np.append(modify_user_list,textName.get())
         modify_user_list=np.append(modify_user_list,textBirth.get())
@@ -814,7 +813,6 @@ def User_Show():
         else:
             modify_user_list=np.append(modify_user_list,False)
         modify_user_list=np.append(modify_user_list,textEmail.get())
-        #modify_user_list=np.append(textUrl.get())
         modify_user_list=np.append(modify_user_list,userInfo[0,5])
         if np.isnan(userInfo[0,6]):
             modify_user_list=np.append(modify_user_list,'')
@@ -1007,11 +1005,6 @@ def Rent_User_Search():
 
     treeview["show"] = "headings"
 
-    #treeValueList = [("손다연", "2000.11.07", "010-1234-5678", "여", "123@naver.com", "3권 대출 중")]
-
-    #for i in range(len(treeValueList)):
-    #    treeview.insert("", "end", text="", values=treeValueList[i], iid=i)
-    #    treeview.bind("<Double-1>", User_Show)
 
     btn_select = Button(panedwindow1, text="선택", command=lambda: update_rent_situation(panedwindow1))
     btn_select.grid(row=4, column=0, padx=100)
