@@ -11,6 +11,7 @@ import tkinter.ttk
 from tkinter import messagebox
 import datetime as dt #날짜 관련 관리하는 라이브러리
 
+"""
 df=pd.read_csv('csv/Rent.csv', encoding='UTF-8') # cvs파일 불러옴
 df1=pd.read_csv('csv/User.csv', encoding='UTF-8')
 df2=pd.read_csv('csv/Book.csv', encoding='UTF-8')
@@ -28,16 +29,25 @@ user_list=user_list[:,1:]
 book_list=np.array([])
 book_list=np.append(book_list,df2)
 book_list=np.reshape(book_list,(int(book_list.size/9),9))
-book_list=book_list[:,1:]
+book_list=book_list[:,1:]"""
 
 send_data=''
+send_data2=''
 
 #rent, user, book_list 이 세개는 csv 파일에서 불러와서 인터페이스에 집어넣고 나면 안 써야 됩니다. 코드 본문에서 _list 쓰지 말고 인터페이스 경유해서 정보 받으세요
 
 class Book:
     
-    def __init__(self,book): #생성자
-        self.__book=book #self.__ : private
+    def __init__(self): #생성자
+        self.__book=np.array([]) #self.__ : private
+        self.__road_from_csv()
+    def __road_from_csv(self):
+        df=pd.read_csv('csv/Book.csv', encoding='UTF-8')
+        book_list=np.array([])
+        book_list=np.append(book_list,df)
+        book_list=np.reshape(book_list,(int(book_list.size/9),9))
+        book_list=book_list[:,1:]
+        self.__book=book_list
     def get_Isbnlist(self): #접근자
         return self.__book[:0]
 
@@ -46,8 +56,10 @@ class Book:
 
     def save_to_csv(self): # 변동사항 생길 때마다 저장(IF-007)
         book_col=["ISBN","TITLE","AUTHOR","PUB","PRICE","LINK","DESCRIP","PRE"] # 열 이름
+        print(self.__book)
         bookdf=pd.DataFrame(self.__book, columns=book_col) # numpy 배열을 DataFrame 형식으로 변환
         bookdf.to_csv('csv/Book.csv', encoding='UTF-8') # to_csv는 numpy 배열에서 작동하지 않아 DataFrame으로 변환한 것
+        #self.__road_from_csv()
     
     def get_IsIn(self,isbn): # isbn이 안에 있는가 확인 (IF-001)
         if isbn in self.__book[:,0]: # 있으면 True 반환
@@ -60,7 +72,7 @@ class Book:
         self.save_to_csv()
         
     def get_Book_info(self,isbn): # 책 정보 확인
-        ind=np.where(self.__book[:,0]==isbn)#내부 인덱스를 찾아냄
+        ind=np.where(self.__book[:,0]==int(isbn))#내부 인덱스를 찾아냄
         return self.__book[ind,:]# 인덱스에 해당하는 책 정보를 리턴
 
     def get_IsRented(self,isbn):#IF-008
@@ -87,6 +99,8 @@ class Book:
         search_list=np.array([])# 검색된 책 정보 저장할 리스트
         found_ind=np.where(self.__book[:,1]==title)
         for i in found_ind:
+            if self.__book[i,0]==-1:
+                continue
             search_list=np.append(search_list,self.__book[i,:])# 제목이 동일하면 리스트에 추가
         search_list=np.reshape(search_list,(int(search_list.size/8),8))
         return search_list # 반환 값 : 도서 목록
@@ -96,33 +110,45 @@ class Book:
         search_list=np.array([])# 검색된 책 정보 저장할 리스트
         found_ind=np.where(self.__book[:,2]==author)
         for i in found_ind:
+            if self.__book[i,0]==-1:
+                continue
             search_list=np.append(search_list,self.__book[i,:])# 저자가 동일하면 리스트에 추가
         search_list=np.reshape(search_list,(int(search_list.size/8),8))
         return search_list # 반환 값 : 도서 목록
     
     def set_Book_Info(self,inf): # 도서 수정 (IF-005)
-        ind=np.where(self.__book[:,0]==inf[0])#내부 인덱스를 찾아냄
-        self.__user[ind,:]=inf# 인덱스 값에 해당하는 책 정보 삽입
+        ind=np.where(self.__book[:,0]==int(inf[0]))#내부 인덱스를 찾아냄
+        self.__book[ind,:]=inf# 인덱스 값에 해당하는 책 정보 삽입
         self.save_to_csv()
    
     def drop_Book_Info(self,isbn): # 도서 삭제 (IF-006)
         ind=np.where(self.__book[:,0]==isbn)#내부 인덱스를 찾아냄
-        self.__book=np.delete(self.__book,ind)# 인덱스 값에 해당하는 정보 삭제
+        self.__book[ind,0]=-1
+        #self.__book=np.delete(self.__book,ind)# 인덱스 값에 해당하는 정보 삭제
         self.save_to_csv()
         
 class User:
 
-    def __init__(self,user): #생성자
-        self.__user=user #__ : private
+    def __init__(self): #생성자
+        self.__user=np.array([]) #__ : private
+        self.__road_from_csv()
+    def __road_from_csv(self):
+        df=pd.read_csv('csv/User.csv', encoding='UTF-8')
+        user_list=np.array([])
+        user_list=np.append(user_list,df)
+        user_list=np.reshape(user_list,(int(user_list.size/9),9))
+        user_list=user_list[:,1:]
+        self.__user=user_list
     def get_Phonelist(self): #접근자
-        return self.__user[:0]
+        return self.__user[:,0]
     
     def save_to_csv(self): # 변동사항 생길 때마다 저장(IF-016)
-        user_col=["PHONE","NAME,BIRTH","GENDER","MAIL","REG_DATE","OUT_DATE","RENT_CNT"]
+        user_col=["PHONE","NAME","BIRTH","GENDER","MAIL","REG_DATE","OUT_DATE","RENT_CNT"]
         userdf=pd.DataFrame(self.__user, columns=user_col)
         userdf.to_csv('csv/User.csv', encoding='UTF-8')
+        self.__road_from_csv()
     def get_IsIn(self,phone): # 폰번호가 안에 있는가 확인 (IF-010)
-        if phone in self.__user[:,0]: # 있으면 True 반환
+        if phone in self.__user[:,0]: # 있으면 True 반환 np.isin(self.__user[:,0],phone)
             return True
         else:
             return False
@@ -173,19 +199,28 @@ class User:
         # 회원 탈퇴 시 재가입을 할 수도 있는경우를 위해회원을 삭제 하는 것이 아니라 탈퇴 날짜를 지정해줌
 
 class Rent:
-    def __init__(self,rent): # 생성자
-        self.__rent=rent
+    def __init__(self): # 생성자
+        self.__rent=np.array([])
+        self.__road_from_csv()
+    def __road_from_csv(self):
+        df=pd.read_csv('csv/Rent.csv', encoding='UTF-8')
+        rent_list=np.array([]) # 넘파이 빈리스트 생성
+        rent_list=np.append(rent_list,df) # 값들을 append를 사용해 추가
+        rent_list=np.reshape(rent_list,(int(rent_list.size/7),7)) # size행 8열로 모양 변환
+        rent_list=rent_list[:,1:] #저장 시 생기는 인덱스 제거
+        self.__rent=rent_list
             
     def save_to_csv(self): # 변동사항 생길 때마다 저장(IF-023)
         rent_col=["SEQ","ISBN","PHONE","DATE","RETURN_DATE","RETURN_YN"]
         rentdf=pd.DataFrame(self.__rent, columns=rent_col)
         rentdf.to_csv('csv/Rent.csv', encoding='UTF-8')
+        self.__road_from_csv()
         
     def get_Rent_Info(self,ind):#실제 인덱스 번호가 아니라 대출 테이블 내에 저장된 인덱스 번호를 넣을 것
         return self.__rent[ind-1,:]
     
     def rent_Book(self,isbn,phone,dat,datr): # 도서대출  (IF-019)
-        add_info=np.array([int(self.__rent.size/6)+1,isbn,phone,dat,dat+dt.timedelta(days=14),False])# 대출 정보를 numpy 형태로 변환
+        add_info=np.array([int(self.__rent.size/6)+1,isbn,phone,dat,datr,False])# 대출 정보를 numpy 형태로 변환
         # 날짜 형식 계산은 나중에 추가할 예정
         self.__rent=np.append(self.__rent,[add_info],axis=0)# 대출 목록에 추가
         self.save_to_csv()
@@ -210,9 +245,9 @@ class Rent:
         self.__rent[ind-1,5]=True # 인덱스 값에 해당하는 대출 반납처리
         self.save_to_csv()
 
-BO=Book(book_list)
-US=User(user_list)
-RE=Rent(rent_list)
+BO=Book()
+US=User()
+RE=Rent()
 
 # Create object
 root = Tk()
@@ -438,7 +473,7 @@ def Book_Show():
     # item = self.tree.selection()[0]
     global new
     global send_data
-    bookInfo=BO.get_Book_info(send_data)[0,:]
+    bookInfo=BO.get_Book_info(int(send_data))[0,:]
     
     #def print_book_info(): # 조회한 책의 정보 출력을 위한 메소드
         #BO.get_Book_info() # 책 정보 확인 함수 호출
@@ -449,6 +484,11 @@ def Book_Show():
     def modify_book(): # 수정 버튼을 눌렀을 때 원래 도서 정보의 내용이 바뀌어서 저장되게 하기 위한 메소드
         #BO.set_Book_Info() # 도서 수정 함수 호출
         global bookInfo
+        global send_data
+        bookInfo=BO.get_Book_info(int(textISBN.get()))[0,:]
+        if bookInfo[0,7]==False:
+            messagebox.showinfo("경고","대출 중인 도서는 수정할 수 없습니다.")
+            return 0
         modify_list=np.array([])
 
         if textBookName.get()=='' or textAuthor.get()=='' or textPub.get()=='': # 도서명,저자,출판사 셋중 하나를 입력하지 않았을경우 경고메세지 출력
@@ -462,24 +502,26 @@ def Book_Show():
             textWrite+="필수사항을 입력해주세요."
             messagebox.showinfo("경고",textWrite)
             return 0
-
         modify_list=np.append(modify_list,textISBN.get())
         modify_list=np.append(modify_list,textBookName.get())
         modify_list=np.append(modify_list,textAuthor.get())
         modify_list=np.append(modify_list,textPub.get())
         modify_list=np.append(modify_list,textPrice.get())
         modify_list=np.append(modify_list,textUrl.get())
-        modify_list=np.append(modify_list,bookInfo[0,6])
+        if np.isnan(bookInfo[0,6]):
+            modify_list=np.append(modify_list,'')
+        else:
+            modify_list=np.append(modify_list,bookInfo[0,6])
         #도서 설명이 빠져있어서 일단 긁어온 값 유지
         modify_list=np.append(modify_list,bookInfo[0,7])
         BO.set_Book_Info(modify_list)
-        print("도서 수정이 완료되었습니다.") # 팝업창
-        bookInfo=BO.get_Book_info(int(textISBN.get()))
+        messagebox.showinfo("알림","도서 수정이 완료되었습니다.") # 팝업창
+        bookInfo=BO.get_Book_info(textISBN.get())[0,:]
         
         #isbn이 수정되는걸 체크해야되나 ?<-애초에 수정되면 안 되니 isbn을 아예 못 건드리게 하는게 좋을 거 같음
 
     def delete_book(): # 삭제 버튼을 눌렀을 때 해당된 도서 정보가 원래의 도서 리스트에서 삭제되어 도서 리스트에 저장 하기 위한 메소드
-        if BO.get_IsRented(int(textISBN.get())):
+        if BO.get_IsRented(int(textISBN.get()))==False:
             messagebox.showinfo("경고","대출중인 도서는 삭제할 수 없습니다.")
         else:
             BO.drop_Book_Info(int(textISBN.get()))  # 도서 삭제 함수 호출
@@ -518,26 +560,36 @@ def Book_Show():
 
     labelPrice = Label(new, text="가격 : ")
     textPrice = Entry(new)
-    textPrice.insert(END,bookInfo[0,4])
+    if(np.isnan(bookInfo[0,4])):
+        textPrice.insert(END,'')
+    else:
+        textPrice.insert(END,bookInfo[0,4])
     labelPrice.grid(row=5, column=0, padx=100)
     textPrice.grid(row=5, column=1, padx=100)
 
     labelUrl = Label(new, text="관련URL : ")
     textUrl = Entry(new)
-    textUrl.insert(END,bookInfo[0,5])
+    if(np.isnan(bookInfo[0,5])):
+        textUrl.insert(END,'')
+    else:
+        textUrl.insert(END,bookInfo[0,5])
     labelUrl.grid(row=6, column=0, padx=100)
     textUrl.grid(row=6, column=1, padx=100)
     
     labelRent = Label(new, text="대출여부 : ") 
     textRent = Entry(new)
-    textRent.insert(END,bookInfo[0,7])
+    if bookInfo[0,7]:
+        textRent.insert(END,'X')
+    else:
+        textRent.insert(END,'O')
+    #textRent.insert(END,bookInfo[0,7])
     labelRent.grid(row=7, column=0, padx=100)
     textRent.grid(row=7, column=1, padx=100)
 
     btn_check_dup = Button(new, text="수정",command=modify_book)
     btn_check_dup.grid(row=8, column=0, padx=100)
 
-    btn_check_dup = Button(new, text="등록")
+    btn_check_dup = Button(new, text="삭제",command=delete_book)
     btn_check_dup.grid(row=8, column=1, padx=100)
 
     btn_check_dup = Button(new, text="취소", command=lambda: new.destroy())
@@ -558,9 +610,9 @@ def User_Add():
         global isConfirmed
         global confirmedHP
         if US.get_IsIn(textHP.get()): # 중복되는 전화번호 있으면 True, 없으면 False
-            messagebox.showinfo(text="이미 등록된 회원입니다.") # 팝업창
+            messagebox.showinfo("중복확인결과","이미 등록된 회원입니다.") # 팝업창
         else:
-            messagebox.showinfo(text="등록 가능한 회원입니다.") # 팝업창
+            messagebox.showinfo("중복확인결과","등록 가능한 회원입니다.") # 팝업창
             isConfirmed=True # 중복 확인했으므로 True
             confirmedHP=textHP.get() # 중복 확인한 전화번호 저장
     
@@ -587,17 +639,23 @@ def User_Add():
                 textWrite+="필수사항을 입력해주세요."
                 messagebox.showinfo("경고",textWrite)
                 return 0
+        if textGender.get()!='남' and textGender.get()!='여':
+            messagebox.showinfo("경고","성별은 '남' 혹은 '여' 둘 중 하나로만 입력해야 합니다.")
+            return 0
         
         #d=dt.datetime.now().strftime('%Y-%m-%d')
+        add_user_list=np.append(add_user_list,textHP.get())
         add_user_list=np.append(add_user_list,textName.get())
         add_user_list=np.append(add_user_list,textBirth.get())
-        add_user_list=np.append(add_user_list,textHP.get())
-        add_user_list=np.append(add_user_list,textGender.get())
+        if textGender.get()=='남':
+            add_user_list=np.append(add_user_list,True)
+        else:
+            add_user_list=np.append(add_user_list,False)
         add_user_list=np.append(add_user_list,textEmail.get())
         #add_user_list=np.append(textUrl.get())#Url?
         #필요없는 값 같아서 주석처리
         add_user_list=np.append(add_user_list,dt.datetime.now().strftime('%Y.%m.%d'))
-        add_user_list=np.append(add_user_list,np.nan)
+        add_user_list=np.append(add_user_list,'')
         add_user_list=np.append(add_user_list,0)
         #가입일자 추가가 안 되어있네요
         #탈퇴일자도 빈 값으로 추가를 해주세요
@@ -676,6 +734,7 @@ def User_Search():
         else:
             messagebox.showinfo("경고","이름과 연락처 둘 중 하나라도 입력하시오")
             return 0
+        print(searched_list)
         treeview.delete(*treeview.get_children())#treeview 전체를 지우는 문장
         #treeview에 넣을 데이터 정제 과정
         #treeV=[[for i in range(8)] for j in range(int(searched_list.size)/8)]#2차원 배열
@@ -694,9 +753,9 @@ def User_Search():
                 treeV.append('여')
             treeV.append(searched_list[i,4])
             if searched_list[i,7]!=0:
-                treeV.append('도서 대출 중')
+                treeV.append('O')
             else:
-                treeV.append('대출한 도서 없음')
+                treeV.append('X')
             if np.isnan(searched_list[i,6]):
                 treeV.append('X')
             else:
@@ -772,6 +831,8 @@ def User_Show():
     global send_data
     userInfo=US.get_User_info(send_data)[0]
     global new
+    global isConfirmed
+    isConfirmed=False
     
     #def print_user_info(ind): # 조회한 회원의 정보 출력을 위한 메소드
         #US.get_User_info(ind)
@@ -786,6 +847,10 @@ def User_Show():
 
     def modify_user(): # 수정 버튼을 눌렀을 때 원래 회원 정보의 내용이 바뀌어서 저장되게 하기 위한 메소드
         global userInfo
+        userInfo=US.get_User_info(textHP.get())[0]
+        if userInfo[0,7]!=0:
+            messagebox.showinfo("경고","도서 대출 중인 회원의 정보는 수정할 수 없습니다.")
+            return 0
         modify_user_list=np.array([])
 
         if textName.get()=='' or textBirth.get()=='' or textGender.get()=='' or textEmail.get()=='': # 이름,생년월일,성별,이메일 넷중 하나를 입력하지 않았을경우 경고메세지 
@@ -802,30 +867,44 @@ def User_Show():
             textWrite+="필수사항을 입력해주세요."
             messagebox.showinfo("경고",textWrite)
             return 0
+        if textGender.get()!='남' and textGender.get()!='여':
+            messagebox.showinfo("경고","성별은 '남' 혹은 '여' 둘 중 하나로만 입력해야 합니다.")
+            return 0
 
         #d=dt.datetime.now().strftime('%Y-%m-%d')
         #가입일자를 다시 읽어올 필요는 없습니다
+        modify_user_list=np.append(modify_user_list,textHP.get())
         modify_user_list=np.append(modify_user_list,textName.get())
         modify_user_list=np.append(modify_user_list,textBirth.get())
-        modify_user_list=np.append(modify_user_list,textHP.get())
-        modify_user_list=np.append(modify_user_list,textGender.get())
+        if textGender.get()=='남':
+            modify_user_list=np.append(modify_user_list,True)
+        else:
+            modify_user_list=np.append(modify_user_list,False)
         modify_user_list=np.append(modify_user_list,textEmail.get())
         #modify_user_list=np.append(textUrl.get())
         modify_user_list=np.append(modify_user_list,userInfo[0,5])
-        modify_user_list=np.append(modify_user_list,userInfo[0,6])
+        if np.isnan(userInfo[0,6]):
+            modify_user_list=np.append(modify_user_list,'')
+        else:
+            modify_user_list=np.append(modify_user_list,userInfo[0,6])
         modify_user_list=np.append(modify_user_list,userInfo[0,7])
         US.set_User_Info(modify_user_list)
-        messagebox.showinfo("알림","도서 수정이 완료되었습니다.")# 팝업창
-        userInfo=US.get_User_info(textHP.get())
+        messagebox.showinfo("알림","회원 수정이 완료되었습니다.")# 팝업창
+        userInfo=US.get_User_info(textHP.get())[0]
         
     def delete_user(): # 삭제 버튼을 눌렀을 때 해당 회원 정보가 원래의 회원 리스트에서 삭제되어 회원 리스트에 저장하기 위한 메소드
         phone=textHP.get()
+        global isConfirmed
+        if isConfirmed:
+            messagebox.showinfo("경고","이미 처리되었습니다.")
+            return 0
         if US.get_IsRented(phone)!=0: # 사용자가 도서 대출 중일 때 #US.get_IsRented(ind) 쓰시면 됩니다. 리턴 값은 대출 중인 책 권수(int형)
             messagebox.showinfo("경고","도서 대출 중인 회원은 탈퇴할 수 없습니다.")
         else:
-            d=dt.datetime.now() # 반납 예정일 저장
+            d=dt.datetime.now().strftime('%Y.%m.%d') # 반납 예정일 저장
             US.drop_User_Info(phone,d) # 회원탈퇴 메소드 호출
             messagebox.showinfo("알림","회원탈퇴가 완료되었습니다.")
+            isConfirmed=True
 
     #def get_user(name,phone): # 회원 정보를 불러오는 메소드
         #User.search_User_ByName(name) # 이름으로 회원 조회했을시
@@ -854,9 +933,9 @@ def User_Show():
     labelGender = Label(new, text="성별 : ")
     textGender = Entry(new)
     if userInfo[0,3]:
-        textGender.insert(END,'남성')
+        textGender.insert(END,'남')
     else:
-        textGender.insert(END,'여성')
+        textGender.insert(END,'여')
     labelGender.grid(row=4, column=0, padx=100)
     textGender.grid(row=4, column=1, padx=100)
 
@@ -893,7 +972,7 @@ def User_Show():
     btn_check_dup = Button(new, text="수정",command=modify_user)
     btn_check_dup.grid(row=9, column=0, padx=100)
 
-    btn_check_dup = Button(new, text="등록")
+    btn_check_dup = Button(new, text="삭제",command=delete_user)
     btn_check_dup.grid(row=9, column=1, padx=100)
 
     btn_check_dup = Button(new, text="취소", command=lambda: new.destroy())
@@ -905,20 +984,24 @@ def Rent_User_Search():
     panedwindow1 = PanedWindow(relief="raised", bd=2)
     panedwindow1.pack(expand=True)
         #ind,isbn,phone,dat
-    def update_rent_situation(event): # 선택 버튼을 눌렀을 시에 해당 회원의 대출 여부가 도서 대출 중으로 바뀌어 저장하는 메소드
+    global send_data
+    def update_rent_situation(before): # 선택 버튼을 눌렀을 시에 해당 회원의 대출 여부가 도서 대출 중으로 바뀌어 저장하는 메소드
+        #if treeview.selection().count==0: 아무것도 선택하지 않은 것을 판별할 수 있는 메소드가 필요함
+        #    messagebox.showinfo("경고","회원을 선택하세요.")
+        #    return 0
         phone=treeview.selection()[0]
-        if np.isnan(US.get_User_info(phone)[6])==False:
+        if np.isnan(US.get_User_info(phone)[0,0,6])==False:
             messagebox.showinfo("경고","이미 탈퇴한 회원입니다.")
             return 0
         if US.get_IsRented(phone)==3:#US.user_list[ind,8]==3: # 대출 진행 불가능 -> 해당 회원이 3권을 빌린 상태인지를 먼저 체크해야 함#US.get_IsRented(ind)로 불러오시면 
-            messagebox.showinfo("경고","대출할 수 있는 최대 권수는 3권입니다.")
+            messagebox.showinfo("경고","각 회원당 대출할 수 있는 최대 권수는 3권입니다.")
             return 0
         global send_data
         send_data=phone
-        
+        messagebox.showinfo("알림","회원을 선택하였습니다.")
+        Rent_Book_Search(before)
         #US.user_list[ind,8]+=1 # 대출 권수 1추가 
         #RE.rent_Book(isbn,phone,dat) # 대출 여부
-
     def print_rent_user(): # 이름 검색을 누를시에 회원 리스트와 대출여부가 출력되게 하는 메소드
         searched_list=np.array([])
         if text_user_name.get():
@@ -953,7 +1036,6 @@ def Rent_User_Search():
             else:
                 treeV.append('탈퇴한 회원')
             treeview.insert("", "end", text="", values=treeV, iid=treeV[2])
-            treeview.bind("<Double-1>", update_rent_situation)
         #User_Search에서 했던 것처럼 -> user_search에서 ?
         
         #US.get_User_info(ind) # 해당 이름의 회원들 정보 불러오는 메소드
@@ -1009,20 +1091,22 @@ def Rent_User_Search():
 
     treeview["show"] = "headings"
 
-    treeValueList = [("손다연", "2000.11.07", "010-1234-5678", "여", "123@naver.com", "3권 대출 중")]
+    #treeValueList = [("손다연", "2000.11.07", "010-1234-5678", "여", "123@naver.com", "3권 대출 중")]
 
-    for i in range(len(treeValueList)):
-        treeview.insert("", "end", text="", values=treeValueList[i], iid=i)
-        treeview.bind("<Double-1>", User_Show)
+    #for i in range(len(treeValueList)):
+    #    treeview.insert("", "end", text="", values=treeValueList[i], iid=i)
+    #    treeview.bind("<Double-1>", User_Show)
 
-    btn_select = Button(panedwindow1, text="선택", command=lambda: Rent_Book_Search(panedwindow1))
+    btn_select = Button(panedwindow1, text="선택", command=lambda: update_rent_situation(panedwindow1))
     btn_select.grid(row=4, column=0, padx=100)
 
     btn_cancel = Button(panedwindow1, text="취소", command=lambda: panedwindow1.pack_forget())
     btn_cancel.grid(row=4, column=1, padx=100)
 
 def Rent_Book_Search(before):
-    global send_data
+    global send_data2
+    send_data2=''
+    isChecked=False
     def check_book_rent(): # 도서 정보를 검색시에 해당 도서의 대출 여부 정보를 불러오는 메소드
         #Book_Search에서 도서명으로 검색했던 것처럼
         #treeview랑 연계 
@@ -1043,17 +1127,19 @@ def Rent_Book_Search(before):
             for j in range(1,6):#대출여부 외에는 배치순서 동일하니 for문 처리
                 treeV.append(searched_list[i,j-1])
             treeview.insert("", "end", text="", values=treeV, iid=treeV[1])
-            treeview.bind("<Double-1>", update_rent_situation)
+            #treeview.bind("<Double-1>", update_rent_situation)
 
-    def update_rent_situation(event): # 선택 버튼을 눌렀을 시에 대출 상태가 대출중으로 바뀌어 저장되게하고, 대출 정보 화면을 띄어주게 하는 메소드
+    def update_rent_situation(before): # 선택 버튼을 눌렀을 시에 대출 상태가 대출중으로 바뀌어 저장되게하고, 대출 정보 화면을 띄어주게 하는 메소드
         isbn=int(treeview.selection()[0])
-        print(BO.get_IsRented(isbn))
         if BO.get_IsRented(isbn)==False:#BO.get_IsRented(ind)
             messagebox.showinfo("경고","이미 대출 중인 도서입니다.")
             return 0
-        global send_data
-        send_data=[send_data,isbn]
-        #Rent_Show()
+        global send_data2
+        send_data2=isbn
+        messagebox.showinfo("알림","도서가 선택되었습니다.")
+        global isChecked
+        isChecked=True
+        Rent_Show(before)
         #else:
             #book_list[ind,8]==TRUE
             
@@ -1112,7 +1198,7 @@ def Rent_Book_Search(before):
     #    treeview.insert("", "end", text="", values=treeValueList[i], iid=i)
     #    treeview.bind("<Double-1>", update_rent_situation)
 
-    btn_select = Button(panedwindow1, text="선택", command=lambda: Rent_Show(panedwindow1))
+    btn_select = Button(panedwindow1, text="선택", command=lambda: update_rent_situation(panedwindow1))
     btn_select.grid(row=3, column=0, padx=100)
 
     btn_cancel = Button(panedwindow1, text="취소", command=lambda: panedwindow1.pack_forget())
@@ -1122,22 +1208,29 @@ def Rent_Book_Search(before):
 def Rent_Show(before):
     global new
     global send_data
-    userInfo=US.get_User_info(send_data[0])[0,:]
-    bookInfo=BO.get_Book_info(send_data[1])[0,:]
+    global send_data2
+    userInfo=US.get_User_info(send_data)[0,:]
+    bookInfo=BO.get_Book_info(send_data2)[0,:]
+    global isChecked
     isChecked=False
+    global phone
+    phone=userInfo[0,0]
 
     def save_rent(): # 대출 완료 버튼을 눌렀을 시에 대출 정보를 저장하는 메소드 -> gui (버튼작용)
         global isChecked
+        global phone
+        print(phone)
         if isChecked:
             messagebox.showinfo("경고","이미 처리되었습니다.")
             return 0
         d=dt.datetime.now()
-        dr=d+dt.timedelta(days=14)
-        isbn=int(textISBN.get())
-        RE.rent_Book(isbn,text,d,dr)
-        US.set_IsRented(0,1)
-        BO.set_IsRented(isbn,False)
-        messagebox.showinfo("알림","대출이 완료되었습니다.\n반납 예정 일자는 "+dr.strftime('%Y.%m.%d')+"입니다.")
+        dr=(d+dt.timedelta(days=14)).strftime('%Y.%m.%d')
+        d=d.strftime('%Y.%m.%d')
+        isbn=textISBN.get()
+        RE.rent_Book(isbn,phone,d,dr)
+        US.set_IsRented(phone,1)
+        BO.set_IsRented(int(isbn),False)
+        messagebox.showinfo("알림","대출이 완료되었습니다.\n반납 예정 일자는 "+dr+"입니다.")
         isChecked=True
 
     #def get_rent_book_info(ind): # 대출할 도서의 정보를 불러오는 메소드
@@ -1192,7 +1285,10 @@ def Rent_Show(before):
     textPub.grid(row=4, column=1, padx=100)
     labelGender = Label(new, text="성별 : ")
     textGender = Entry(new)
-    textGender.insert(END,userInfo[0,3])
+    if userInfo[0,3]:
+        textGender.insert(END,'남')
+    else:
+        textGender.insert(END,'여')
     labelGender.grid(row=4, column=2, padx=100)
     textGender.grid(row=4, column=3, padx=100)
 
@@ -1209,7 +1305,10 @@ def Rent_Show(before):
 
     labelUrl = Label(new, text="관련URL : ")
     textUrl = Entry(new)
-    textUrl.insert(END,bookInfo[0,5])
+    if np.isnan(bookInfo[0,5]):
+        textUrl.insert(END,'')
+    else:
+        textUrl.insert(END,bookInfo[0,5])
     labelUrl.grid(row=6, column=0, padx=100)
     textUrl.grid(row=6, column=1, padx=100)
     labelRentDay = Label(new, text="대여일 : ")
@@ -1290,9 +1389,9 @@ def Rent_Search():
         for i in range(int(searched_list.size/6)):
             treeV=[]#
             if np.isnan(searched_list[i,5]):
-                treeV.append('대출 중')
-            else:
                 treeV.append('X')
+            else:
+                treeV.append('대출 중')
             rentBookInfo=BO.get_Book_info(searched_list[i,1])[0]
             for j in range(6):
                 treeV.append(rentBookInfo[0,j])
@@ -1369,6 +1468,7 @@ def Rent_State_Show():
     rentInfo=RE.get_Rent_Info(int(send_data))
     bookInfo=BO.get_Book_info(int(rentInfo[1]))[0]
     userInfo=US.get_User_info(rentInfo[2])[0]
+    global isBacked
     isBacked=False
     
     def book_return(): # 도서 반납 메소드
@@ -1433,13 +1533,19 @@ def Rent_State_Show():
     textPub.grid(row=4, column=1, padx=100)
     labelGender = Label(new, text="성별 : ")
     textGender = Entry(new)
-    textGender.insert(END,userInfo[0,3])
+    if userInfo[0,3]:
+        textGender.insert(END,'남')
+    else:
+        textGender.insert(END,'여')
     labelGender.grid(row=4, column=2, padx=100)
     textGender.grid(row=4, column=3, padx=100)
 
     labelPrice = Label(new, text="가격 : ")
     textPrice = Entry(new)
-    textPrice.insert(END,bookInfo[0,4])
+    if np.isnan(bookInfo[0,4]):
+        textPrice.insert(END,'')
+    else:
+        textPrice.insert(END,bookInfo[0,4])
     labelPrice.grid(row=5, column=0, padx=100)
     textPrice.grid(row=5, column=1, padx=100)
     labelEmail = Label(new, text="이메일 : ")
@@ -1450,7 +1556,10 @@ def Rent_State_Show():
 
     labelUrl = Label(new, text="관련URL : ")
     textUrl = Entry(new)
-    textUrl.insert(END,bookInfo[0,5])
+    if np.isnan(bookInfo[0,5]):
+        textUrl.insert(END,'')
+    else:
+        textUrl.insert(END,bookInfo[0,5])
     labelUrl.grid(row=6, column=0, padx=100)
     textUrl.grid(row=6, column=1, padx=100)
     labelRentDay = Label(new, text="대여일 : ")
