@@ -37,6 +37,7 @@ class Book:
         print(self.__book)
         bookdf=pd.DataFrame(self.__book, columns=book_col) # numpy 배열을 DataFrame 형식으로 변환
         bookdf.to_csv('csv/Book.csv', encoding='UTF-8') # to_csv는 numpy 배열에서 작동하지 않아 DataFrame으로 변환한 것
+        self.__road_from_csv()
     
     def get_IsIn(self,isbn): # isbn이 안에 있는가 확인 (IF-001)
         if isbn in self.__book[:,0]: # 있으면 True 반환
@@ -68,8 +69,7 @@ class Book:
             search_list=np.append(search_list,self.__book[i,:])# 제목이 동일하면 리스트에 추가
         search_list=np.reshape(search_list,(int(search_list.size/8),8))
         return search_list # 반환 값 : 도서 목록
-    # 일부만 일치해도 검색할 수 있게 개선 필요함
-    
+
     def search_Book_ByAuthor(self,author): # 책 저자로 검색 (IF-004)
         search_list=np.array([])# 검색된 책 정보 저장할 리스트
         found_ind=np.where(self.__book[:,2]==author)
