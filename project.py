@@ -467,46 +467,46 @@ def Book_Show():
     new = Toplevel()
     
     labelISBN = Label(new, text="ISBN : ")
-    labelISBN.grid(row=1, column=0, padx=100)
+    labelISBN.grid(row=1, column=0, padx=20, pady=20)
     textISBN = Entry(new)
     textISBN.insert(END,bookInfo[0,0])
-    textISBN.grid(row=1, column=1, padx=100)
+    textISBN.grid(row=1, column=1, padx=20, pady=20)
 
     labelBookName = Label(new, text="도서명 : ")
     textBookName = Entry(new)
     textBookName.insert(END,bookInfo[0,1])
-    labelBookName.grid(row=2, column=0, padx=100)
-    textBookName.grid(row=2, column=1, padx=100)
+    labelBookName.grid(row=2, column=0, padx=20)
+    textBookName.grid(row=2, column=1, padx=20)
 
     labelAuthor = Label(new, text="저자 : ")
     textAuthor = Entry(new)
     textAuthor.insert(END,bookInfo[0,2])
-    labelAuthor.grid(row=3, column=0, padx=100)
-    textAuthor.grid(row=3, column=1, padx=100)
+    labelAuthor.grid(row=3, column=0, padx=20, pady=20)
+    textAuthor.grid(row=3, column=1, padx=20, pady=20)
 
     labelPub = Label(new, text="출판사 : ")
     textPub = Entry(new)
     textPub.insert(END,bookInfo[0,3])
-    labelPub.grid(row=4, column=0, padx=100)
-    textPub.grid(row=4, column=1, padx=100)
+    labelPub.grid(row=4, column=0, padx=20)
+    textPub.grid(row=4, column=1, padx=20)
 
     labelPrice = Label(new, text="가격 : ")
     textPrice = Entry(new)
     textPrice.insert(END,bookInfo[0,4])
-    labelPrice.grid(row=5, column=0, padx=100)
-    textPrice.grid(row=5, column=1, padx=100)
+    labelPrice.grid(row=5, column=0, padx=20, pady=20)
+    textPrice.grid(row=5, column=1, padx=20, pady=20)
 
     labelUrl = Label(new, text="관련URL : ")
     textUrl = Entry(new)
     textUrl.insert(END,bookInfo[0,5])
-    labelUrl.grid(row=6, column=0, padx=100)
-    textUrl.grid(row=6, column=1, padx=100)
+    labelUrl.grid(row=6, column=0, padx=20)
+    textUrl.grid(row=6, column=1, padx=20)
 
     labelInfo = Label(new, text="설명 : ")
     textInfo = Entry(new)
     textInfo.insert(END,bookInfo[0,6])
-    labelInfo.grid(row=7, column=0, padx=100)
-    textInfo.grid(row=7, column=1, padx=100)
+    labelInfo.grid(row=7, column=0, padx=20, pady=20)
+    textInfo.grid(row=7, column=1, padx=20, pady=20)
     
     labelRent = Label(new, text="대출여부 : ") 
     textRent = Entry(new)
@@ -515,17 +515,17 @@ def Book_Show():
     else:
         textRent.insert(END,'O')
     #textRent.insert(END,bookInfo[0,7])
-    labelRent.grid(row=8, column=0, padx=100)
-    textRent.grid(row=8, column=1, padx=100)
+    labelRent.grid(row=8, column=0, padx=20)
+    textRent.grid(row=8, column=1, padx=20)
 
     btn_check_dup = Button(new, text="수정",command=modify_book)
-    btn_check_dup.grid(row=9, column=0, padx=100)
+    btn_check_dup.grid(row=9, column=0, padx=10, pady=20)
 
     btn_check_dup = Button(new, text="삭제",command=delete_book)
-    btn_check_dup.grid(row=9, column=1, padx=100)
+    btn_check_dup.grid(row=9, column=1, padx=10, pady=20)
 
     btn_check_dup = Button(new, text="취소", command=lambda: new.destroy())
-    btn_check_dup.grid(row=9, column=2, padx=100)
+    btn_check_dup.grid(row=9, column=2, padx=10, pady=20)
 
 # 회원 등록 페이지
 def User_Add():
@@ -787,7 +787,45 @@ def User_Show():
         US.set_User_Info(modify_user_list)
         messagebox.showinfo("알림","회원 수정이 완료되었습니다.")# 팝업창
         userInfo=US.get_User_info(textHP.get())[0]
-        
+
+    def reAdd_user(): # 수정 버튼을 눌렀을 때 원래 회원 정보의 내용이 바뀌어서 저장되게 하기 위한 메소드
+        global userInfo
+        userInfo=US.get_User_info(textHP.get())[0]
+        modify_user_list=np.array([])
+
+        if textName.get()=='' or textBirth.get()=='' or textGender.get()=='' or textEmail.get()=='': # 이름,생년월일,성별,이메일 넷중 하나를 입력하지 않았을경우 경고메세지 
+            #and 말고 or
+            textWrite=""
+            if textName.get()=='':
+                textWrite+="회원명이 입력되어있지 않습니다.\n" # 팝업창 처리
+            elif textBirth.get()=='':
+                textWrite+="생년월일이 입력되어있지 않습니다.\n" # 팝업창 처리
+            elif textGender.get()=='':
+                textWrite+="성별이 입력되어있지 않습니다.\n" # 팝업창 처리
+            elif textEmail.get()=='':
+                textWrite+="이메일이 입력되어있지 않습니다.\n"
+            textWrite+="필수사항을 입력해주세요."
+            messagebox.showinfo("경고",textWrite)
+            return 0
+        if textGender.get()!='남' and textGender.get()!='여':
+            messagebox.showinfo("경고","성별은 '남' 혹은 '여' 둘 중 하나로만 입력해야 합니다.")
+            return 0
+
+        modify_user_list=np.append(modify_user_list,textHP.get())
+        modify_user_list=np.append(modify_user_list,textName.get())
+        modify_user_list=np.append(modify_user_list,textBirth.get())
+        if textGender.get()=='남':
+            modify_user_list=np.append(modify_user_list,True)
+        else:
+            modify_user_list=np.append(modify_user_list,False)
+        modify_user_list=np.append(modify_user_list,textEmail.get())
+        modify_user_list=np.append(modify_user_list,userInfo[0,5])
+        modify_user_list=np.append(modify_user_list,'0')
+        modify_user_list=np.append(modify_user_list,userInfo[0,7])
+        US.set_User_Info(modify_user_list)
+        messagebox.showinfo("알림","회원 재가입이 완료되었습니다.")# 팝업창
+        userInfo=US.get_User_info(textHP.get())[0]
+
     def delete_user(): # 삭제 버튼을 눌렀을 때 해당 회원 정보가 원래의 회원 리스트에서 삭제되어 회원 리스트에 저장하기 위한 메소드
         phone=textHP.get()
         global isConfirmed
@@ -803,24 +841,24 @@ def User_Show():
             isConfirmed=True
 
     new = Toplevel()
+    
     labelName = Label(new, text="이름 : ")
-    labelName.grid(row=1, column=0, padx=100)
-
+    labelName.grid(row=1, column=0, padx=20, pady=20)
     textName = Entry(new)
     textName.insert(END,userInfo[0,1])
-    textName.grid(row=1, column=1, padx=100)
+    textName.grid(row=1, column=1, padx=20, pady=20)
 
     labelBirth = Label(new, text="생년월일 : ")
     textBirth = Entry(new)
     textBirth.insert(END,userInfo[0,2])
-    labelBirth.grid(row=2, column=0, padx=100)
-    textBirth.grid(row=2, column=1, padx=100)
+    labelBirth.grid(row=2, column=0, padx=20)
+    textBirth.grid(row=2, column=1, padx=20)
 
     labelHP = Label(new, text="전화번호 : ")
     textHP = Entry(new)
     textHP.insert(END,userInfo[0,0])
-    labelHP.grid(row=3, column=0, padx=100)
-    textHP.grid(row=3, column=1, padx=100)
+    labelHP.grid(row=3, column=0, padx=20, pady=20)
+    textHP.grid(row=3, column=1, padx=20, pady=20)
 
     labelGender = Label(new, text="성별 : ")
     textGender = Entry(new)
@@ -828,34 +866,34 @@ def User_Show():
         textGender.insert(END,'남')
     else:
         textGender.insert(END,'여')
-    labelGender.grid(row=4, column=0, padx=100)
-    textGender.grid(row=4, column=1, padx=100)
+    labelGender.grid(row=4, column=0, padx=20)
+    textGender.grid(row=4, column=1, padx=20)
 
     labelEmail = Label(new, text="이메일: ")
     textEmail = Entry(new)
     textEmail.insert(END,userInfo[0,4])
-    labelEmail.grid(row=5, column=0, padx=100)
-    textEmail.grid(row=5, column=1, padx=100)
+    labelEmail.grid(row=5, column=0, padx=20, pady=20)
+    textEmail.grid(row=5, column=1, padx=20, pady=20)
 
     labelJoin = Label(new, text="가입일 : ") 
     textJoin = Entry(new)
     textJoin.insert(END,userInfo[0,5])
-    labelJoin.grid(row=6, column=0, padx=100)
-    textJoin.grid(row=6, column=1, padx=100)
+    labelJoin.grid(row=6, column=0, padx=20)
+    textJoin.grid(row=6, column=1, padx=20)
 
     labelExit = Label(new, text="탈퇴일 : ") 
     textExit = Entry(new)
     textExit.insert(END,userInfo[0,6])
-    labelExit.grid(row=7, column=0, padx=100)
-    textExit.grid(row=7, column=1, padx=100)
+    labelExit.grid(row=7, column=0, padx=20, pady=20)
+    textExit.grid(row=7, column=1, padx=20, pady=20)
 
     labelRent = Label(new, text="대출여부 : ")
     textRent = Entry(new)
     ins_st=''
     ins_st+=str(userInfo[0,7])+'권 대출중'
     textRent.insert(END,ins_st)
-    labelRent.grid(row=8, column=0, padx=100)
-    textRent.grid(row=8, column=1, padx=100)
+    labelRent.grid(row=8, column=0, padx=20)
+    textRent.grid(row=8, column=1, padx=20)
 
     labelExit = Label(new, text="탈퇴여부 : ")
     textExit = Entry(new)
@@ -865,17 +903,20 @@ def User_Show():
     else:
         ins_st='O'
     textExit.insert(END,ins_st)
-    labelExit.grid(row=9, column=0, padx=100)
-    textExit.grid(row=9, column=1, padx=100)
+    labelExit.grid(row=9, column=0, padx=20, pady=20)
+    textExit.grid(row=9, column=1, padx=20, pady=20)
 
     btn_check_dup = Button(new, text="수정",command=modify_user)
-    btn_check_dup.grid(row=10, column=0, padx=100)
+    btn_check_dup.grid(row=10, column=0, padx=20)
 
     btn_check_dup = Button(new, text="탈퇴",command=delete_user)
-    btn_check_dup.grid(row=10, column=1, padx=100)
+    btn_check_dup.grid(row=10, column=1, padx=20)
+
+    btn_check_dup = Button(new, text="재가입",command=reAdd_user)
+    btn_check_dup.grid(row=11, column=0, padx=20, pady=20)
 
     btn_check_dup = Button(new, text="취소", command=lambda: new.destroy())
-    btn_check_dup.grid(row=10, column=2, padx=100)
+    btn_check_dup.grid(row=11, column=1, padx=20, pady=20)
 
 
 #책 대여하기
@@ -1096,100 +1137,97 @@ def Rent_Show(before):
     new = Toplevel()
 
     labelTitle = Label(new, text="대출 정보")
-    labelTitle.grid(row=0, column=0, padx=100)
+    labelTitle.grid(row=0, column=0, padx=20, pady=20)
 
     labelBookInfo = Label(new, text="도서 정보")
-    labelBookInfo.grid(row=1, column=0, padx=100)
+    labelBookInfo.grid(row=1, column=0, padx=20, pady=20)
 
     labelMemboerInfo = Label(new, text="회원 정보")
-    labelMemboerInfo.grid(row=1, column=2, padx=100)
+    labelMemboerInfo.grid(row=1, column=2, padx=20, pady=20)
 
     labelBookName = Label(new, text="도서명 : ")
     textBookName = Entry(new)
     textBookName.insert(END,bookInfo[0,1])
-    labelBookName.grid(row=2, column=0, padx=100)
-    textBookName.grid(row=2, column=1, padx=100)
+    labelBookName.grid(row=2, column=0, padx=20)
+    textBookName.grid(row=2, column=1, padx=20)
     labelName = Label(new, text="이름 : ")
     textName = Entry(new)
     textName.insert(END,userInfo[0,1])
-    labelName.grid(row=2, column=2, padx=100)
-    textName.grid(row=2, column=3, padx=100)
+    labelName.grid(row=2, column=2, padx=20)
+    textName.grid(row=2, column=3, padx=20)
 
     labelAuthor = Label(new, text="저자 : ")
     textAuthor = Entry(new)
     textAuthor.insert(END,bookInfo[0,2])
-    labelAuthor.grid(row=3, column=0, padx=100)
-    textAuthor.grid(row=3, column=1, padx=100)
+    labelAuthor.grid(row=3, column=0, padx=20, pady=20)
+    textAuthor.grid(row=3, column=1, padx=20, pady=20)
     labelBirth = Label(new, text="생년월일 : ")
     textBirth = Entry(new)
     textBirth.insert(END,userInfo[0,2])
-    labelBirth.grid(row=3, column=2, padx=100)
-    textBirth.grid(row=3, column=3, padx=100)
+    labelBirth.grid(row=3, column=2, padx=20, pady=20)
+    textBirth.grid(row=3, column=3, padx=20, pady=20)
 
     labelPub = Label(new, text="출판사 : ")
     textPub = Entry(new)
     textPub.insert(END,bookInfo[0,3])
-    labelPub.grid(row=4, column=0, padx=100)
-    textPub.grid(row=4, column=1, padx=100)
+    labelPub.grid(row=4, column=0, padx=20)
+    textPub.grid(row=4, column=1, padx=20)
     labelGender = Label(new, text="성별 : ")
     textGender = Entry(new)
     if userInfo[0,3]:
         textGender.insert(END,'남')
     else:
         textGender.insert(END,'여')
-    labelGender.grid(row=4, column=2, padx=100)
-    textGender.grid(row=4, column=3, padx=100)
+    labelGender.grid(row=4, column=2, padx=20)
+    textGender.grid(row=4, column=3, padx=20)
 
     labelPrice = Label(new, text="가격 : ")
     textPrice = Entry(new)
     textPrice.insert(END,bookInfo[0,4])
-    labelPrice.grid(row=5, column=0, padx=100)
-    textPrice.grid(row=5, column=1, padx=100)
+    labelPrice.grid(row=5, column=0, padx=20, pady=20)
+    textPrice.grid(row=5, column=1, padx=20, pady=20)
     labelEmail = Label(new, text="이메일 : ")
     textEmail = Entry(new)
     textEmail.insert(END,userInfo[0,4])
-    labelEmail.grid(row=5, column=2, padx=100)
-    textEmail.grid(row=5, column=3, padx=100)
+    labelEmail.grid(row=5, column=2, padx=20, pady=20)
+    textEmail.grid(row=5, column=3, padx=20, pady=20)
 
     labelUrl = Label(new, text="관련URL : ")
     textUrl = Entry(new)
-    if np.isnan(bookInfo[0,5]):
-        textUrl.insert(END,'')
-    else:
-        textUrl.insert(END,bookInfo[0,5])
-    labelUrl.grid(row=6, column=0, padx=100)
-    textUrl.grid(row=6, column=1, padx=100)
+    textUrl.insert(END,bookInfo[0,5])
+    labelUrl.grid(row=6, column=0, padx=20)
+    textUrl.grid(row=6, column=1, padx=20)
     labelRentDay = Label(new, text="대여일 : ")
     textRentDay = Entry(new)
     d=dt.datetime.now()
     textRentDay.insert(END,d.strftime('%Y.%m.%d'))
-    labelRentDay.grid(row=6, column=2, padx=100)
-    textRentDay.grid(row=6, column=3, padx=100)
+    labelRentDay.grid(row=6, column=2, padx=20)
+    textRentDay.grid(row=6, column=3, padx=20)
 
     labelISBN = Label(new, text="ISBN : ")
-    labelISBN.grid(row=7, column=0, padx=100)
+    labelISBN.grid(row=7, column=0, padx=20, pady=20)
     textISBN = Entry(new)
     textISBN.insert(END,bookInfo[0,0])
-    textISBN.grid(row=7, column=1, padx=100)
+    textISBN.grid(row=7, column=1, padx=20, pady=20)
 
     labelBackDay = Label(new, text="반납 예정일 : ")
     textBackDay = Entry(new)
     d=d+dt.timedelta(days=14)
     textBackDay.insert(END,d.strftime('%Y.%m.%d'))
-    labelBackDay.grid(row=7, column=2, padx=100)
-    textBackDay.grid(row=7, column=3, padx=100)
+    labelBackDay.grid(row=7, column=2, padx=20, pady=20)
+    textBackDay.grid(row=7, column=3, padx=20, pady=20)
 
     labelBackCheck = Label(new, text="반납 여부 : ")
     textBackCheck = Entry(new)
     textBackCheck.insert(END,'X')
-    labelBackCheck.grid(row=8, column=2, padx=100)
-    textBackCheck.grid(row=8, column=3, padx=100)
+    labelBackCheck.grid(row=8, column=2, padx=20)
+    textBackCheck.grid(row=8, column=3, padx=20)
 
     btn_check_dup = Button(new, text="대여하기",command=save_rent)
-    btn_check_dup.grid(row=9, column=1, padx=100)
+    btn_check_dup.grid(row=9, column=1, padx=20, pady=20)
 
     btn_check_dup = Button(new, text="취소", command=lambda: new.destroy())
-    btn_check_dup.grid(row=9, column=2, padx=100)
+    btn_check_dup.grid(row=9, column=2, padx=20, pady=20)
 
 
 # 대여 책 조회
@@ -1298,13 +1336,6 @@ def Rent_Search():
 
     treeview["show"] = "headings"
 
-    #treeValueList = [("대출중", 9788970504773, "따라하며 배우는 파이썬과 데이터 과학", "천인국", "생능출판", 26000, "https://~"),
-    #                 (" X ", 1234970504773, "예제 중심의 파이썬 입문", "황재호", "생능출판", 26000, "https://~")]
-
-    #for i in range(len(treeValueList)):
-    #    treeview.insert("", "end", text="", values=treeValueList[i], iid=i)
-    #    treeview.bind("<Double-1>", Rent_State_Show)
-
     btn_cancel = Button(panedwindow1, text="취소", command=lambda: panedwindow1.pack_forget())
     btn_cancel.grid(row=4, column=1, padx=100)
 
@@ -1330,62 +1361,52 @@ def Rent_State_Show():
         isBacked=True
 
 
-    #def get_rent_book_info(ind): # 대출된 도서의 정보를 불러오는 메소드
-        #Rent 인터페이스에서 불러온 정보에서 ISBN을 불러와서 Book 인터페이스에서 재검색하는 식으로 해야되는 해당 인터페이스 추가
-        #Rent.getRentInfo(ind)
-
-    #def get_rent_user_info(): # 대출을 실행한 회원의 정보를 불러오는 메소드 -> 해당 책을 빌린 사람의 정보
-        #user= #도서대출 저장하는 메소드에서 회원이름을 뽑아옴
-        #User.get_User_info(user)
-
-    #def get_rent_info(): # 상단 대출 정보를 표시하는 메소드 -> gui
-
     new = Toplevel()
 
     labelTitle = Label(new, text="대출 정보")
-    labelTitle.grid(row=0, column=0, padx=100)
+    labelTitle.grid(row=0, column=0, padx=20, pady=20)
 
     labelBookInfo = Label(new, text="도서 정보")
-    labelBookInfo.grid(row=1, column=0, padx=100)
+    labelBookInfo.grid(row=1, column=0, padx=20, pady=20)
 
     labelMemboerInfo = Label(new, text="회원 정보")
-    labelMemboerInfo.grid(row=1, column=2, padx=100)
+    labelMemboerInfo.grid(row=1, column=2, padx=20, pady=20)
 
     labelBookName = Label(new, text="도서명 : ")
     textBookName = Entry(new)
     textBookName.insert(END,bookInfo[0,1])
-    labelBookName.grid(row=2, column=0, padx=100)
-    textBookName.grid(row=2, column=1, padx=100)
+    labelBookName.grid(row=2, column=0, padx=20)
+    textBookName.grid(row=2, column=1, padx=20)
     labelName = Label(new, text="이름 : ")
     textName = Entry(new)
     textName.insert(END,userInfo[0,1])
-    labelName.grid(row=2, column=2, padx=100)
-    textName.grid(row=2, column=3, padx=100)
+    labelName.grid(row=2, column=2, padx=20)
+    textName.grid(row=2, column=3, padx=20)
 
     labelAuthor = Label(new, text="저자 : ")
     textAuthor = Entry(new)
     textAuthor.insert(END,bookInfo[0,2])
-    labelAuthor.grid(row=3, column=0, padx=100)
-    textAuthor.grid(row=3, column=1, padx=100)
+    labelAuthor.grid(row=3, column=0, padx=20, pady=20)
+    textAuthor.grid(row=3, column=1, padx=20, pady=20)
     labelBirth = Label(new, text="생년월일 : ")
     textBirth = Entry(new)
     textBirth.insert(END,userInfo[0,2])
-    labelBirth.grid(row=3, column=2, padx=100)
-    textBirth.grid(row=3, column=3, padx=100)
+    labelBirth.grid(row=3, column=2, padx=20, pady=20)
+    textBirth.grid(row=3, column=3, padx=20, pady=20)
 
     labelPub = Label(new, text="출판사 : ")
     textPub = Entry(new)
     textPub.insert(END,bookInfo[0,3])
-    labelPub.grid(row=4, column=0, padx=100)
-    textPub.grid(row=4, column=1, padx=100)
+    labelPub.grid(row=4, column=0, padx=20)
+    textPub.grid(row=4, column=1, padx=20)
     labelGender = Label(new, text="성별 : ")
     textGender = Entry(new)
     if userInfo[0,3]:
         textGender.insert(END,'남')
     else:
         textGender.insert(END,'여')
-    labelGender.grid(row=4, column=2, padx=100)
-    textGender.grid(row=4, column=3, padx=100)
+    labelGender.grid(row=4, column=2, padx=20)
+    textGender.grid(row=4, column=3, padx=20)
 
     labelPrice = Label(new, text="가격 : ")
     textPrice = Entry(new)
@@ -1393,38 +1414,35 @@ def Rent_State_Show():
         textPrice.insert(END,'')
     else:
         textPrice.insert(END,bookInfo[0,4])
-    labelPrice.grid(row=5, column=0, padx=100)
-    textPrice.grid(row=5, column=1, padx=100)
+    labelPrice.grid(row=5, column=0, padx=20, pady=20)
+    textPrice.grid(row=5, column=1, padx=20, pady=20)
     labelEmail = Label(new, text="이메일 : ")
     textEmail = Entry(new)
     textEmail.insert(END,userInfo[0,4])
-    labelEmail.grid(row=5, column=2, padx=100)
-    textEmail.grid(row=5, column=3, padx=100)
+    labelEmail.grid(row=5, column=2, padx=20, pady=20)
+    textEmail.grid(row=5, column=3, padx=20, pady=20)
 
     labelUrl = Label(new, text="관련URL : ")
     textUrl = Entry(new)
-    if np.isnan(bookInfo[0,5]):
-        textUrl.insert(END,'')
-    else:
-        textUrl.insert(END,bookInfo[0,5])
-    labelUrl.grid(row=6, column=0, padx=100)
-    textUrl.grid(row=6, column=1, padx=100)
+    textUrl.insert(END,bookInfo[0,5])
+    labelUrl.grid(row=6, column=0, padx=20)
+    textUrl.grid(row=6, column=1, padx=20)
     labelRentDay = Label(new, text="대여일 : ")
     textRentDay = Entry(new)
     textRentDay.insert(END,rentInfo[3])
-    labelRentDay.grid(row=6, column=2, padx=100)
-    textRentDay.grid(row=6, column=3, padx=100)
+    labelRentDay.grid(row=6, column=2, padx=20)
+    textRentDay.grid(row=6, column=3, padx=20)
 
     labelISBN = Label(new, text="ISBN : ")
-    labelISBN.grid(row=7, column=0, padx=100)
+    labelISBN.grid(row=7, column=0, padx=20, pady=20)
     textISBN = Entry(new)
     textISBN.insert(END,bookInfo[0,0])
-    textISBN.grid(row=7, column=1, padx=100)
+    textISBN.grid(row=7, column=1, padx=20, pady=20)
     labelBackDay = Label(new, text="반납 예정일 : ")
     textBackDay = Entry(new)
     textBackDay.insert(END,rentInfo[4])
-    labelBackDay.grid(row=7, column=2, padx=100)
-    textBackDay.grid(row=7, column=3, padx=100)
+    labelBackDay.grid(row=7, column=2, padx=20, pady=20)
+    textBackDay.grid(row=7, column=3, padx=20, pady=20)
 
     labelBackCheck = Label(new, text="반납 여부 : ")
     textBackCheck = Entry(new)
@@ -1432,14 +1450,14 @@ def Rent_State_Show():
         textBackCheck.insert(END,'O')
     else:
         textBackCheck.insert(END,'X')
-    labelBackCheck.grid(row=8, column=2, padx=100)
-    textBackCheck.grid(row=8, column=3, padx=100)
+    labelBackCheck.grid(row=8, column=2, padx=20)
+    textBackCheck.grid(row=8, column=3, padx=20)
 
     btn_check_dup = Button(new, text="반납하기", command=book_return)
-    btn_check_dup.grid(row=9, column=1, padx=100)
+    btn_check_dup.grid(row=9, column=1, padx=20, pady=20)
 
     btn_check_dup = Button(new, text="취소", command=lambda: new.destroy())
-    btn_check_dup.grid(row=9, column=2, padx=100)
+    btn_check_dup.grid(row=9, column=2, padx=20, pady=20)
 
 
 
