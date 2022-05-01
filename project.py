@@ -217,11 +217,11 @@ root = Tk()
 # Adjust size
 root.geometry("1454x936")
 
-# 버튼 클릭 이벤트 핸들러
 def Book_Add():
 
     confirmedISBN="" # 중복확인한 ISBN 임시저장하는 문자열 변수, 체크할 때마다 저장할 것
     isConfirmed=False # 체크를 했는가 저장하는 boolean 변수, 기본값은 False
+    
     def get_user(): # ISBN 중복 확인을 위해 도서 리스트를 불러오는 위한 메소드
         global isConfirmed
         global confirmedISBN
@@ -336,7 +336,7 @@ def Book_Add():
 # 도서 조회
 def Book_Search():
 
-    def get_book_show(event): # 도서 조회시 도서를 선택했을 때 book show 클래스를 불러오는 메소드 -> gui?
+    def get_book_show(event): # 도서 조회시 도서를 선택했을 때 book show 클래스를 불러오는 메소드
         global send_data
         send_data=int(treeview.selection()[0])
         Book_Show() # 조회한 책의 정보를 출력하는 메소드
@@ -363,15 +363,7 @@ def Book_Search():
             for j in range(1,6):#대출여부 외에는 배치순서 동일하니 for문 처리
                 treeV.append(searched_list[i,j-1])
             treeview.insert("", "end", text="", values=treeV, iid=treeV[1])
-            treeview.bind("<Double-1>", get_book_show)#대체 어떻게 써야 먹힐지 모르겠으니 일단 조사 필요함
-        #이하 treeview에 추가하는 for문
-        #for i in range(int(searched_list.size)/8):
-            #treeview.insert("", "end", text="", values=searched_list[i,:], iid=i)
-            #treeview.bind("<Double-1>", onDetailViewForBook)
-
-    #def get_book(): # 도서 정보를 불러오는 메소드
-        #print(BS.get_Book_info()) # 책 정보 확인 ( 도서 정보 리스트 출력 )
-        #get_book_show랑 역할 겹치는 거 같은데 일단 보류
+            treeview.bind("<Double-1>", get_book_show)
     
     panedwindow1 = PanedWindow(relief="raised", bd=2)
     panedwindow1.pack(expand=True)
@@ -421,13 +413,6 @@ def Book_Search():
 
     treeview["show"] = "headings"
 
-    #treeValueList = [("대출중", 9788970504773, "따라하며 배우는 파이썬과 데이터 과학", "천인국", "생능출판", 26000, "https://~"),
-                     #(" X ", 1234970504773, "예제 중심의 파이썬 입문", "황재호", "생능출판", 26000, "https://~")]
-
-    #for i in range(len(treeValueList)):
-        #treeview.insert("", "end", text="", values=treeValueList[i], iid=i)
-        #treeview.bind("<Double-1>", Book_Show)
-
     btn_cancel = Button(panedwindow1, text="취소", command=lambda: panedwindow1.pack_forget())
     btn_cancel.grid(row=4, column=1, padx=100)
 
@@ -436,12 +421,6 @@ def Book_Show():
     global new
     global send_data
     bookInfo=BO.get_Book_info(int(send_data))[0,:]
-    
-    #def print_book_info(): # 조회한 책의 정보 출력을 위한 메소드
-        #BO.get_Book_info() # 책 정보 확인 함수 호출
-        #아마 생성자처럼 작동하는 거 같은데 일단 보류
-
-    # 취소 버튼을 눌렀을때의 경우는 없는가 ?
 
     def modify_book(): # 수정 버튼을 눌렀을 때 원래 도서 정보의 내용이 바뀌어서 저장되게 하기 위한 메소드
         #BO.set_Book_Info() # 도서 수정 함수 호출
@@ -470,7 +449,7 @@ def Book_Show():
         modify_list=np.append(modify_list,textPub.get())
         modify_list=np.append(modify_list,textPrice.get())
         modify_list=np.append(modify_list,textUrl.get())
-        if np.isnan(bookInfo[0,6]):
+        if bookInfo[0,6] == NULL:
             modify_list=np.append(modify_list,'')
         else:
             modify_list=np.append(modify_list,bookInfo[0,6])
@@ -531,7 +510,7 @@ def Book_Show():
 
     labelUrl = Label(new, text="관련URL : ")
     textUrl = Entry(new)
-    if(np.isnan(bookInfo[0,5])):
+    if(bookInfo[0,5] == NULL):
         textUrl.insert(END,'')
     else:
         textUrl.insert(END,bookInfo[0,5])
@@ -583,7 +562,7 @@ def User_Add():
         global confirmedHP
         add_user_list=np.array([])
     
-        if isConfirmed!=True: # 등록버튼을 눌렀을 때 isConfirmed가 False면 체크를 안 했다는 소리이므로 중복확인하라고 메세지박스 띄우고 리턴(빠꾸) -> 버튼처리
+        if isConfirmed != True: # 등록버튼을 눌렀을 때 isConfirmed가 False면 체크를 안 했다는 소리이므로 중복확인하라고 메세지박스 띄우고 리턴(빠꾸) -> 버튼처리
             messagebox.showinfo("경고","중복확인을 하세요")
             return 0
         else:
@@ -604,8 +583,7 @@ def User_Add():
         if textGender.get()!='남' and textGender.get()!='여':
             messagebox.showinfo("경고","성별은 '남' 혹은 '여' 둘 중 하나로만 입력해야 합니다.")
             return 0
-        
-        #d=dt.datetime.now().strftime('%Y-%m-%d')
+
         add_user_list=np.append(add_user_list,textHP.get())
         add_user_list=np.append(add_user_list,textName.get())
         add_user_list=np.append(add_user_list,textBirth.get())
@@ -615,11 +593,8 @@ def User_Add():
             add_user_list=np.append(add_user_list,False)
         add_user_list=np.append(add_user_list,textEmail.get())
         add_user_list=np.append(add_user_list,dt.datetime.now().strftime('%Y.%m.%d'))
-        add_user_list=np.append(add_user_list,'')
+        add_user_list=np.append(add_user_list,'0')
         add_user_list=np.append(add_user_list,0)
-        #가입일자 추가가 안 되어있네요
-
-        #탈퇴일자도 빈 값으로 추가를 해주세요
         US.add_User_Info(add_user_list)
         messagebox.showinfo("알림","회원 등록이 완료되었습니다.")# 팝업창
         confirmedHP="" # 중복 등록 방지를 위해 초기화
@@ -715,7 +690,7 @@ def User_Search():
                 treeV.append('O')
             else:
                 treeV.append('X')
-            if searched_list[i,6] == NULL:
+            if searched_list[i,6] == '0':
                 treeV.append('X')
             else:
                 treeV.append('탈퇴한 회원')
@@ -895,7 +870,7 @@ def User_Show():
     labelExit = Label(new, text="탈퇴여부 : ")
     textExit = Entry(new)
     ins_st=''
-    if np.isnan(userInfo[0,6]):
+    if userInfo[0,6] == '0':
         ins_st='X'
     else:
         ins_st='O'
@@ -921,7 +896,7 @@ def Rent_User_Search():
     global send_data
     def update_rent_situation(before): # 선택 버튼을 눌렀을 시에 해당 회원의 대출 여부가 도서 대출 중으로 바뀌어 저장하는 메소드
         phone=treeview.selection()[0]
-        if np.isnan(US.get_User_info(phone)[0,0,6])==False:
+        if US.get_User_info(phone)[0,0,6]!='0':
             messagebox.showinfo("경고","이미 탈퇴한 회원입니다.")
             return 0
         if US.get_IsRented(phone)==3:#US.user_list[ind,8]==3: # 대출 진행 불가능 -> 해당 회원이 3권을 빌린 상태인지를 먼저 체크해야 함#US.get_IsRented(ind)로 불러오시면 
@@ -958,7 +933,7 @@ def Rent_User_Search():
                 treeV.append('도서 대출 중')
             else:
                 treeV.append('대출한 도서 없음')
-            if np.isnan(searched_list[i,6]):
+            if searched_list[i,6] == '0':
                 treeV.append('X')
             else:
                 treeV.append('탈퇴한 회원')
