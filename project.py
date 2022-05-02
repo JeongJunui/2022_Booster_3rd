@@ -4,7 +4,7 @@ from cgitb import text
 from glob import glob
 from re import T
 #from jmespath import search
-from matplotlib.pyplot import axis
+#from matplotlib.pyplot import axis
 import pandas as pd
 import numpy as np
 from tkinter import *
@@ -1410,7 +1410,7 @@ def Rent_State_Show():
 
     labelPrice = Label(new, text="가격 : ")
     textPrice = Entry(new)
-    if np.isnan(bookInfo[0,4]):
+    if bookInfo[0,4] == NULL:
         textPrice.insert(END,'')
     else:
         textPrice.insert(END,bookInfo[0,4])
