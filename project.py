@@ -269,6 +269,7 @@ def Book_Add():
                 textWrite+="필수사항을 입력해주세요."
                 messagebox.showinfo("경고",textWrite)  # 팝업창 처리
                 return 0
+            
             if textPrice.get().isdecimal()==False: # 가격이 숫자가 아닐경우
                 messagebox.showinfo("경고","가격은 숫자만 입력하여야 합니다.")
         
@@ -294,9 +295,9 @@ def Book_Add():
 
     labelISBN = Label(panedwindow1, text="ISBN : ") # ' ISBN: ' 화면에 출력
     labelISBN.grid(row=1, column=0, padx=50, pady=10)
-    textISBN = Entry(panedwindow1) #ISBN 넣는 텍스트박스
+    textISBN = Entry(panedwindow1) # ISBN 넣는 텍스트박스
     textISBN.grid(row=1, column=1, padx=0, pady=10)
-    btn_check_dup = Button(panedwindow1, text="중복확인", command=get_user)
+    btn_check_dup = Button(panedwindow1, text="중복확인", command=get_user) # "중복확인"버튼을 눌렀을 시에 get_user함수 호출
     btn_check_dup.grid(row=1, column=2, padx=50, pady=10)
 
     labelBookName = Label(panedwindow1, text="도서명 : ") # ' 도서명: ' 화면에 출력
@@ -457,7 +458,7 @@ def Book_Show():
             textWrite+="필수사항을 입력해주세요."
             messagebox.showinfo("경고",textWrite)
             return 0
-        modify_list=np.append(modify_list,textISBN.get())
+        modify_list=np.append(modify_list,textISBN.get()) # modify_list에 값들 저장 / ISBN은 애초에 수정되지 않게 해야됨
         modify_list=np.append(modify_list,textBookName.get())
         modify_list=np.append(modify_list,textAuthor.get())
         modify_list=np.append(modify_list,textPub.get())
@@ -469,7 +470,7 @@ def Book_Show():
         else:
             modify_list=np.append(modify_list, True)
 
-        BO.set_Book_Info(modify_list)
+        BO.set_Book_Info(modify_list) # set_Book_Info함수를 호출해 modify_list를 추가
         messagebox.showinfo("알림","도서 수정이 완료되었습니다.") # 팝업창
         bookInfo=BO.get_Book_info(textISBN.get())[0,:]
 
