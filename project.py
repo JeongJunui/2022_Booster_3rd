@@ -3,8 +3,8 @@ from cgitb import text
 #from curses import textpad
 from glob import glob
 from re import T
-#from jmespath import search
-#from matplotlib.pyplot import axis
+from jmespath import search
+from matplotlib.pyplot import axis
 import pandas as pd
 import numpy as np
 from tkinter import *
@@ -46,18 +46,18 @@ class Book:
             return False
     
     def add_Book_Info(self,inf): # 도서 등록 (IF-002)
-        self.__book=np.append(self.__book,[inf],axis=0)# 행 방향으로 정보 추가
+        self.__book=np.append(self.__book,[inf],axis=0) # 행 방향으로 정보 추가
         self.save_to_csv()
         
     def get_Book_info(self,isbn): # 책 정보 확인
-        ind=np.where(self.__book[:,0]==int(isbn))#내부 인덱스를 찾아냄
+        ind=np.where(self.__book[:,0]==int(isbn)) #내부 인덱스를 찾아냄
         return self.__book[ind,:]# 인덱스에 해당하는 책 정보를 리턴
 
     def get_IsRented(self,isbn):#IF-008
-        ind=np.where(self.__book[:,0]==isbn)#내부 인덱스를 찾아냄
+        ind=np.where(self.__book[:,0]==isbn) #내부 인덱스를 찾아냄
         return self.__book[ind,7]
     def set_IsRented(self,isbn,rt):#IF-009
-        ind=np.where(self.__book[:,0]==isbn)#내부 인덱스를 찾아냄
+        ind=np.where(self.__book[:,0]==isbn) #내부 인덱스를 찾아냄
         self.__book[ind,7]=rt
         self.save_to_csv()
         
@@ -227,55 +227,62 @@ def Book_Add():
     def get_user(): # ISBN 중복 확인을 위해 도서 리스트를 불러오는 위한 메소드
         global isConfirmed
         global confirmedISBN
-        if textISBN.get().isdecimal()==False:
+        
+        if textISBN.get().isdecimal()==False: # isdecimal : 주어진 문자열이 숫자로 되어있는지 검사하는 함수
             messagebox.showinfo("경고","ISBN은 숫자로만 입력해야 합니다.")
             return 0
+        
+        if textISBN.get()!=4: # isbn이 4글자가 아닌경우
+            messagebox.showinfo("경고","ISBN은 4글자를 입력해야 합니다.")
+            
         if BO.get_IsIn(int(textISBN.get())): # ISBN 집어넣어서 있으면 True(등록된 거 있음), 없으면 False 받아옴
             messagebox.showinfo("중복확인결과"," 이미 등록된 도서입니다.")
             isConfirmed=False
+            
         else:
             messagebox.showinfo("중복확인결과","등록 가능한 도서입니다.")
             isConfirmed=True # 체크-> True
             confirmedISBN=textISBN.get() # 중복확인한 거 저장
 
-    def add_book():
+    def add_book(): # 도서 등록을 위한 메소드
         global isConfirmed
         global confirmedISBN
         add_book_list=np.array([])
     
-        if isConfirmed!=True: #등록버튼을 눌렀을 때 isConfirmed가 False면 체크를 안 했다는 소리이므로 중복확인하라고 메세지박스 띄움
+        if isConfirmed!=True: # 등록버튼을 눌렀을 때 isConfirmed가 False면 체크를 안 했다는 소리이므로 중복확인하라고 메세지박스 띄움
             messagebox.showinfo("경고","중복확인을 하세요")
             return 0
+        
         else:
-            if textISBN.get()!=confirmedISBN:
+            if textISBN.get()!=confirmedISBN:  # get(): entry에서 입력된 값을 불러옴
                 isConfirmed=False
                 messagebox.showinfo("경고","중복확인을 다시 하세요")
                 return 0
-            
+           
             if textBookName.get()=='' or textAuthor.get()=='' or textPub.get()=='': # 도서명,저자,출판사 셋중 하나를 입력하지 않았을경우 경고메세지 출력
                 textWrite=""
                 if textBookName.get()=='':
-                    textWrite+="도서명이 입력되어있지 않습니다.\n" # 팝업창 처리
+                    textWrite+="도서명이 입력되어있지 않습니다.\n" 
                 elif textAuthor.get()=='':
-                    textWrite+="저자명이 입력되어있지 않습니다.\n" # 팝업창 처리
+                    textWrite+="저자명이 입력되어있지 않습니다.\n" 
                 elif textPub.get()=='':
-                    textWrite+="출판사가 입력되어있지 않습니다.\n" # 팝업창 처리
+                    textWrite+="출판사가 입력되어있지 않습니다.\n"
                 textWrite+="필수사항을 입력해주세요."
-                messagebox.showinfo("경고",textWrite)
+                messagebox.showinfo("경고",textWrite)  # 팝업창 처리
                 return 0
-            if textPrice.get().isdecimal()==False:
+            if textPrice.get().isdecimal()==False: # 가격이 숫자가 아닐경우
                 messagebox.showinfo("경고","가격은 숫자만 입력하여야 합니다.")
         
-        add_book_list=np.append(add_book_list,textISBN.get())
+        add_book_list=np.append(add_book_list,textISBN.get()) # add_book_list에 값들을 저장
         add_book_list=np.append(add_book_list,textBookName.get())
         add_book_list=np.append(add_book_list,textAuthor.get())
         add_book_list=np.append(add_book_list,textPub.get())
         add_book_list=np.append(add_book_list,textPrice.get())
         add_book_list=np.append(add_book_list,textUrl.get())
         add_book_list=np.append(add_book_list,textDesc.get())
-        add_book_list=np.append(add_book_list,True)
-        BO.add_Book_Info(add_book_list)
-        messagebox.showinfo("알림","도서 등록이 완료되었습니다.")# 팝업창
+        add_book_list=np.append(add_book_list,True) # 대출 여부 초기값 True
+        BO.add_Book_Info(add_book_list) # add_book_list를 book_list에 추가
+        messagebox.showinfo("알림","도서 등록이 완료되었습니다.") # 팝업창
         confirmedISBN="" # 중복 등록 방지를 위해 초기화
         isConfirmed=False
         panedwindow1.destroy()
@@ -283,54 +290,53 @@ def Book_Add():
     panedwindow1 = PanedWindow(relief="raised", bd=2)
     panedwindow1.pack(expand=True)
 
-    title = Label(panedwindow1, text="도서 등록")
+    title = Label(panedwindow1, text="도서 등록") # '도서등록' 화면에 출력 ( 상단의 타이틀 )
     title.grid(row=0, column=1, padx=50)
 
-    labelISBN = Label(panedwindow1, text="ISBN : ")
+    labelISBN = Label(panedwindow1, text="ISBN : ")  # ' ISBN: ' 화면에 출력
     labelISBN.grid(row=1, column=0, padx=50, pady=10)
     textISBN = Entry(panedwindow1) #ISBN 넣는 텍스트박스
     textISBN.grid(row=1, column=1, padx=0, pady=10)
     btn_check_dup = Button(panedwindow1, text="중복확인", command=get_user)
     btn_check_dup.grid(row=1, column=2, padx=50, pady=10)
 
-    labelBookName = Label(panedwindow1, text="도서명 : ")
+    labelBookName = Label(panedwindow1, text="도서명 : ")  # ' 도서명: ' 화면에 출력
     textBookName = Entry(panedwindow1) #도서명 넣는 텍스트박스
     labelBookName.grid(row=2, column=0, padx=50, pady=10)
     textBookName.grid(row=2, column=1, padx=0, pady=10)
 
-    labelAuthor = Label(panedwindow1, text="저자 : ")
+    labelAuthor = Label(panedwindow1, text="저자 : ") # ' 저자: ' 화면에 출력
     textAuthor = Entry(panedwindow1) #저자 넣는 텍스트박스
     labelAuthor.grid(row=3, column=0, padx=50)
     textAuthor.grid(row=3, column=1, padx=0)
 
-
-    labelPub = Label(panedwindow1, text="출판사 : ")
+    labelPub = Label(panedwindow1, text="출판사 : ") # ' 출판사: ' 화면에 출력
     textPub = Entry(panedwindow1) #출판사 넣는 텍스트박스
     labelPub.grid(row=4, column=0, padx=50, pady=10)
     textPub.grid(row=4, column=1, padx=0, pady=10)
 
-    labelPrice = Label(panedwindow1, text="가격 : ")
+    labelPrice = Label(panedwindow1, text="가격 : ") # ' 가격: ' 화면에 출력
     textPrice = Entry(panedwindow1) #가격 넣는 텍스트박스
     labelPrice.grid(row=5, column=0, padx=50)
     textPrice.grid(row=5, column=1, padx=0)
-    label_price_msg = Label(panedwindow1, text="가격은 쉼표 없이 숫자만 입력하세요!", fg = "red")
+    label_price_msg = Label(panedwindow1, text="가격은 쉼표 없이 숫자만 입력하세요!", fg = "red")  # 가격 입력 경고 문자
     label_price_msg.grid(row=6, column=1, padx=0)
 
 
-    labelUrl = Label(panedwindow1, text="관련URL : ")
+    labelUrl = Label(panedwindow1, text="관련URL : ")  # ' 관련URL: ' 화면에 출력
     textUrl = Entry(panedwindow1) #URL 넣는 텍스트박스
     labelUrl.grid(row=7, column=0, padx=50, pady=10)
     textUrl.grid(row=7, column=1, padx=0, pady=10)
 
-    labelDesc = Label(panedwindow1, text="도서설명 : ")
+    labelDesc = Label(panedwindow1, text="도서설명 : ")  # ' 도서설명: ' 화면에 출력
     textDesc = Entry(panedwindow1) #도서설명 넣는 텍스트박스
     labelDesc.grid(row=8, column=0, padx=50)
     textDesc.grid(row=8, column=1, padx=0)
 
-    btn_book_register = Button(panedwindow1, text="등록", command=add_book)
+    btn_book_register = Button(panedwindow1, text="등록", command=add_book) # '등록' 버튼을 누를시에 add_book함수 호출
     btn_book_register.grid(row=9, column=0, padx=50, pady=10)
     # command=lambda: panedwindow1.pack_forget() -> 현재 panedwindow1 창을 닫음.
-    btn_cancel = Button(panedwindow1, text="취소", command=lambda: panedwindow1.pack_forget())
+    btn_cancel = Button(panedwindow1, text="취소", command=lambda: panedwindow1.pack_forget()) # '취소' 버튼을 누를시에 페이지 닫음
     btn_cancel.grid(row=9, column=1, padx=50, pady=10)
 
 
@@ -347,10 +353,19 @@ def Book_Search():
         searched_list=np.array([])
         if text_book_name.get(): # 도서명이 입력된 경우
             searched_list=BO.search_Book_ByTitle(text_book_name.get()) # 제목으로 도서 검색하는 함수 호출
+            
+        elif text_book_name.get()=='': # 관련 도서명이 없는 경우
+            messagebox.showinfo("경고","관련된 도서가 없습니다.\n올바른 제목을 입력해주세요.")
+            
         elif text_author.get(): # 저자명이 입력된 경우
             searched_list=BO.search_Book_ByAuthor(text_author.get()) # 책 저자로 검색하는 함수 호출
+        
+        elif text_author.get()=='': # 관련 저자이름이 없는 경우
+             messagebox.showinfo("경고","관련된 저자가 없습니다.\n올바른 저자이름을 입력해주세요.")
+                
         else:
             messagebox.showinfo("경고","도서명과 저자명 둘 중 하나라도 입력하시오")
+            
         treeview.delete(*treeview.get_children())#treeview 전체를 지우는 문장
         #treeview에 넣을 데이터 정제 과정
         #treeV=[[for i in range(8)] for j in range(int(searched_list.size)/8)]#2차원 배열
@@ -368,17 +383,17 @@ def Book_Search():
     panedwindow1 = PanedWindow(relief="raised", bd=2)
     panedwindow1.pack(expand=True)
 
-    title = Label(panedwindow1, text="도서 조회")
+    title = Label(panedwindow1, text="도서 조회") # '도서 조회' 화면에 출력 ( 상단의 타이틀 )
     title.grid(row=0, column=1, padx=10, pady=10)
 
-    label_book_name = Label(panedwindow1, text="도서명 : ")
+    label_book_name = Label(panedwindow1, text="도서명 : ") # '도서명:' 화면에 출력
     label_book_name.grid(row=1, column=0, padx=10, pady=10)
     text_book_name = Entry(panedwindow1)
     text_book_name.grid(row=1, column=1, padx=10, pady=10)
-    btn_view = Button(panedwindow1, text="조회", command=print_book_list)
+    btn_view = Button(panedwindow1, text="조회", command=print_book_list) # "조회"버튼을 누를시에 print_book_list함수 호출
     btn_view.grid(row=1, column=2, padx=10, pady=10)
 
-    label_author = Label(panedwindow1, text="저자 : ")
+    label_author = Label(panedwindow1, text="저자 : ") # '저자:' 화면에 출력
     label_author.grid(row=2, column=0, padx=10, pady=10)
     text_author = Entry(panedwindow1)
     text_author.grid(row=2, column=1, padx=10, pady=10)
