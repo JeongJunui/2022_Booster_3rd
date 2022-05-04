@@ -252,7 +252,7 @@ def Book_Add():
             messagebox.showinfo("경고","중복확인을 하세요")
             return 0
         
-        else:
+        else: # 등록버튼을 눌렀을 때
             if textISBN.get()!=confirmedISBN:  # get(): entry에서 입력된 값을 불러옴
                 isConfirmed=False
                 messagebox.showinfo("경고","중복확인을 다시 하세요")
@@ -353,15 +353,15 @@ def Book_Search():
         searched_list=np.array([])
         if text_book_name.get(): # 도서명이 입력된 경우
             searched_list=BO.search_Book_ByTitle(text_book_name.get()) # 제목으로 도서 검색하는 함수 호출
-            
-        elif text_book_name.get()=='': # 관련 도서명이 없는 경우
-            messagebox.showinfo("경고","관련된 도서가 없습니다.\n올바른 제목을 입력해주세요.")
+            if text_book_name.get()=='': # 관련 도서명이 없는 경우
+                messagebox.showinfo("경고","관련된 도서가 없습니다.\n올바른 제목을 입력해주세요.")
+                return 0
             
         elif text_author.get(): # 저자명이 입력된 경우
             searched_list=BO.search_Book_ByAuthor(text_author.get()) # 책 저자로 검색하는 함수 호출
-        
-        elif text_author.get()=='': # 관련 저자이름이 없는 경우
-             messagebox.showinfo("경고","관련된 저자가 없습니다.\n올바른 저자이름을 입력해주세요.")
+            if text_author.get()=='': # 관련 저자이름이 없는 경우
+                messagebox.showinfo("경고","관련된 저자가 없습니다.\n올바른 저자이름을 입력해주세요.")
+                return 0
                 
         else:
             messagebox.showinfo("경고","도서명과 저자명 둘 중 하나라도 입력하시오")
@@ -442,7 +442,7 @@ def Book_Show():
         global bookInfo
         global send_data
         bookInfo=BO.get_Book_info(int(textISBN.get()))[0,:]
-        if bookInfo[0,7]==False:
+        if bookInfo[0,7]==False: # 대출중인 도서일 경우 -> 수정 불가능
             messagebox.showinfo("경고","대출 중인 도서는 수정할 수 없습니다.")
             return 0
         modify_list=np.array([])
@@ -450,14 +450,15 @@ def Book_Show():
         if textBookName.get()=='' or textAuthor.get()=='' or textPub.get()=='': # 도서명,저자,출판사 셋중 하나를 입력하지 않았을경우 경고메세지 출력
             textWrite=""
             if textBookName.get()=='':
-                textWrite+="도서명이 입력되어있지 않습니다.\n" # 팝업창 처리
+                textWrite+="도서명이 입력되어있지 않습니다.\n" 
             elif textAuthor.get()=='':
-                textWrite+="저자명이 입력되어있지 않습니다.\n" # 팝업창 처리
+                textWrite+="저자명이 입력되어있지 않습니다.\n" 
             elif textPub.get()=='':
-                textWrite+="출판사가 입력되어있지 않습니다.\n" # 팝업창 처리
+                textWrite+="출판사가 입력되어있지 않습니다.\n"
             textWrite+="필수사항을 입력해주세요."
-            messagebox.showinfo("경고",textWrite)
+            messagebox.showinfo("경고",textWrite) # 팝업창 처리
             return 0
+        
         modify_list=np.append(modify_list,textISBN.get()) # modify_list에 값들 저장 / ISBN은 애초에 수정되지 않게 해야됨
         modify_list=np.append(modify_list,textBookName.get())
         modify_list=np.append(modify_list,textAuthor.get())
@@ -469,7 +470,6 @@ def Book_Show():
             modify_list=np.append(modify_list, False)
         else:
             modify_list=np.append(modify_list, True)
-
         BO.set_Book_Info(modify_list) # set_Book_Info함수를 호출해 modify_list를 추가
         messagebox.showinfo("알림","도서 수정이 완료되었습니다.") # 팝업창
         bookInfo=BO.get_Book_info(textISBN.get())[0,:]
@@ -559,8 +559,8 @@ def User_Add():
         if US.get_IsIn(textHP.get()): # 중복되는 전화번호 있으면 True, 없으면 False
             messagebox.showinfo("중복확인결과","이미 등록된 회원입니다.") # 팝업창
             
-        elif textHP.get().isdecimal()==False: # 전화번호를 숫자가 아닌 것으로 입력했을 경우
-            messagebox.showinfo("경고","전화번호는 숫자로만 입력해야 합니다.") # 팝업창
+        elif textHP.get()!=13: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
+            messagebox.showinfo("경고","전화번호는 13자리를 입력해야 합니다.") # 팝업창
             return 0 
         
         else:
@@ -573,11 +573,11 @@ def User_Add():
         global confirmedHP
         add_user_list=np.array([])
     
-        if isConfirmed != True: # 등록버튼을 눌렀을 때 isConfirmed가 False면 체크를 안 했다는 소리이므로 중복확인하라고 메세지박스 띄우고 리턴(빠꾸) -> 버튼처리
-            messagebox.showinfo("경고","중복확인을 하세요")
+        if isConfirmed != True: # 등록버튼을 눌렀을시에 중복확인을 하지 않았을 때(isConfirmed가 False면 체크를 안 했다는 소리이므로) 중복확인경고메세지 출력
+            messagebox.showinfo("경고","중복확인을 하세요") # 팝업창
             return 0
         
-        else:
+        else: # 필수사항을 입력하지 않았을 때
             if textName.get()=='' or textBirth.get()=='' or textGender.get()=='' or textEmail.get()=='': # 이름,생년월일,성별,이메일 넷중 하나를 입력하지 않았을경우 경고메세지 
                 textWrite=""
                 if textName.get()=='':
