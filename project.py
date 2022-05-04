@@ -294,27 +294,27 @@ def Book_Add():
     textISBN = Entry(panedwindow1) # ISBN 넣는 텍스트박스
     textISBN.grid(row=1, column=1, padx=0, pady=10)
     btn_check_dup = Button(panedwindow1, text="중복확인", command=get_user) # "중복확인"버튼을 눌렀을 시에 get_user함수 호출
-    btn_check_dup.grid(row=1, column=2, padx=50, pady=10)
+    btn_check_dup.grid(row=1, column=2, padx=50, pady=10) #화면을 표처럼 나눈다고 생각했을 때, 첫행, 두번째 열에 x축 공백을 50, y축 공백을 10으로 설정합니다
 
     labelBookName = Label(panedwindow1, text="도서명 : ") # ' 도서명: ' 화면에 출력
     textBookName = Entry(panedwindow1) #도서명 넣는 텍스트박스
-    labelBookName.grid(row=2, column=0, padx=50, pady=10)
-    textBookName.grid(row=2, column=1, padx=0, pady=10)
+    labelBookName.grid(row=2, column=0, padx=50, pady=10) #화면을 표처럼 나눈다고 생각했을 때, 두번째행, 0번째 열에 x축 공백을 50, y축 공백을 10으로 설정합니다
+    textBookName.grid(row=2, column=1, padx=0, pady=10) #화면을 표처럼 나눈다고 생각했을 때, 두번째행, 1번째 줄에 x축 공백을 0, y축 공백을 10으로 설정합니다
 
     labelAuthor = Label(panedwindow1, text="저자 : ") # ' 저자: ' 화면에 출력
     textAuthor = Entry(panedwindow1) #저자 넣는 텍스트박스
-    labelAuthor.grid(row=3, column=0, padx=50)
-    textAuthor.grid(row=3, column=1, padx=0)
+    labelAuthor.grid(row=3, column=0, padx=50) #화면을 표처럼 나눈다고 생각했을 때, 세번째행, 0번째 줄에 x축 공백을 50, y축 공백을 10으로 설정합니다
+    textAuthor.grid(row=3, column=1, padx=0) #화면을 표처럼 나눈다고 생각했을 때, 세번째행, 1번째 줄에 x축 공백을 0으로 설정합니다
 
     labelPub = Label(panedwindow1, text="출판사 : ") # ' 출판사: ' 화면에 출력
     textPub = Entry(panedwindow1) #출판사 넣는 텍스트박스
-    labelPub.grid(row=4, column=0, padx=50, pady=10)
-    textPub.grid(row=4, column=1, padx=0, pady=10)
+    labelPub.grid(row=4, column=0, padx=50, pady=10) #화면을 표처럼 나눈다고 생각했을 때, 4번째행, 0번째 줄에 x축 공백을 50, y축 공백을 10으로 설정합니다
+    textPub.grid(row=4, column=1, padx=0, pady=10) #화면을 표처럼 나눈다고 생각했을 때, 4번째행, 1번째 줄에 x축 공백을 0, y축 공백을 10으로 설정
 
     labelPrice = Label(panedwindow1, text="가격 : ") # ' 가격: ' 화면에 출력
     textPrice = Entry(panedwindow1) #가격 넣는 텍스트박스
-    labelPrice.grid(row=5, column=0, padx=50)
-    textPrice.grid(row=5, column=1, padx=0)
+    labelPrice.grid(row=5, column=0, padx=50) #화면을 표처럼 나눈다고 생각했을 때, 5번째행, 0번째 줄에 x축 공백을 50으로 설정
+    textPrice.grid(row=5, column=1, padx=0) #화면을 표처럼 나눈다고 생각했을 때, 5번째행, 1번째 줄에 x축 공백을 0으로 설정
     label_price_msg = Label(panedwindow1, text="가격은 쉼표 없이 숫자만 입력하세요!", fg = "red")  # 가격 입력 경고 문자
     label_price_msg.grid(row=6, column=1, padx=0)
 
@@ -403,8 +403,8 @@ def Book_Search():
     treeview.column("t_check", width=100, anchor="center")
     treeview.heading("t_check", text="대출 여부", anchor="center")
 
-    treeview.column("t_isbn", width=100, anchor="center")
-    treeview.heading("t_isbn", text="ISBN", anchor="center")
+    treeview.column("t_isbn", width=100, anchor="center") #검색해서 표출되는 표에서 isbn이 표시되는 열의 너비를 100으로 설정, 가운데 정렬
+    treeview.heading("t_isbn", text="ISBN", anchor="center") #isbn이 표시되는 열의 제목에 ISBN이라는 텍스트를 넣고, 가운데 정렬
 
     treeview.column("t_title", width=100, anchor="center")
     treeview.heading("t_title", text="제목", anchor="center")
