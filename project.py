@@ -62,29 +62,28 @@ class Book:
         self.save_to_csv()
         
     def search_Book_ByTitle(self,title): # 책 제목으로 검색 (IF-003)
-
-        search_list=np.array([])# 검색된 책 정보 저장할 리스트
+        search_list=np.array([]) # 검색된 책 정보 저장할 리스트
         found_ind=np.where(self.__book[:,1]==title)
         for i in found_ind:
-            search_list=np.append(search_list,self.__book[i,:])# 제목이 동일하면 리스트에 추가
+            search_list=np.append(search_list,self.__book[i,:]) # 제목이 동일하면 리스트에 추가
         search_list=np.reshape(search_list,(int(search_list.size/8),8))
         return search_list # 반환 값 : 도서 목록
 
     def search_Book_ByAuthor(self,author): # 책 저자로 검색 (IF-004)
-        search_list=np.array([])# 검색된 책 정보 저장할 리스트
+        search_list=np.array([]) # 검색된 책 정보 저장할 리스트
         found_ind=np.where(self.__book[:,2]==author)
         for i in found_ind:
-            search_list=np.append(search_list,self.__book[i,:])# 저자가 동일하면 리스트에 추가
+            search_list=np.append(search_list,self.__book[i,:]) # 저자가 동일하면 리스트에 추가
         search_list=np.reshape(search_list,(int(search_list.size/8),8))
         return search_list # 반환 값 : 도서 목록
     
     def set_Book_Info(self,inf): # 도서 수정 (IF-005)
-        ind=np.where(self.__book[:,0]==int(inf[0]))#내부 인덱스를 찾아냄
+        ind=np.where(self.__book[:,0]==int(inf[0])) # 내부 인덱스를 찾아냄
         self.__book[ind,:]=inf# 인덱스 값에 해당하는 책 정보 삽입
         self.save_to_csv()
    
     def drop_Book_Info(self,isbn): # 도서 삭제 (IF-006)
-        ind=np.where(self.__book[:,0]==isbn)#내부 인덱스를 찾아냄
+        ind=np.where(self.__book[:,0]==isbn) # 내부 인덱스를 찾아냄
         self.__book=np.delete(self.__book,ind,axis=0)# 인덱스 값에 해당하는 정보 삭제
         self.save_to_csv()
         
@@ -133,30 +132,30 @@ class User:
         self.save_to_csv()
     
     def search_User_ByName(self,name): # 이름으로 회원 조회 (IF-012)
-        search_list=np.array([])# 검색된 회원 정보 저장할 리스트
+        search_list=np.array([]) # 검색된 회원 정보 저장할 리스트
         found_ind=np.where(self.__user[:,1]==name)
         for i in found_ind:
-            search_list=np.append(search_list,self.__user[i,:])# 이름이 동일하면 리스트에 추가
+            search_list=np.append(search_list,self.__user[i,:]) # 이름이 동일하면 리스트에 추가
         search_list=np.reshape(search_list,(int(search_list.size/8),8))
-        return search_list# 반환 값 : 회원 목록
+        return search_list # 반환 값 : 회원 목록
 
     def search_User_ByPhone(self,phone): # 연락처로 회원 조회 (IF-013)
-        search_list=np.array([])# 검색된 회원 정보 저장할 리스트
+        search_list=np.array([]) # 검색된 회원 정보 저장할 리스트
         found_ind=np.where(self.__user[:,0]==phone)
         for i in found_ind:
-            search_list=np.append(search_list,self.__user[i,:])# 연락처가 동일하면 리스트에 추가
+            search_list=np.append(search_list,self.__user[i,:]) # 연락처가 동일하면 리스트에 추가
         search_list=np.reshape(search_list,(int(search_list.size/8),8))
         return search_list# 반환 값 : 회원 목록
     # 일부만 일치해도 검색할 수 있게 개선 필요함
     
     def set_User_Info(self,inf): # 회원 수정 (IF-014)
-        ind=np.where(self.__user[:,0]==inf[0])#내부 인덱스를 찾아냄
-        self.__user[ind,:]=inf# 인덱스 값에 해당하는 회원 정보 삽입
+        ind=np.where(self.__user[:,0]==inf[0]) # 내부 인덱스를 찾아냄
+        self.__user[ind,:]=inf # 인덱스 값에 해당하는 회원 정보 삽입
         self.save_to_csv()
 
     def drop_User_Info(self,phone,dat): # 회원 탈퇴 (IF-015)
-        ind=np.where(self.__user[:,0]==phone)#내부 인덱스를 찾아냄
-        self.__user[ind,6]=dat# 인덱스 값에 해당하는 회원 탈퇴일자 저장
+        ind=np.where(self.__user[:,0]==phone) # 내부 인덱스를 찾아냄
+        self.__user[ind,6]=dat # 인덱스 값에 해당하는 회원 탈퇴일자 저장
         self.save_to_csv()
         # 회원 탈퇴 시 재가입을 할 수도 있는경우를 위해회원을 삭제 하는 것이 아니라 탈퇴 날짜를 지정해줌
 
@@ -178,7 +177,7 @@ class Rent:
         rentdf.to_csv('csv/Rent.csv', encoding='UTF-8')
         self.__road_from_csv()
         
-    def get_Rent_Info(self,ind):#실제 인덱스 번호가 아니라 대출 테이블 내에 저장된 인덱스 번호를 넣을 것
+    def get_Rent_Info(self,ind): # 실제 인덱스 번호가 아니라 대출 테이블 내에 저장된 인덱스 번호를 넣을 것
         return self.__rent[ind-1,:]
     
     def rent_Book(self,isbn,phone,dat,datr): # 도서대출  (IF-019)
@@ -230,9 +229,6 @@ def Book_Add():
         if textISBN.get().isdecimal()==False: # isdecimal : 주어진 문자열이 숫자로 되어있는지 검사하는 함수
             messagebox.showinfo("경고","ISBN은 숫자로만 입력해야 합니다.")
             return 0
-        
-        if textISBN.get()!=4: # isbn이 4글자가 아닌경우
-            messagebox.showinfo("경고","ISBN은 4글자를 입력해야 합니다.")
             
         if BO.get_IsIn(int(textISBN.get())): # ISBN 집어넣어서 있으면 True(등록된 거 있음), 없으면 False 받아옴
             messagebox.showinfo("중복확인결과"," 이미 등록된 도서입니다.")
@@ -354,28 +350,28 @@ def Book_Search():
         if text_book_name.get(): # 도서명이 입력된 경우
             searched_list=BO.search_Book_ByTitle(text_book_name.get()) # 제목으로 도서 검색하는 함수 호출
             if text_book_name.get()=='': # 관련 도서명이 없는 경우
-                messagebox.showinfo("경고","관련된 도서가 없습니다.\n올바른 제목을 입력해주세요.")
+                messagebox.showinfo("경고","관련된 도서가 없습니다.\n올바른 제목을 입력해주세요.") # 팝업창
                 return 0
             
         elif text_author.get(): # 저자명이 입력된 경우
             searched_list=BO.search_Book_ByAuthor(text_author.get()) # 책 저자로 검색하는 함수 호출
             if text_author.get()=='': # 관련 저자이름이 없는 경우
-                messagebox.showinfo("경고","관련된 저자가 없습니다.\n올바른 저자이름을 입력해주세요.")
+                messagebox.showinfo("경고","관련된 저자가 없습니다.\n올바른 저자이름을 입력해주세요.") # 팝업창
                 return 0
                 
         else:
             messagebox.showinfo("경고","도서명과 저자명 둘 중 하나라도 입력하시오")
             
-        treeview.delete(*treeview.get_children())#treeview 전체를 지우는 문장
+        treeview.delete(*treeview.get_children()) # treeview 전체를 지우는 문장
         #treeview에 넣을 데이터 정제 과정
-        #treeV=[[for i in range(8)] for j in range(int(searched_list.size)/8)]#2차원 배열
+        #treeV=[[for i in range(8)] for j in range(int(searched_list.size)/8)] # 2차원 배열
         for i in range(int(searched_list.size/8)):
-            treeV=[]#
+            treeV=[]
             if searched_list[i,7]:#대출 여부에 따라 문장을 다르게 삽입
                 treeV.append("X")
             else:
                 treeV.append("대출 중")
-            for j in range(1,6):#대출여부 외에는 배치순서 동일하니 for문 처리
+            for j in range(1,6): # 대출여부 외에는 배치순서 동일하니 for문 처리
                 treeV.append(searched_list[i,j-1])
             treeview.insert("", "end", text="", values=treeV, iid=treeV[1])
             treeview.bind("<Double-1>", get_book_show)
@@ -428,7 +424,7 @@ def Book_Search():
 
     treeview["show"] = "headings"
 
-    btn_cancel = Button(panedwindow1, text="취소", command=lambda: panedwindow1.pack_forget())
+    btn_cancel = Button(panedwindow1, text="취소", command=lambda: panedwindow1.pack_forget()) # "취소"버튼을 누를시에 창닫기
     btn_cancel.grid(row=4, column=1, padx=10, pady=10)
 
 def Book_Show():
@@ -459,6 +455,9 @@ def Book_Show():
             messagebox.showinfo("경고",textWrite) # 팝업창 처리
             return 0
         
+        if textPrice.get().isdecimal()==False: # 가격이 숫자가 아닐경우
+                messagebox.showinfo("경고","가격은 숫자만 입력하여야 합니다.")
+                
         modify_list=np.append(modify_list,textISBN.get()) # modify_list에 값들 저장 / ISBN은 애초에 수정되지 않게 해야됨
         modify_list=np.append(modify_list,textBookName.get())
         modify_list=np.append(modify_list,textAuthor.get())
@@ -481,7 +480,7 @@ def Book_Show():
             
         else:
             BO.drop_Book_Info(int(textISBN.get()))  # 도서 삭제 함수 호출 
-            messagebox.showinfo("알림","해당 도서가 삭제되었습니다.")# 팝업창
+            messagebox.showinfo("알림","해당 도서가 삭제되었습니다.") # 팝업창
             
     new = Toplevel()
     
@@ -560,8 +559,12 @@ def User_Add():
             messagebox.showinfo("중복확인결과","이미 등록된 회원입니다.") # 팝업창
             
         elif textHP.get()!=13: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
-            messagebox.showinfo("경고","전화번호는 13자리를 입력해야 합니다.") # 팝업창
-            return 0 
+            messagebox.showinfo("경고","전화번호는 '-'을 포함한 13자리를 입력해야 합니다.") # 팝업창
+            return 0
+        
+        #elif textHP.get().isdigit()==False: # 전화번호가 숫자가 아닐경우-->'-'이 포함
+        #    messagebox.showinfo("경고","전화번호는 숫자만 입력해야 합니다.") # 팝업창
+        #    return 0
         
         else:
             messagebox.showinfo("중복확인결과","등록 가능한 회원입니다.") # 팝업창
@@ -592,6 +595,12 @@ def User_Add():
                 messagebox.showinfo("경고",textWrite) # 팝업창 처리
                 return 0
             
+        if textHP.get()!=13: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
+            messagebox.showinfo("경고","전화번호는 '-'을 포함한 13자리를 입력해야 합니다.") # 팝업창
+            return 0
+            
+        if textBirth.get() # 생년월일이 숫자가 아닌 것일때 예외처리
+            
         if textGender.get()!='남' and textGender.get()!='여': # 성별이 '남','여'가 아닐경우
             messagebox.showinfo("경고","성별은 '남' 혹은 '여' 둘 중 하나로만 입력해야 합니다.") # 팝업창
             return 0
@@ -608,7 +617,7 @@ def User_Add():
         add_user_list=np.append(add_user_list,'0')
         add_user_list=np.append(add_user_list,0) # 탈퇴날짜 빈값으로 기입
         US.add_User_Info(add_user_list)  # add_User_Info함수를 호출해 add_user_list값들을 추가
-        messagebox.showinfo("알림","회원 등록이 완료되었습니다.")# 팝업창
+        messagebox.showinfo("알림","회원 등록이 완료되었습니다.") # 팝업창
         confirmedHP="" # 중복 등록 방지를 위해 초기화
         isConfirmed=False
         panedwindow1.destroy()
@@ -678,17 +687,18 @@ def User_Search():
         searched_list=np.array([])
         if text_user_name.get(): # 사용자 이름으로 조회할 경우 
             searched_list=US.search_User_ByName(text_user_name.get())
-            
-        elif text_user_name.get()=='': # 해당 사용자가 없을 경우
-            messagebox.showinfo("경고","해당되는 사용자가 없습니다.")
-            return 0
+            if text_user_name.get()=='': # 해당 사용자가 없을 경우
+                messagebox.showinfo("경고","해당되는 사용자가 없습니다.")
+                return 0
         
         elif text_phone.get(): # 사용자 폰번호로 조회할 경우 
             searched_list=US.search_User_ByPhone(text_phone.get())
-           
-        elif text_phone.get().isdecimal()==False: # 폰번호가 숫자가 아닐경우
-            messagebox.showinfo("경고","해당되는 폰번호가 없습니다.")
-            return 0
+            if textHP.get()!=13: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
+                messagebox.showinfo("경고","전화번호는 '-'을 포함한 13자리를 입력해야 합니다.") # 팝업창
+                return 0
+            if textHP.get()=='': # 해당 전화번호가 없을 경우
+                messagebox.showinfo("경고","해당되는 전화번호가 없습니다.")
+                return 0
         
         else: # 사용자 이름, 폰번호 둘다 입력하지 않은 경우
             messagebox.showinfo("경고","이름과 연락처 둘 중 하나라도 입력하시오")
@@ -798,6 +808,14 @@ def User_Show():
             messagebox.showinfo("경고",textWrite) # 팝업창 처리
             return 0
         
+        if textHP.get()!=13: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
+            messagebox.showinfo("경고","전화번호는 '-'을 포함한 13자리를 입력해야 합니다.") # 팝업창
+            return 0
+        
+        #if textBirth.get().isdecimal()==False: # 생년월일이 숫자가 아닌경우  --> '.'이 포함
+        #    messagebox.showinfo("경고","생년월일은 숫자로만 입력해야 합니다.")
+        #    return 0
+        
         if textGender.get()!='남' and textGender.get()!='여': # 성별은 '여','남'이 아닐경우 
             messagebox.showinfo("경고","성별은 '남' 혹은 '여' 둘 중 하나로만 입력해야 합니다.")
             return 0
@@ -839,9 +857,13 @@ def User_Show():
             messagebox.showinfo("경고",textWrite) # 팝업창 처리 
             return 0
         
-        if textBirth.get().isdecimal()==False: # 생년월일이 숫자가 아닌경우
-            messagebox.showinfo("경고","생년월일은 숫자로만 입력해야 합니다.")
+        if textHP.get()!=13: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
+            messagebox.showinfo("경고","전화번호는 '-'을 포함한 13자리를 입력해야 합니다.") # 팝업창
             return 0
+        
+        #if textBirth.get().isdecimal()==False: # 생년월일이 숫자가 아닌경우  --> '.'이 포함
+        #    messagebox.showinfo("경고","생년월일은 숫자로만 입력해야 합니다.")
+        #    return 0
         
         if textGender.get()!='남' and textGender.get()!='여': # 성별이 '남','여'가 아닐경우
             messagebox.showinfo("경고","성별은 '남' 혹은 '여' 둘 중 하나로만 입력해야 합니다.")
@@ -865,12 +887,16 @@ def User_Show():
     def delete_user(): # 삭제 버튼을 눌렀을 때 해당 회원 정보가 원래의 회원 리스트에서 삭제되어 회원 리스트에 저장하기 위한 메소드
         phone=textHP.get()
         global isConfirmed
-        if isConfirmed:
+        
+        if isConfirmed: # 이미 탈퇴된 회원일 경우
             messagebox.showinfo("경고","이미 처리되었습니다.")
             return 0
+        
         if US.get_IsRented(phone)!=0: # 사용자가 도서 대출 중일 때
             messagebox.showinfo("경고","도서 대출 중인 회원은 탈퇴할 수 없습니다.")
-        else:
+            return 0
+        
+        else: 
             d=dt.datetime.now().strftime('%Y.%m.%d') # 반납 예정일 저장
             US.drop_User_Info(phone,d) # 회원탈퇴 메소드 호출
             messagebox.showinfo("알림","회원탈퇴가 완료되었습니다.")
@@ -961,29 +987,39 @@ def Rent_User_Search():
     panedwindow1.pack(expand=True)
         #ind,isbn,phone,dat
     global send_data
+    
     def update_rent_situation(before): # 선택 버튼을 눌렀을 시에 해당 회원의 대출 여부가 도서 대출 중으로 바뀌어 저장하는 메소드
         phone=treeview.selection()[0]
         if US.get_User_info(phone)[0,0,6]!='0': 
             messagebox.showinfo("경고","이미 탈퇴한 회원입니다.")
             return 0
+        
         if US.get_IsRented(phone)==3:#US.user_list[ind,8]==3: # 대출 진행 불가능 -> 해당 회원이 3권을 빌린 상태인지를 먼저 체크 
             messagebox.showinfo("경고","각 회원당 대출할 수 있는 최대 권수는 3권입니다.") 
             return 0
+        
         global send_data
         send_data=phone
         messagebox.showinfo("알림","회원을 선택하였습니다.") # 팝업창
         Rent_Book_Search(before)
         #US.user_list[ind,8]+=1 # 대출 권수 1추가 
         #RE.rent_Book(isbn,phone,dat) # 대출 여부
+        
     def print_rent_user(): # 이름 검색을 누를시에 회원 리스트와 대출여부가 출력되게 하는 메소드
         searched_list=np.array([])
         if text_user_name.get(): # 회원 이름으로 검색할 경우
             searched_list=US.search_User_ByName(text_user_name.get())
+            
         elif text_phone.get(): # 회원 전화번호로 검색할 경우
             searched_list=US.search_User_ByPhone(text_phone.get())
-        elif text_phone.get().isdecimal()==False: # 전화번호가 숫자가 아닌경우
-            messagebox.showinfo("경고","전화번호를 숫자로 입력하세요.")
-            return 0
+            if textHP.get()!=13: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
+                messagebox.showinfo("경고","전화번호는 '-'을 포함한 13자리를 입력해야 합니다.") # 팝업창
+                return 0
+            
+        #elif text_phone.get().isdecimal()==False: # 전화번호가 숫자가 아닌경우 --> '-'포함
+        #    messagebox.showinfo("경고","전화번호를 숫자로 입력하세요.")
+        #    return 0
+        
         else: # 회원 이름,전화번호 둘다 입력하지 않은 경우
             messagebox.showinfo("경고","이름과 연락처 둘 중 하나라도 입력하시오")
             return 0
@@ -1067,8 +1103,12 @@ def Rent_Book_Search(before):
         searched_list=np.array([])
         if text_member_name.get(): # 도서명이 입력된 경우
             searched_list=BO.search_Book_ByTitle(text_member_name.get()) # 제목으로 도서 검색하는 함수 호출
+            if text_member_name.get()=='': # 해당 도서가 없을경우
+                messagebox.showinfo("경고","해당되는 도서가 없습니다.\n올바른 제목을 입력해주세요.")
+                
         else: # 도서명을 입력하지 않았을 경우
             messagebox.showinfo("경고","도서명을 입력하시오")
+            
         treeview.delete(*treeview.get_children())#treeview 전체를 지우는 문장
         #treeview에 넣을 데이터 정제 과정
         #treeV=[[for i in range(8)] for j in range(int(searched_list.size)/8)]#2차원 배열
@@ -1279,11 +1319,19 @@ def Rent_Search():
         if text_book_name.get(): # 도서명이 입력된 경우
             searched_list=BO.search_Book_ByTitle(text_book_name.get()) # 제목으로 도서 검색하는 함수 호출
             isBook=True
+            if text_book_name.get(): # 해당 도서가 없을 경우
+                messagebox.showinfo("경고","해당 도서의 대출기록이 없습니다.")
+                return 0
+            
         elif text_member.get(): # 회원명이 입력된 경우
             searched_list=US.search_User_ByName(text_member.get()) # 회원명으로 검색하는 함수 호출
+            if text_member.get()=='': # 해당 회원이 없을 경우
+                messagebox.showinfo("경고","해당 회원은 대출기록이 없습니다.")
+                return 0
         else:
             messagebox.showinfo("경고","도서명과 회원명 둘 중 하나라도 입력하시오")
             return 0
+        
         searched_list=searched_list[:,0]
         if searched_list.size!=1:
             adv_search=np.array([])
@@ -1330,17 +1378,17 @@ def Rent_Search():
     panedwindow1 = PanedWindow(relief="raised", bd=2)
     panedwindow1.pack(expand=True)
 
-    title = Label(panedwindow1, text="대출 조회")
+    title = Label(panedwindow1, text="대출 조회") # "대출 조회" 화면에 출력 ( 상단의 타이틀 )
     title.grid(row=0, column=1, padx=10, pady=10)
 
-    label_book_name = Label(panedwindow1, text="도서명 : ")
+    label_book_name = Label(panedwindow1, text="도서명 : ") # "도서명 : " 화면에 출력
     label_book_name.grid(row=1, column=0, padx=10, pady=10)
     text_book_name = Entry(panedwindow1)
     text_book_name.grid(row=1, column=1, padx=10, pady=10)
     btn_view = Button(panedwindow1, text="조회",command=get_rent)
     btn_view.grid(row=1, column=2, padx=10, pady=10)
 
-    label_member = Label(panedwindow1, text="회원명 : ")
+    label_member = Label(panedwindow1, text="회원명 : " ) # "회원명 : " 화면에 출력
     label_member.grid(row=2, column=0, padx=10, pady=10)
     text_member = Entry(panedwindow1)
     text_member.grid(row=2, column=1, padx=10, pady=10)
@@ -1398,7 +1446,6 @@ def Rent_State_Show():
         BO.set_IsRented(bookInfo[0,0],True)
         messagebox.showinfo("알림","반납 처리가 완료되었습니다.") # 팝업창
         isBacked=True
-
 
     new = Toplevel()
 
