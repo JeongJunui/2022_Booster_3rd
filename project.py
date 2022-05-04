@@ -613,7 +613,7 @@ def User_Add():
         else:
             add_user_list=np.append(add_user_list,False)
         add_user_list=np.append(add_user_list,textEmail.get())
-        add_user_list=np.append(add_user_list,dt.datetime.now().strftime('%Y.%m.%d'))
+        add_user_list=np.append(add_user_list,dt.datetime.now().strftime('%Y.%m.%d')) #사용자 정보를 추가하기 위해 만든 리스트에 datetime을 삽입. 연, 월, 일 형식으로
         add_user_list=np.append(add_user_list,'0')
         add_user_list=np.append(add_user_list,0) # 탈퇴날짜 빈값으로 기입
         US.add_User_Info(add_user_list)  # add_User_Info함수를 호출해 add_user_list값들을 추가
@@ -737,8 +737,8 @@ def User_Search():
 
     label_user_name = Label(panedwindow1, text="이름 : ") # "이름 : " 화면에 출력
     label_user_name.grid(row=1, column=0, padx=10, pady=10)
-    text_user_name = Entry(panedwindow1)
-    text_user_name.grid(row=1, column=1, padx=10, pady=10)
+    text_user_name = Entry(panedwindow1) #사용자 이름을 입력 받을 엔트리를 화면에 삽입
+    text_user_name.grid(row=1, column=1, padx=10, pady=10) # 전체 화면을 표라고 가정하면 1행, 1열에 x축으로 여백을 10, y축으로 여백을 10 둠
     btn_view = Button(panedwindow1, text="조회",command=get_user) # "조회"버튼을 눌렀을 때 get_user함수 호출
     btn_view.grid(row=1, column=2, padx=10, pady=10)
 
@@ -1470,8 +1470,8 @@ def Rent_State_Show():
     textName.grid(row=2, column=3, padx=20)
 
     labelAuthor = Label(new, text="저자 : ")  # "저자 : " 화면에 출력
-    textAuthor = Entry(new)
-    textAuthor.insert(END,bookInfo[0,2])
+    textAuthor = Entry(new) # 저자 정보 엔트리 생성
+    textAuthor.insert(END,bookInfo[0,2]) # bookInfo에서 저자에 해당하는 정보를 리스트에서 빼와서 넣음. 불러오는 과정은 사전에 수행이 되어 있음
     labelAuthor.grid(row=3, column=0, padx=20, pady=20)
     textAuthor.grid(row=3, column=1, padx=20, pady=20)
     labelBirth = Label(new, text="생년월일 : ")  # "생년월일 : " 화면에 출력 
@@ -1514,7 +1514,7 @@ def Rent_State_Show():
     labelUrl.grid(row=6, column=0, padx=20)
     textUrl.grid(row=6, column=1, padx=20)
     labelRentDay = Label(new, text="대여일 : ") # "대여일 : " 화면에 출력
-    textRentDay = Entry(new)
+    textRentDay = Entry(new) # 대여일 정보가 삽입될 엔트리 생성
     textRentDay.insert(END,rentInfo[3])
     labelRentDay.grid(row=6, column=2, padx=20)
     textRentDay.grid(row=6, column=3, padx=20)
