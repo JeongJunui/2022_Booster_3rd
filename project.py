@@ -648,7 +648,7 @@ def User_Add():
     textHP = Entry(panedwindow1) #전화번호 저장하는 텍스트박스
     labelHP.grid(row=4, column=0, padx=50, pady=10)
     textHP.grid(row=4, column=1, padx=0, pady=10)
-    label_HP_msg = Label(panedwindow1, text="전화번호는 010-0000-0000 형태로 '-'을 포함하여 입력해주세요!", fg = "red")
+    label_HP_msg = Label(panedwindow1, text="전화번호는 000-0000-0000 형태로 '-'을 포함하여 입력해주세요!", fg = "red")
     label_HP_msg.grid(row=5, column=1, padx=0)
     btn_check = Button(panedwindow1, text="중복확인", command=check_user)
     btn_check.grid(row=4, column=2, padx=50, pady=10)
