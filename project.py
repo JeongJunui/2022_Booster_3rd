@@ -63,17 +63,23 @@ class Book:
         
     def search_Book_ByTitle(self,title): # 책 제목으로 검색 (IF-003)
         search_list=np.array([]) # 검색된 책 정보 저장할 리스트
-        found_ind=np.where(self.__book[:,1]==title)
-        for i in found_ind:
-            search_list=np.append(search_list,self.__book[i,:]) # 제목이 동일하면 리스트에 추가
+        for i in range(int(self.__book[:,1].size)):
+            if title in self.__book[i,1]:
+                search_list=np.append(search_list,self.__book[i,:])
+        #found_ind=np.where(self.__book[:,1]==title)
+        #for i in found_ind:
+        #    search_list=np.append(search_list,self.__book[i,:]) # 제목이 동일하면 리스트에 추가
         search_list=np.reshape(search_list,(int(search_list.size/8),8))
         return search_list # 반환 값 : 도서 목록
 
     def search_Book_ByAuthor(self,author): # 책 저자로 검색 (IF-004)
         search_list=np.array([]) # 검색된 책 정보 저장할 리스트
-        found_ind=np.where(self.__book[:,2]==author)
-        for i in found_ind:
-            search_list=np.append(search_list,self.__book[i,:]) # 저자가 동일하면 리스트에 추가
+        for i in range(int(self.__book[:,2].size)):
+            if author in self.__book[i,2]:
+                search_list=np.append(search_list,self.__book[i,:])
+        #found_ind=np.where(self.__book[:,2]==author)
+        #for i in found_ind:
+        #    search_list=np.append(search_list,self.__book[i,:]) # 저자가 동일하면 리스트에 추가
         search_list=np.reshape(search_list,(int(search_list.size/8),8))
         return search_list # 반환 값 : 도서 목록
     
@@ -133,20 +139,25 @@ class User:
     
     def search_User_ByName(self,name): # 이름으로 회원 조회 (IF-012)
         search_list=np.array([]) # 검색된 회원 정보 저장할 리스트
-        found_ind=np.where(self.__user[:,1]==name)
-        for i in found_ind:
-            search_list=np.append(search_list,self.__user[i,:]) # 이름이 동일하면 리스트에 추가
+        for i in range(int(self.__user[:,1].size)):
+            if name in self.__user[i,1]:
+                search_list=np.append(search_list,self.__user[i,:])
+        #found_ind=np.where(self.__user[:,1]==name)
+        #for i in found_ind:
+        #    search_list=np.append(search_list,self.__user[i,:]) # 이름이 동일하면 리스트에 추가
         search_list=np.reshape(search_list,(int(search_list.size/8),8))
         return search_list # 반환 값 : 회원 목록
 
     def search_User_ByPhone(self,phone): # 연락처로 회원 조회 (IF-013)
         search_list=np.array([]) # 검색된 회원 정보 저장할 리스트
-        found_ind=np.where(self.__user[:,0]==phone)
-        for i in found_ind:
-            search_list=np.append(search_list,self.__user[i,:]) # 연락처가 동일하면 리스트에 추가
+        for i in range(int(self.__user[:,0].size)):
+            if phone in self.__user[i,0]:
+                search_list=np.append(search_list,self.__user[i,:])
+        #found_ind=np.where(self.__user[:,0]==phone)
+        #for i in found_ind:
+        #    search_list=np.append(search_list,self.__user[i,:]) # 연락처가 동일하면 리스트에 추가
         search_list=np.reshape(search_list,(int(search_list.size/8),8))
         return search_list# 반환 값 : 회원 목록
-    # 일부만 일치해도 검색할 수 있게 개선 필요함
     
     def set_User_Info(self,inf): # 회원 수정 (IF-014)
         ind=np.where(self.__user[:,0]==inf[0]) # 내부 인덱스를 찾아냄
@@ -558,12 +569,21 @@ def User_Add():
     def check_user(): # 회원 중복 확인을 위한 메소드
         global isConfirmed
         global confirmedHP
-        if US.get_IsIn(textHP.get()): # 중복되는 전화번호 있으면 True, 없으면 False
-            messagebox.showinfo("중복확인결과","이미 등록된 회원입니다.") # 팝업창
-            
-        elif len(textHP.get())!=13: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
+        checkHp=textHP.get()
+        checkHp=checkHp.replace('.','-')
+        splitHp=checkHp.split('-')
+        if len(checkHp)!=13 or len(splitHp)!=3: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
             messagebox.showinfo("경고","전화번호는 '-'을 포함한 13자리를 입력해야 합니다.") # 팝업창
             return 0
+        elif not (splitHp[0].isdecimal() and splitHp[1].isdecimal() and splitHp[2].isdecimal()):
+            messagebox.showinfo("경고","전화번호의 형식이 올바르지 않습니다.")
+            return 0
+        elif not (len(splitHp[0])==3 and len(splitHp[1])==4 and len(splitHp[2])==4):
+            messagebox.showinfo("경고","전화번호의 형식이 올바르지 않습니다.")
+            return 0
+        if US.get_IsIn(checkHp): # 중복되는 전화번호 있으면 True, 없으면 False
+            messagebox.showinfo("중복확인결과","이미 등록된 회원입니다.") # 팝업창
+            
         
         #elif textHP.get().isdigit()==False: # 전화번호가 숫자가 아닐경우-->'-'이 포함
         #    messagebox.showinfo("경고","전화번호는 숫자만 입력해야 합니다.") # 팝업창
@@ -572,7 +592,7 @@ def User_Add():
         else:
             messagebox.showinfo("중복확인결과","등록 가능한 회원입니다.") # 팝업창
             isConfirmed=True # 중복 확인했으므로 True
-            confirmedHP=textHP.get() # 중복 확인한 전화번호 저장
+            confirmedHP=checkHp # 중복 확인한 전화번호 저장
     
     def add_user(): # 등록 버튼을 누를시에 이름, 생년월일, 전화번호, 성별, 이메일, 사진의 정보를 받아 원래 회원 리스트에 추가해주는 메소드
         global isConfirmed
@@ -597,10 +617,16 @@ def User_Add():
                 textWrite+="필수사항을 입력해주세요."
                 messagebox.showinfo("경고",textWrite) # 팝업창 처리
                 return 0
+            checkBirth=textBirth.get()
+            checkBirth.replace('-','.')
+            splitBirth=checkBirth.split('.')
+            if len(splitBirth)!=3:
+                messagebox.showinfo("경고","생년월일의 형식이 올바르지 않습니다.")
+                return 0
+            if not (splitBirth[0].isdecimal() and splitBirth[1].isdecimal() and splitBirth[2].isdecimal):
+                messagebox.showinfo("경고","생년월일의 형식이 올바르지 않습니다.")
+                return 0
             
-        if len(textHP.get())!=13: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
-            messagebox.showinfo("경고","전화번호는 '-'을 포함한 13자리를 입력해야 합니다.") # 팝업창
-            return 0
         # if # 생년월일이 .이 아닌 -일때 .으로 바꿔서 저장해주기
         #if textBirth.get() # 생년월일이 숫자가 아닌 것일때 예외처리
             
@@ -610,7 +636,7 @@ def User_Add():
 
         add_user_list=np.append(add_user_list,textHP.get()) # add_user_list에 값들 저장
         add_user_list=np.append(add_user_list,textName.get())
-        add_user_list=np.append(add_user_list,textBirth.get())
+        add_user_list=np.append(add_user_list,checkBirth)
         if textGender.get()=='남':
             add_user_list=np.append(add_user_list,True)
         else:
