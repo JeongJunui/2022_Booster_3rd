@@ -694,11 +694,11 @@ def User_Search():
                 messagebox.showinfo("경고","해당되는 사용자가 없습니다.")
                 return 0
         
-        elif text_phone.get(): # 사용자 폰번호로 조회할 경우 
-            searched_list=US.search_User_ByPhone(text_phone.get())
+        elif text_phone.get(): # 사용자 폰번호로 조회할 경우
             if text_phone.get()!=13: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
                 messagebox.showinfo("경고","전화번호는 '-'을 포함한 13자리를 입력해야 합니다.") # 팝업창
                 return 0
+            searched_list=US.search_User_ByPhone(text_phone.get())
             if not searched_list: # 해당 전화번호가 없을 경우
                 messagebox.showinfo("경고","해당되는 전화번호가 없습니다.")
                 return 0
