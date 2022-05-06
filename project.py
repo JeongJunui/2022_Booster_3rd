@@ -791,6 +791,9 @@ def User_Show():
 
     def modify_user(): # 수정 버튼을 눌렀을 때 원래 회원 정보의 내용이 바뀌어서 저장되게 하기 위한 메소드
         global userInfo
+        if textHP.get()!=13: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
+            messagebox.showinfo("경고","전화번호는 '-'을 포함한 13자리를 입력해야 합니다.") # 팝업창
+            return 0
         userInfo=US.get_User_info(textHP.get())[0]
         if userInfo[0,7]!=0: 
             messagebox.showinfo("경고","도서 대출 중인 회원의 정보는 수정할 수 없습니다.")
@@ -809,10 +812,6 @@ def User_Show():
                 textWrite+="이메일이 입력되어있지 않습니다.\n"
             textWrite+="필수사항을 입력해주세요."
             messagebox.showinfo("경고",textWrite) # 팝업창 처리
-            return 0
-        
-        if textHP.get()!=13: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
-            messagebox.showinfo("경고","전화번호는 '-'을 포함한 13자리를 입력해야 합니다.") # 팝업창
             return 0
         
         #if textBirth.get().isdecimal()==False: # 생년월일이 숫자가 아닌경우  --> '.'이 포함
