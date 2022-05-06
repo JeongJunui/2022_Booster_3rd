@@ -350,13 +350,13 @@ def Book_Search():
         searched_list=np.array([])
         if text_book_name.get(): # 도서명이 입력된 경우
             searched_list=BO.search_Book_ByTitle(text_book_name.get()) # 제목으로 도서 검색하는 함수 호출
-            if not searched_list: # 관련 도서명이 없는 경우
+            if not searched_list.all(): # 관련 도서명이 없는 경우
                 messagebox.showinfo("경고","관련된 도서가 없습니다.\n올바른 제목을 입력해주세요.") # 팝업창
                 return 0
             
         elif text_author.get(): # 저자명이 입력된 경우
             searched_list=BO.search_Book_ByAuthor(text_author.get()) # 책 저자로 검색하는 함수 호출
-            if not searched_list: # 관련 저자이름이 없는 경우
+            if not searched_list.all(): # 관련 저자이름이 없는 경우
                 messagebox.showinfo("경고","관련된 저자가 없습니다.\n올바른 저자이름을 입력해주세요.") # 팝업창
                 return 0
                 
@@ -690,7 +690,7 @@ def User_Search():
         searched_list=np.array([])
         if text_user_name.get(): # 사용자 이름으로 조회할 경우 
             searched_list=US.search_User_ByName(text_user_name.get())
-            if not searched_list: # 해당 사용자가 없을 경우
+            if not searched_list.all(): # 해당 사용자가 없을 경우
                 messagebox.showinfo("경고","해당되는 사용자가 없습니다.")
                 return 0
         
@@ -699,7 +699,7 @@ def User_Search():
                 messagebox.showinfo("경고","전화번호는 '-'을 포함한 13자리를 입력해야 합니다.") # 팝업창
                 return 0
             searched_list=US.search_User_ByPhone(text_phone.get())
-            if not searched_list: # 해당 전화번호가 없을 경우
+            if not searched_list.all(): # 해당 전화번호가 없을 경우
                 messagebox.showinfo("경고","해당되는 전화번호가 없습니다.")
                 return 0
         
@@ -1105,7 +1105,7 @@ def Rent_Book_Search(before):
         searched_list=np.array([])
         if text_member_name.get(): # 도서명이 입력된 경우
             searched_list=BO.search_Book_ByTitle(text_member_name.get()) # 제목으로 도서 검색하는 함수 호출
-            if not searched_list: # 해당 도서가 없을경우
+            if not searched_list.all(): # 해당 도서가 없을경우
                 messagebox.showinfo("경고","해당되는 도서가 없습니다.\n올바른 제목을 입력해주세요.")
                 return 0
             
@@ -1323,13 +1323,13 @@ def Rent_Search():
         if text_book_name.get(): # 도서명이 입력된 경우
             searched_list=BO.search_Book_ByTitle(text_book_name.get()) # 제목으로 도서 검색하는 함수 호출
             isBook=True
-            if not searched_list: # 해당 도서가 없을 경우
+            if not searched_list.all(): # 해당 도서가 없을 경우
                 messagebox.showinfo("경고","해당 도서의 대출기록이 없습니다.")
                 return 0
             
         elif text_member.get(): # 회원명이 입력된 경우
             searched_list=US.search_User_ByName(text_member.get()) # 회원명으로 검색하는 함수 호출
-            if not searched_list: # 해당 회원이 없을 경우
+            if not searched_list.all(): # 해당 회원이 없을 경우
                 messagebox.showinfo("경고","해당 회원은 대출기록이 없습니다.")
                 return 0
         else:
