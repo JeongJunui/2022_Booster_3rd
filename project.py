@@ -842,6 +842,9 @@ def User_Show():
 
     def reAdd_user(): # 수정 버튼을 눌렀을 때 원래 회원 정보의 내용이 바뀌어서 저장되게 하기 위한 메소드
         global userInfo
+        if textHP.get()!=13: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
+            messagebox.showinfo("경고","전화번호는 '-'을 포함한 13자리를 입력해야 합니다.") # 팝업창
+            return 0
         userInfo=US.get_User_info(textHP.get())[0]
         modify_user_list=np.array([])
 
@@ -857,10 +860,6 @@ def User_Show():
                 textWrite+="이메일이 입력되어있지 않습니다.\n"
             textWrite+="필수사항을 입력해주세요."
             messagebox.showinfo("경고",textWrite) # 팝업창 처리 
-            return 0
-        
-        if textHP.get()!=13: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
-            messagebox.showinfo("경고","전화번호는 '-'을 포함한 13자리를 입력해야 합니다.") # 팝업창
             return 0
         
         #if textBirth.get().isdecimal()==False: # 생년월일이 숫자가 아닌경우  --> '.'이 포함
@@ -1013,10 +1012,10 @@ def Rent_User_Search():
             searched_list=US.search_User_ByName(text_user_name.get())
             
         elif text_phone.get(): # 회원 전화번호로 검색할 경우
-            searched_list=US.search_User_ByPhone(text_phone.get())
             if text_phone.get()!=13: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
                 messagebox.showinfo("경고","전화번호는 '-'을 포함한 13자리를 입력해야 합니다.") # 팝업창
                 return 0
+            searched_list=US.search_User_ByPhone(text_phone.get())
             
         #elif text_phone.get().isdecimal()==False: # 전화번호가 숫자가 아닌경우 --> '-'포함
         #    messagebox.showinfo("경고","전화번호를 숫자로 입력하세요.")
@@ -1025,6 +1024,7 @@ def Rent_User_Search():
         else: # 회원 이름,전화번호 둘다 입력하지 않은 경우
             messagebox.showinfo("경고","이름과 연락처 둘 중 하나라도 입력하시오")
             return 0
+        
         treeview.delete(*treeview.get_children())#treeview 전체를 지우는 문장
         #treeview에 넣을 데이터 정제 과정
         for i in range(int(searched_list.size/8)):
@@ -1105,11 +1105,13 @@ def Rent_Book_Search(before):
         searched_list=np.array([])
         if text_member_name.get(): # 도서명이 입력된 경우
             searched_list=BO.search_Book_ByTitle(text_member_name.get()) # 제목으로 도서 검색하는 함수 호출
-            if text_member_name.get()=='': # 해당 도서가 없을경우
+            if not searched_list: # 해당 도서가 없을경우
                 messagebox.showinfo("경고","해당되는 도서가 없습니다.\n올바른 제목을 입력해주세요.")
-                
+                return 0
+            
         else: # 도서명을 입력하지 않았을 경우
             messagebox.showinfo("경고","도서명을 입력하시오")
+            return 0
             
         treeview.delete(*treeview.get_children())#treeview 전체를 지우는 문장
         #treeview에 넣을 데이터 정제 과정
@@ -1321,13 +1323,13 @@ def Rent_Search():
         if text_book_name.get(): # 도서명이 입력된 경우
             searched_list=BO.search_Book_ByTitle(text_book_name.get()) # 제목으로 도서 검색하는 함수 호출
             isBook=True
-            if text_book_name.get(): # 해당 도서가 없을 경우
+            if not searched_list: # 해당 도서가 없을 경우
                 messagebox.showinfo("경고","해당 도서의 대출기록이 없습니다.")
                 return 0
             
         elif text_member.get(): # 회원명이 입력된 경우
             searched_list=US.search_User_ByName(text_member.get()) # 회원명으로 검색하는 함수 호출
-            if text_member.get()=='': # 해당 회원이 없을 경우
+            if not searched_list: # 해당 회원이 없을 경우
                 messagebox.showinfo("경고","해당 회원은 대출기록이 없습니다.")
                 return 0
         else:
