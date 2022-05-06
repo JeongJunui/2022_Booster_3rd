@@ -561,7 +561,7 @@ def User_Add():
         if US.get_IsIn(textHP.get()): # 중복되는 전화번호 있으면 True, 없으면 False
             messagebox.showinfo("중복확인결과","이미 등록된 회원입니다.") # 팝업창
             
-        elif textHP.get()!=13: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
+        elif len(textHP.get())!=13: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
             messagebox.showinfo("경고","전화번호는 '-'을 포함한 13자리를 입력해야 합니다.") # 팝업창
             return 0
         
@@ -598,7 +598,7 @@ def User_Add():
                 messagebox.showinfo("경고",textWrite) # 팝업창 처리
                 return 0
             
-        if textHP.get()!=13: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
+        if len(textHP.get())!=13: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
             messagebox.showinfo("경고","전화번호는 '-'을 포함한 13자리를 입력해야 합니다.") # 팝업창
             return 0
             
@@ -695,7 +695,7 @@ def User_Search():
                 return 0
         
         elif text_phone.get(): # 사용자 폰번호로 조회할 경우
-            if text_phone.get()!=13: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
+            if len(textHP.get())!=13: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
                 messagebox.showinfo("경고","전화번호는 '-'을 포함한 13자리를 입력해야 합니다.") # 팝업창
                 return 0
             searched_list=US.search_User_ByPhone(text_phone.get())
@@ -791,7 +791,7 @@ def User_Show():
 
     def modify_user(): # 수정 버튼을 눌렀을 때 원래 회원 정보의 내용이 바뀌어서 저장되게 하기 위한 메소드
         global userInfo
-        if textHP.get()!=13: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
+        if len(textHP.get())!=13: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
             messagebox.showinfo("경고","전화번호는 '-'을 포함한 13자리를 입력해야 합니다.") # 팝업창
             return 0
         userInfo=US.get_User_info(textHP.get())[0]
@@ -842,7 +842,7 @@ def User_Show():
 
     def reAdd_user(): # 수정 버튼을 눌렀을 때 원래 회원 정보의 내용이 바뀌어서 저장되게 하기 위한 메소드
         global userInfo
-        if textHP.get()!=13: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
+        if len(textHP.get())!=13: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
             messagebox.showinfo("경고","전화번호는 '-'을 포함한 13자리를 입력해야 합니다.") # 팝업창
             return 0
         userInfo=US.get_User_info(textHP.get())[0]
@@ -1012,7 +1012,7 @@ def Rent_User_Search():
             searched_list=US.search_User_ByName(text_user_name.get())
             
         elif text_phone.get(): # 회원 전화번호로 검색할 경우
-            if text_phone.get()!=13: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
+            if len(textHP.get())!=13: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
                 messagebox.showinfo("경고","전화번호는 '-'을 포함한 13자리를 입력해야 합니다.") # 팝업창
                 return 0
             searched_list=US.search_User_ByPhone(text_phone.get())
