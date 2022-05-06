@@ -268,7 +268,8 @@ def Book_Add():
             
             if textPrice.get().isdecimal()==False: # 가격이 숫자가 아닐경우
                 messagebox.showinfo("경고","가격은 숫자만 입력하여야 합니다.")
-        
+                return 0
+            
         add_book_list=np.append(add_book_list,textISBN.get()) # add_book_list에 값들을 저장
         add_book_list=np.append(add_book_list,textBookName.get())
         add_book_list=np.append(add_book_list,textAuthor.get())
@@ -349,19 +350,20 @@ def Book_Search():
         searched_list=np.array([])
         if text_book_name.get(): # 도서명이 입력된 경우
             searched_list=BO.search_Book_ByTitle(text_book_name.get()) # 제목으로 도서 검색하는 함수 호출
-            if text_book_name.get()=='': # 관련 도서명이 없는 경우
+            if not searched_list: # 관련 도서명이 없는 경우
                 messagebox.showinfo("경고","관련된 도서가 없습니다.\n올바른 제목을 입력해주세요.") # 팝업창
                 return 0
             
         elif text_author.get(): # 저자명이 입력된 경우
             searched_list=BO.search_Book_ByAuthor(text_author.get()) # 책 저자로 검색하는 함수 호출
-            if text_author.get()=='': # 관련 저자이름이 없는 경우
+            if not searched_list: # 관련 저자이름이 없는 경우
                 messagebox.showinfo("경고","관련된 저자가 없습니다.\n올바른 저자이름을 입력해주세요.") # 팝업창
                 return 0
                 
         else:
             messagebox.showinfo("경고","도서명과 저자명 둘 중 하나라도 입력하시오")
-            
+            return 0
+        
         treeview.delete(*treeview.get_children()) # treeview 전체를 지우는 문장
         #treeview에 넣을 데이터 정제 과정
         #treeV=[[for i in range(8)] for j in range(int(searched_list.size)/8)] # 2차원 배열
@@ -456,7 +458,8 @@ def Book_Show():
             return 0
         
         if textPrice.get().isdecimal()==False: # 가격이 숫자가 아닐경우
-                messagebox.showinfo("경고","가격은 숫자만 입력하여야 합니다.")
+            messagebox.showinfo("경고","가격은 숫자만 입력하여야 합니다.")
+            return 0
                 
         modify_list=np.append(modify_list,textISBN.get()) # modify_list에 값들 저장 / ISBN은 애초에 수정되지 않게 해야됨
         modify_list=np.append(modify_list,textBookName.get())
@@ -599,7 +602,7 @@ def User_Add():
             messagebox.showinfo("경고","전화번호는 '-'을 포함한 13자리를 입력해야 합니다.") # 팝업창
             return 0
             
-        if textBirth.get() # 생년월일이 숫자가 아닌 것일때 예외처리
+        #if textBirth.get() # 생년월일이 숫자가 아닌 것일때 예외처리
             
         if textGender.get()!='남' and textGender.get()!='여': # 성별이 '남','여'가 아닐경우
             messagebox.showinfo("경고","성별은 '남' 혹은 '여' 둘 중 하나로만 입력해야 합니다.") # 팝업창
@@ -693,10 +696,10 @@ def User_Search():
         
         elif text_phone.get(): # 사용자 폰번호로 조회할 경우 
             searched_list=US.search_User_ByPhone(text_phone.get())
-            if textHP.get()!=13: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
+            if text_phone.get()!=13: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
                 messagebox.showinfo("경고","전화번호는 '-'을 포함한 13자리를 입력해야 합니다.") # 팝업창
                 return 0
-            if textHP.get()=='': # 해당 전화번호가 없을 경우
+            if text_phone.get()=='': # 해당 전화번호가 없을 경우
                 messagebox.showinfo("경고","해당되는 전화번호가 없습니다.")
                 return 0
         
