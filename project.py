@@ -601,7 +601,7 @@ def User_Add():
         if len(textHP.get())!=13: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
             messagebox.showinfo("경고","전화번호는 '-'을 포함한 13자리를 입력해야 합니다.") # 팝업창
             return 0
-            
+        # if # 생년월일이 .이 아닌 -일때 .으로 바꿔서 저장해주기
         #if textBirth.get() # 생년월일이 숫자가 아닌 것일때 예외처리
             
         if textGender.get()!='남' and textGender.get()!='여': # 성별이 '남','여'가 아닐경우
@@ -1012,7 +1012,7 @@ def Rent_User_Search():
             searched_list=US.search_User_ByName(text_user_name.get())
             
         elif text_phone.get(): # 회원 전화번호로 검색할 경우
-            if len(textHP.get())!=13: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
+            if len(text_phone.get())!=13: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
                 messagebox.showinfo("경고","전화번호는 '-'을 포함한 13자리를 입력해야 합니다.") # 팝업창
                 return 0
             searched_list=US.search_User_ByPhone(text_phone.get())
