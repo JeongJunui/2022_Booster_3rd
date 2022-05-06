@@ -1012,7 +1012,7 @@ def Rent_User_Search():
             
         elif text_phone.get(): # 회원 전화번호로 검색할 경우
             searched_list=US.search_User_ByPhone(text_phone.get())
-            if textHP.get()!=13: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
+            if text_phone.get()!=13: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
                 messagebox.showinfo("경고","전화번호는 '-'을 포함한 13자리를 입력해야 합니다.") # 팝업창
                 return 0
             
