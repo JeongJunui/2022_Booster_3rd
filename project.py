@@ -471,6 +471,15 @@ def Book_Show():
         if textPrice.get().isdecimal()==False: # 가격이 숫자가 아닐경우
             messagebox.showinfo("경고","가격은 숫자만 입력하여야 합니다.")
             return 0
+            
+        if textISBN.get().isdecimal()==False:
+            messagebox.showinfo("경고","ISBN은 숫자로만 입력해야 합니다.")
+            return 0
+
+        if int(textISBN.get())!=bookInfo[0,0]:
+            if BO.get_IsIn(int(textISBN.get())):
+                messagebox.showinfo("중복확인결과"," 이미 등록된 도서입니다.")
+                return 0
                 
         modify_list=np.append(modify_list,textISBN.get()) # modify_list에 값들 저장 / ISBN은 애초에 수정되지 않게 해야됨
         modify_list=np.append(modify_list,textBookName.get())
@@ -843,9 +852,35 @@ def User_Show():
         #if textBirth.get().isdecimal()==False: # 생년월일이 숫자가 아닌경우  --> '.'이 포함
         #    messagebox.showinfo("경고","생년월일은 숫자로만 입력해야 합니다.")
         #    return 0
+        checkHp=textHP.get()
+        checkHp=checkHp.replace('.','-')
+        splitHp=checkHp.split('-')
+        
+        if len(checkHp)!=13 or len(splitHp)!=3: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
+            messagebox.showinfo("경고","전화번호는 '-'을 포함한 13자리를 입력해야 합니다.") # 팝업창
+            return 0
+        elif not (splitHp[0].isdecimal() and splitHp[1].isdecimal() and splitHp[2].isdecimal()):
+            messagebox.showinfo("경고","전화번호의 형식이 올바르지 않습니다.")
+            return 0
+        elif not (len(splitHp[0])==3 and len(splitHp[1])==4 and len(splitHp[2])==4):
+            messagebox.showinfo("경고","전화번호의 형식이 올바르지 않습니다.")
+            return 0
+        if checkHp!=userInfo[0,0]:
+            if US.get_IsIn(checkHp): # 중복되는 전화번호 있으면 True, 없으면 False
+                messagebox.showinfo("중복확인결과","이미 등록된 회원입니다.") # 팝업창
         
         if textGender.get()!='남' and textGender.get()!='여': # 성별은 '여','남'이 아닐경우 
             messagebox.showinfo("경고","성별은 '남' 혹은 '여' 둘 중 하나로만 입력해야 합니다.")
+            return 0
+        
+        checkBirth=textBirth.get()
+        checkBirth.replace('-','.')
+        splitBirth=checkBirth.split('.')
+        if len(splitBirth)!=3:
+            messagebox.showinfo("경고","생년월일의 형식이 올바르지 않습니다.")
+            return 0
+        if not (splitBirth[0].isdecimal() and splitBirth[1].isdecimal() and splitBirth[2].isdecimal):
+            messagebox.showinfo("경고","생년월일의 형식이 올바르지 않습니다.")
             return 0
 
         modify_user_list=np.append(modify_user_list,textHP.get()) # modify_user_list에 값들을 저장
