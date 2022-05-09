@@ -122,7 +122,7 @@ class User:
         
     def get_User_info(self,phone): # 회원 정보 확인
         ind=np.where(self.__user[:,0]==phone) #내부 인덱스를 찾아냄
-        return self.__user[ind,:] # 인덱스에 해당하는 책 정보 리턴
+        return self.__user[ind,:] # 인덱스에 해당하는 회원 정보 리턴
     
     def get_IsRented(self,phone):# 대출한 도서 갯수 반환(IF-017)
         ind=np.where(self.__user[:,0]==phone)#내부 인덱스를 찾아냄
@@ -361,13 +361,13 @@ def Book_Search():
         searched_list=np.array([])
         if text_book_name.get(): # 도서명이 입력된 경우
             searched_list=BO.search_Book_ByTitle(text_book_name.get()) # 제목으로 도서 검색하는 함수 호출
-            if not searched_list.all(): # 관련 도서명이 없는 경우
+            if not searched_list.any(): # 관련 도서명이 없는 경우
                 messagebox.showinfo("경고","관련된 도서가 없습니다.\n올바른 제목을 입력해주세요.") # 팝업창
                 return 0
             
         elif text_author.get(): # 저자명이 입력된 경우
             searched_list=BO.search_Book_ByAuthor(text_author.get()) # 책 저자로 검색하는 함수 호출
-            if not searched_list.all(): # 관련 저자이름이 없는 경우
+            if not searched_list.any(): # 관련 저자이름이 없는 경우
                 messagebox.showinfo("경고","관련된 저자가 없습니다.\n올바른 저자이름을 입력해주세요.") # 팝업창
                 return 0
                 
@@ -472,7 +472,7 @@ def Book_Show():
             messagebox.showinfo("경고","가격은 숫자만 입력하여야 합니다.")
             return 0
             
-        if textISBN.get().isdecimal()==False:
+        if textISBN.get().isdecimal()==False: # isbn이 숫자가 아닌 것으로 입력했을 경우
             messagebox.showinfo("경고","ISBN은 숫자로만 입력해야 합니다.")
             return 0
 
@@ -585,20 +585,18 @@ def User_Add():
         if len(checkHp)!=13 or len(splitHp)!=3: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
             messagebox.showinfo("경고","전화번호는 '-'을 포함한 13자리를 입력해야 합니다.") # 팝업창
             return 0
-        elif not (splitHp[0].isdecimal() and splitHp[1].isdecimal() and splitHp[2].isdecimal()):
+        
+        elif not (splitHp[0].isdecimal() and splitHp[1].isdecimal() and splitHp[2].isdecimal()): # 전화번호
             messagebox.showinfo("경고","전화번호의 형식이 올바르지 않습니다.")
             return 0
+        
         elif not (len(splitHp[0])==3 and len(splitHp[1])==4 and len(splitHp[2])==4):
             messagebox.showinfo("경고","전화번호의 형식이 올바르지 않습니다.")
             return 0
+        
         if US.get_IsIn(checkHp): # 중복되는 전화번호 있으면 True, 없으면 False
             messagebox.showinfo("중복확인결과","이미 등록된 회원입니다.") # 팝업창
             
-        
-        #elif textHP.get().isdigit()==False: # 전화번호가 숫자가 아닐경우-->'-'이 포함
-        #    messagebox.showinfo("경고","전화번호는 숫자만 입력해야 합니다.") # 팝업창
-        #    return 0
-        
         else:
             messagebox.showinfo("중복확인결과","등록 가능한 회원입니다.") # 팝업창
             isConfirmed=True # 중복 확인했으므로 True
@@ -636,9 +634,6 @@ def User_Add():
             if not (splitBirth[0].isdecimal() and splitBirth[1].isdecimal() and splitBirth[2].isdecimal):
                 messagebox.showinfo("경고","생년월일의 형식이 올바르지 않습니다.")
                 return 0
-            
-        # if # 생년월일이 .이 아닌 -일때 .으로 바꿔서 저장해주기
-        #if textBirth.get() # 생년월일이 숫자가 아닌 것일때 예외처리
             
         if textGender.get()!='남' and textGender.get()!='여': # 성별이 '남','여'가 아닐경우
             messagebox.showinfo("경고","성별은 '남' 혹은 '여' 둘 중 하나로만 입력해야 합니다.") # 팝업창
@@ -726,7 +721,7 @@ def User_Search():
         searched_list=np.array([])
         if text_user_name.get(): # 사용자 이름으로 조회할 경우 
             searched_list=US.search_User_ByName(text_user_name.get())
-            if not searched_list.all(): # 해당 사용자가 없을 경우
+            if not searched_list.any(): # 해당 사용자가 없을 경우
                 messagebox.showinfo("경고","해당되는 사용자가 없습니다.")
                 return 0
         
@@ -735,7 +730,7 @@ def User_Search():
                 messagebox.showinfo("경고","전화번호는 '-'을 포함한 13자리를 입력해야 합니다.") # 팝업창
                 return 0
             searched_list=US.search_User_ByPhone(text_phone.get())
-            if not searched_list.all(): # 해당 전화번호가 없을 경우
+            if not searched_list.any(): # 해당 전화번호가 없을 경우
                 messagebox.showinfo("경고","해당되는 전화번호가 없습니다.")
                 return 0
         
@@ -827,9 +822,6 @@ def User_Show():
 
     def modify_user(): # 수정 버튼을 눌렀을 때 원래 회원 정보의 내용이 바뀌어서 저장되게 하기 위한 메소드
         global userInfo
-        if len(textHP.get())!=13: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
-            messagebox.showinfo("경고","전화번호는 '-'을 포함한 13자리를 입력해야 합니다.") # 팝업창
-            return 0
         userInfo=US.get_User_info(textHP.get())[0]
         if userInfo[0,7]!=0: 
             messagebox.showinfo("경고","도서 대출 중인 회원의 정보는 수정할 수 없습니다.")
@@ -849,27 +841,26 @@ def User_Show():
             textWrite+="필수사항을 입력해주세요."
             messagebox.showinfo("경고",textWrite) # 팝업창 처리
             return 0
-        
-        #if textBirth.get().isdecimal()==False: # 생년월일이 숫자가 아닌경우  --> '.'이 포함
-        #    messagebox.showinfo("경고","생년월일은 숫자로만 입력해야 합니다.")
-        #    return 0
+       
         checkHp=textHP.get()
         checkHp=checkHp.replace('.','-')
         splitHp=checkHp.split('-')
-        
         if len(checkHp)!=13 or len(splitHp)!=3: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
             messagebox.showinfo("경고","전화번호는 '-'을 포함한 13자리를 입력해야 합니다.") # 팝업창
             return 0
+        
         elif not (splitHp[0].isdecimal() and splitHp[1].isdecimal() and splitHp[2].isdecimal()):
             messagebox.showinfo("경고","전화번호의 형식이 올바르지 않습니다.")
             return 0
+        
         elif not (len(splitHp[0])==3 and len(splitHp[1])==4 and len(splitHp[2])==4):
             messagebox.showinfo("경고","전화번호의 형식이 올바르지 않습니다.")
             return 0
+        
         if checkHp!=userInfo[0,0]:
             if US.get_IsIn(checkHp): # 중복되는 전화번호 있으면 True, 없으면 False
                 messagebox.showinfo("중복확인결과","이미 등록된 회원입니다.") # 팝업창
-        
+       
         if textGender.get()!='남' and textGender.get()!='여': # 성별은 '여','남'이 아닐경우 
             messagebox.showinfo("경고","성별은 '남' 혹은 '여' 둘 중 하나로만 입력해야 합니다.")
             return 0
@@ -902,7 +893,7 @@ def User_Show():
         messagebox.showinfo("알림","회원 수정이 완료되었습니다.") # 팝업창
         userInfo=US.get_User_info(textHP.get())[0]
 
-    def reAdd_user(): # 수정 버튼을 눌렀을 때 원래 회원 정보의 내용이 바뀌어서 저장되게 하기 위한 메소드
+    def reAdd_user(): # 재가입 버튼을 눌렀을 때 원래 회원 정보의 내용이 바뀌어서 저장되게 하기 위한 메소드
         global userInfo
         if len(textHP.get())!=13: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
             messagebox.showinfo("경고","전화번호는 '-'을 포함한 13자리를 입력해야 합니다.") # 팝업창
@@ -924,12 +915,38 @@ def User_Show():
             messagebox.showinfo("경고",textWrite) # 팝업창 처리 
             return 0
         
-        #if textBirth.get().isdecimal()==False: # 생년월일이 숫자가 아닌경우  --> '.'이 포함
-        #    messagebox.showinfo("경고","생년월일은 숫자로만 입력해야 합니다.")
-        #    return 0
+        checkHp=textHP.get()
+        checkHp=checkHp.replace('.','-')
+        splitHp=checkHp.split('-')
         
-        if textGender.get()!='남' and textGender.get()!='여': # 성별이 '남','여'가 아닐경우
+        if len(checkHp)!=13 or len(splitHp)!=3: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
+            messagebox.showinfo("경고","전화번호는 '-'을 포함한 13자리를 입력해야 합니다.") # 팝업창
+            return 0
+
+        elif not (splitHp[0].isdecimal() and splitHp[1].isdecimal() and splitHp[2].isdecimal()):
+            messagebox.showinfo("경고","전화번호의 형식이 올바르지 않습니다.")
+            return 0
+
+        elif not (len(splitHp[0])==3 and len(splitHp[1])==4 and len(splitHp[2])==4):
+            messagebox.showinfo("경고","전화번호의 형식이 올바르지 않습니다.")
+            return 0
+
+        if checkHp!=userInfo[0,0]:
+            if US.get_IsIn(checkHp): # 중복되는 전화번호 있으면 True, 없으면 False
+                messagebox.showinfo("중복확인결과","이미 등록된 회원입니다.") # 팝업창
+        
+        if textGender.get()!='남' and textGender.get()!='여': # 성별은 '여','남'이 아닐경우 
             messagebox.showinfo("경고","성별은 '남' 혹은 '여' 둘 중 하나로만 입력해야 합니다.")
+            return 0
+        
+        checkBirth=textBirth.get()
+        checkBirth.replace('-','.')
+        splitBirth=checkBirth.split('.')
+        if len(splitBirth)!=3:
+            messagebox.showinfo("경고","생년월일의 형식이 올바르지 않습니다.")
+            return 0
+        if not (splitBirth[0].isdecimal() and splitBirth[1].isdecimal() and splitBirth[2].isdecimal):
+            messagebox.showinfo("경고","생년월일의 형식이 올바르지 않습니다.")
             return 0
 
         modify_user_list=np.append(modify_user_list,textHP.get()) # modify_user_list에 값들을 저장
@@ -1070,16 +1087,18 @@ def Rent_User_Search():
         searched_list=np.array([])
         if text_user_name.get(): # 회원 이름으로 검색할 경우
             searched_list=US.search_User_ByName(text_user_name.get())
+            if not searched_list.any(): # 해당 사용자가 없을 경우
+                messagebox.showinfo("경고","해당되는 사용자가 없습니다.")
+                return 0
             
         elif text_phone.get(): # 회원 전화번호로 검색할 경우
             if len(text_phone.get())!=13: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
                 messagebox.showinfo("경고","전화번호는 '-'을 포함한 13자리를 입력해야 합니다.") # 팝업창
                 return 0
             searched_list=US.search_User_ByPhone(text_phone.get())
-            
-        #elif text_phone.get().isdecimal()==False: # 전화번호가 숫자가 아닌경우 --> '-'포함
-        #    messagebox.showinfo("경고","전화번호를 숫자로 입력하세요.")
-        #    return 0
+            if not searched_list.any(): # 해당 사용자가 없을 경우
+                messagebox.showinfo("경고","해당되는 사용자가 없습니다.")
+                return 0
         
         else: # 회원 이름,전화번호 둘다 입력하지 않은 경우
             messagebox.showinfo("경고","이름과 연락처 둘 중 하나라도 입력하시오")
