@@ -3,7 +3,7 @@ from cgitb import text
 #from curses import textpad
 from glob import glob
 from re import T
-from jmespath import search
+#from jmespath import search
 from matplotlib.pyplot import axis
 import pandas as pd
 import numpy as np
@@ -444,13 +444,16 @@ def Book_Show():
     # item = self.tree.selection()[0]
     global new
     global send_data
+    global orig_isbn
     bookInfo=BO.get_Book_info(int(send_data))[0,:]
+    orig_isbn=bookInfo[0,0]
 
     def modify_book(): # 수정 버튼을 눌렀을 때 원래 도서 정보의 내용이 바뀌어서 저장되게 하기 위한 메소드
         #BO.set_Book_Info() # 도서 수정 함수 호출
         global bookInfo
         global send_data
-        bookInfo=BO.get_Book_info(int(textISBN.get()))[0,:]
+        global orig_isbn
+        bookInfo=BO.get_Book_info(orig_isbn)[0,:]
         if bookInfo[0,7]==False: # 대출중인 도서일 경우 -> 수정 불가능
             messagebox.showinfo("경고","대출 중인 도서는 수정할 수 없습니다.")
             return 0
@@ -495,6 +498,7 @@ def Book_Show():
         BO.set_Book_Info(modify_list) # set_Book_Info함수를 호출해 modify_list를 추가
         messagebox.showinfo("알림","도서 수정이 완료되었습니다.") # 팝업창
         bookInfo=BO.get_Book_info(textISBN.get())[0,:]
+        orig_isbn=bookInfo[0,0]
 
 
     def delete_book(): # 삭제 버튼을 눌렀을 때 해당된 도서 정보가 원래의 도서 리스트에서 삭제되어 도서 리스트에 저장 하기 위한 메소드
@@ -818,11 +822,14 @@ def User_Show():
     userInfo=US.get_User_info(send_data)[0]
     global new
     global isConfirmed
+    global orig_hp
+    orig_hp=userInfo[0,0]
     isConfirmed=False
 
     def modify_user(): # 수정 버튼을 눌렀을 때 원래 회원 정보의 내용이 바뀌어서 저장되게 하기 위한 메소드
         global userInfo
-        userInfo=US.get_User_info(textHP.get())[0]
+        global orig_hp
+        userInfo=US.get_User_info(orig_hp)[0]
         if userInfo[0,7]!=0: 
             messagebox.showinfo("경고","도서 대출 중인 회원의 정보는 수정할 수 없습니다.")
             return 0
@@ -892,6 +899,7 @@ def User_Show():
         US.set_User_Info(modify_user_list) # set_User_Info 함수를 호출해 modify_user_list를 추가
         messagebox.showinfo("알림","회원 수정이 완료되었습니다.") # 팝업창
         userInfo=US.get_User_info(textHP.get())[0]
+        orig_hp=userInfo[0,0]
 
     def reAdd_user(): # 재가입 버튼을 눌렀을 때 원래 회원 정보의 내용이 바뀌어서 저장되게 하기 위한 메소드
         global userInfo
