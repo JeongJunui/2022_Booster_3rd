@@ -500,7 +500,8 @@ def Book_Show():
     def delete_book(): # 삭제 버튼을 눌렀을 때 해당된 도서 정보가 원래의 도서 리스트에서 삭제되어 도서 리스트에 저장 하기 위한 메소드
         if BO.get_IsRented(int(textISBN.get()))==False:
             messagebox.showinfo("경고","대출중인 도서는 삭제할 수 없습니다.")
-            
+            return 0
+        
         else:
             BO.drop_Book_Info(int(textISBN.get()))  # 도서 삭제 함수 호출 
             messagebox.showinfo("알림","해당 도서가 삭제되었습니다.") # 팝업창
@@ -562,7 +563,7 @@ def Book_Show():
     btn_check_dup = Button(new, text="수정",command=modify_book) # '수정' 버튼을 누를시에 modify_book함수 호출
     btn_check_dup.grid(row=9, column=0, padx=10, pady=20)
 
-    btn_check_dup = Button(new, text="삭제",command=delete_book) # '등록' 버튼을 누를시에 add_book함수 호출
+    btn_check_dup = Button(new, text="삭제",command=delete_book) # '삭제' 버튼을 누를시에 delete_book함수 호출
     btn_check_dup.grid(row=9, column=1, padx=10, pady=20)
 
     btn_check_dup = Button(new, text="취소", command=lambda: new.destroy()) # "취소" 버튼을 누를시에 창 닫기
@@ -1064,8 +1065,6 @@ def Rent_User_Search():
         send_data=phone
         messagebox.showinfo("알림","회원을 선택하였습니다.") # 팝업창
         Rent_Book_Search(before)
-        #US.user_list[ind,8]+=1 # 대출 권수 1추가 
-        #RE.rent_Book(isbn,phone,dat) # 대출 여부
         
     def print_rent_user(): # 이름 검색을 누를시에 회원 리스트와 대출여부가 출력되게 하는 메소드
         searched_list=np.array([])
