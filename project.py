@@ -1026,33 +1026,29 @@ def User_Show():
     textEmail.grid(row=5, column=1, padx=20, pady=20)
 
     labelJoin = Label(new, text="가입일 : ")  # "가입일 : " 화면에 출력
-    textJoin = Entry(new)
-    textJoin.insert(END,userInfo[0,5])
+    textJoin = Label(new, text=userInfo[0,5])
     labelJoin.grid(row=6, column=0, padx=20)
     textJoin.grid(row=6, column=1, padx=20)
 
     labelExit = Label(new, text="탈퇴일 : ") # "탈퇴일 : " 화면에 출력 
-    textExit = Entry(new)
-    textExit.insert(END,userInfo[0,6])
+    textExit = Label(new, text=userInfo[0,6])
     labelExit.grid(row=7, column=0, padx=20, pady=20)
     textExit.grid(row=7, column=1, padx=20, pady=20)
 
     labelRent = Label(new, text="대출여부 : ") # "대출여부 : " 화면에 출력
-    textRent = Entry(new)
     ins_st=''
     ins_st+=str(userInfo[0,7])+'권 대출중'
-    textRent.insert(END,ins_st)
+    textRent = Label(new, text=ins_st)
     labelRent.grid(row=8, column=0, padx=20)
     textRent.grid(row=8, column=1, padx=20)
 
     labelExit = Label(new, text="탈퇴여부 : ") # "탈퇴여부: " 화면에 출력
-    textExit = Entry(new)
     ins_st=''
     if userInfo[0,6] == '0':
         ins_st='X'
     else:
         ins_st='O'
-    textExit.insert(END,ins_st)
+    textExit = Label(new, text=ins_st)
     labelExit.grid(row=9, column=0, padx=20, pady=20)
     textExit.grid(row=9, column=1, padx=20, pady=20)
 
