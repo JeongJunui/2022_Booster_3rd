@@ -1308,6 +1308,7 @@ def Rent_Show(before):
 
     labelTitle = Label(new, text="대출 정보") # "대출 정보" 화면에 출력 ( 상단의 타이틀 )
     labelTitle.grid(row=0, column=0, padx=20, pady=20)
+    labelTitle.config(fg='#B2CCFF', bg='black', font=("Courier", 12))
 
     labelBookInfo = Label(new, text="도서 정보") # "도서 정보" 화면에 출력 ( 상단의 타이틀 )
     labelBookInfo.grid(row=1, column=0, padx=20, pady=20)
@@ -1316,27 +1317,27 @@ def Rent_Show(before):
     labelMemboerInfo.grid(row=1, column=2, padx=20, pady=20)
 
     labelBookName = Label(new, text="도서명 : ") # "도서명 : " 화면에 출력 
-    textBookName = Label(new, text=bookInfo[0,1])
+    textBookName = Label(new, text=bookInfo[0,1], wraplength=200)
     labelBookName.grid(row=2, column=0, padx=20)
     textBookName.grid(row=2, column=1, padx=20)
 
     labelName = Label(new, text="이름 : ")  # "이름 : " 화면에 출력 
-    textName = Label(new, text=userInfo[0,1])
+    textName = Label(new, text=userInfo[0,1], wraplength=200)
     labelName.grid(row=2, column=2, padx=20)
     textName.grid(row=2, column=3, padx=20)
 
     labelAuthor = Label(new, text="저자 : ") # "저자 : " 화면에 출력
-    textAuthor = Label(new, text=bookInfo[0,2])
+    textAuthor = Label(new, text=bookInfo[0,2], wraplength=200)
     labelAuthor.grid(row=3, column=0, padx=20, pady=20)
     textAuthor.grid(row=3, column=1, padx=20, pady=20)
 
     labelBirth = Label(new, text="생년월일 : ") # "생년월일 : " 화면에 출력 
-    textBirth = Label(new, text=userInfo[0,2])
+    textBirth = Label(new, text=userInfo[0,2], wraplength=200)
     labelBirth.grid(row=3, column=2, padx=20, pady=20)
     textBirth.grid(row=3, column=3, padx=20, pady=20)
 
     labelPub = Label(new, text="출판사 : ") # "출판사 : " 화면에 출력
-    textPub = Label(new, text=bookInfo[0,3])
+    textPub = Label(new, text=bookInfo[0,3], wraplength=200)
     labelPub.grid(row=4, column=0, padx=20)
     textPub.grid(row=4, column=1, padx=20)
 
@@ -1350,17 +1351,17 @@ def Rent_Show(before):
     textGender.grid(row=4, column=3, padx=20)
 
     labelPrice = Label(new, text="가격 : ") # "가격 : "  화면에 출력
-    textPrice = Label(new, text=bookInfo[0,4])
+    textPrice = Label(new, text=bookInfo[0,4], wraplength=200)
     labelPrice.grid(row=5, column=0, padx=20, pady=20)
     textPrice.grid(row=5, column=1, padx=20, pady=20)
 
     labelEmail = Label(new, text="이메일 : ") # "이메일 : " 화면에 출력
-    textEmail = Label(new, text=userInfo[0,4])
+    textEmail = Label(new, text=userInfo[0,4], wraplength=200)
     labelEmail.grid(row=5, column=2, padx=20, pady=20)
     textEmail.grid(row=5, column=3, padx=20, pady=20)
 
     labelUrl = Label(new, text="관련URL : ") # "관련URL : " 화면에 출력
-    textUrl = Label(new, text=bookInfo[0,5])
+    textUrl = Label(new, text=bookInfo[0,5], wraplength=200)
     labelUrl.grid(row=6, column=0, padx=20)
     textUrl.grid(row=6, column=1, padx=20)
 
