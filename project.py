@@ -1297,7 +1297,7 @@ def Rent_Show(before):
         d=dt.datetime.now()
         dr=(d+dt.timedelta(days=14)).strftime('%Y.%m.%d')
         d=d.strftime('%Y.%m.%d')
-        isbn=textISBN.get()
+        isbn=textISBN.cget("text")
         RE.rent_Book(isbn,phone,d,dr)
         US.set_IsRented(phone,1)
         BO.set_IsRented(int(isbn),False)
@@ -1536,6 +1536,7 @@ def Rent_State_Show():
 
     labelTitle = Label(new, text="대출 정보")  # "대출 정보" 화면에 출력 ( 상단의 타이틀 )
     labelTitle.grid(row=0, column=0, padx=20, pady=20)
+    labelTitle.config(fg='#B2CCFF', bg='black', font=("Courier", 12))
 
     labelBookInfo = Label(new, text="도서 정보") # "도서 정보" 화면에 출력 ( 상단의 타이틀 )
     labelBookInfo.grid(row=1, column=0, padx=20, pady=20)
@@ -1544,83 +1545,79 @@ def Rent_State_Show():
     labelMemboerInfo.grid(row=1, column=2, padx=20, pady=20)
 
     labelBookName = Label(new, text="도서명 : ")  # "도서명 : " 화면에 출력 
-    textBookName = Entry(new)
-    textBookName.insert(END,bookInfo[0,1])
+    textBookName = Label(new, text=bookInfo[0,1], wraplength=200)
     labelBookName.grid(row=2, column=0, padx=20)
     textBookName.grid(row=2, column=1, padx=20)
+
     labelName = Label(new, text="이름 : ") # "이름 : " 화면에 출력
-    textName = Entry(new)
-    textName.insert(END,userInfo[0,1])
+    textName = Label(new, text=userInfo[0,1], wraplength=200)
     labelName.grid(row=2, column=2, padx=20)
     textName.grid(row=2, column=3, padx=20)
 
     labelAuthor = Label(new, text="저자 : ")  # "저자 : " 화면에 출력
-    textAuthor = Entry(new) # 저자 정보 엔트리 생성
-    textAuthor.insert(END,bookInfo[0,2]) # bookInfo에서 저자에 해당하는 정보를 리스트에서 빼와서 넣음. 불러오는 과정은 사전에 수행이 되어 있음
+    textAuthor = Label(new, text=bookInfo[0,2], wraplength=200) # bookInfo에서 저자에 해당하는 정보를 리스트에서 빼와서 넣음. 불러오는 과정은 사전에 수행이 되어 있음
     labelAuthor.grid(row=3, column=0, padx=20, pady=20)
     textAuthor.grid(row=3, column=1, padx=20, pady=20)
+
     labelBirth = Label(new, text="생년월일 : ")  # "생년월일 : " 화면에 출력 
-    textBirth = Entry(new)
-    textBirth.insert(END,userInfo[0,2])
+    textBirth = Label(new, text=userInfo[0,2], wraplength=200)
     labelBirth.grid(row=3, column=2, padx=20, pady=20)
     textBirth.grid(row=3, column=3, padx=20, pady=20)
 
     labelPub = Label(new, text="출판사 : ") # "출판사 : " 화면에 출력
-    textPub = Entry(new)
-    textPub.insert(END,bookInfo[0,3])
+    textPub = Label(new, text=bookInfo[0,3], wraplength=200)
     labelPub.grid(row=4, column=0, padx=20)
     textPub.grid(row=4, column=1, padx=20)
+
     labelGender = Label(new, text="성별 : ") # "성별 : " 화면에 출력
-    textGender = Entry(new)
+    textGender = Label(new)
     if userInfo[0,3]:
-        textGender.insert(END,'남')
+        textGender = Label(new, text='남')
     else:
-        textGender.insert(END,'여')
+        textGender = Label(new, text='여')
     labelGender.grid(row=4, column=2, padx=20)
     textGender.grid(row=4, column=3, padx=20)
 
     labelPrice = Label(new, text="가격 : ")  # "가격 : "  화면에 출력
-    textPrice = Entry(new)
+    textPrice = Label(new)
     if bookInfo[0,4] == NULL:
-        textPrice.insert(END,'')
+        textPrice = Label(new, text='')
     else:
-        textPrice.insert(END,bookInfo[0,4])
+        textPrice = Label(new, text=bookInfo[0,4])
     labelPrice.grid(row=5, column=0, padx=20, pady=20)
     textPrice.grid(row=5, column=1, padx=20, pady=20)
+
     labelEmail = Label(new, text="이메일 : ") # "이메일 : " 화면에 출력
-    textEmail = Entry(new)
-    textEmail.insert(END,userInfo[0,4])
+    textEmail = Label(new, text=userInfo[0,4], wraplength=200)
     labelEmail.grid(row=5, column=2, padx=20, pady=20)
     textEmail.grid(row=5, column=3, padx=20, pady=20)
 
     labelUrl = Label(new, text="관련URL : ")  # "관련URL : " 화면에 출력
-    textUrl = Entry(new)
-    textUrl.insert(END,bookInfo[0,5])
+    textUrl = Label(new, text=bookInfo[0,5], wraplength=200)
     labelUrl.grid(row=6, column=0, padx=20)
     textUrl.grid(row=6, column=1, padx=20)
+
     labelRentDay = Label(new, text="대여일 : ") # "대여일 : " 화면에 출력
-    textRentDay = Entry(new) # 대여일 정보가 삽입될 엔트리 생성
-    textRentDay.insert(END,rentInfo[3])
+    textRentDay = Label(new, text=rentInfo[3]) # 대여일 정보가 삽입될 엔트리 생성
     labelRentDay.grid(row=6, column=2, padx=20)
     textRentDay.grid(row=6, column=3, padx=20)
 
     labelISBN = Label(new, text="ISBN : ")  # "ISBN : " 화면에 출력
     labelISBN.grid(row=7, column=0, padx=20, pady=20)
-    textISBN = Entry(new)
-    textISBN.insert(END,bookInfo[0,0])
+    textISBN = Label(new, text=bookInfo[0,0])
     textISBN.grid(row=7, column=1, padx=20, pady=20)
+
     labelBackDay = Label(new, text="반납 예정일 : ") # "반납 예정일 : " 화면에 출력
-    textBackDay = Entry(new)
-    textBackDay.insert(END,rentInfo[4])
+    textBackDay = Label(new, text=rentInfo[4])
     labelBackDay.grid(row=7, column=2, padx=20, pady=20)
     textBackDay.grid(row=7, column=3, padx=20, pady=20)
 
     labelBackCheck = Label(new, text="반납 여부 : ")  # "반납 여부 : "  화면에 출력
-    textBackCheck = Entry(new)
+    textBackCheck = Label(new)
     if rentInfo[5]:
-        textBackCheck.insert(END,'O')
+        textBackCheck = Label(new, text='O')
     else:
-        textBackCheck.insert(END,'X')
+        textBackCheck = Label(new, text='X')
     labelBackCheck.grid(row=8, column=2, padx=20)
     textBackCheck.grid(row=8, column=3, padx=20)
 
