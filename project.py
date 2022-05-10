@@ -1316,80 +1316,73 @@ def Rent_Show(before):
     labelMemboerInfo.grid(row=1, column=2, padx=20, pady=20)
 
     labelBookName = Label(new, text="도서명 : ") # "도서명 : " 화면에 출력 
-    textBookName = Entry(new)
-    textBookName.insert(END,bookInfo[0,1])
+    textBookName = Label(new, text=bookInfo[0,1])
     labelBookName.grid(row=2, column=0, padx=20)
     textBookName.grid(row=2, column=1, padx=20)
+
     labelName = Label(new, text="이름 : ")  # "이름 : " 화면에 출력 
-    textName = Entry(new)
-    textName.insert(END,userInfo[0,1])
+    textName = Label(new, text=userInfo[0,1])
     labelName.grid(row=2, column=2, padx=20)
     textName.grid(row=2, column=3, padx=20)
 
     labelAuthor = Label(new, text="저자 : ") # "저자 : " 화면에 출력
-    textAuthor = Entry(new)
-    textAuthor.insert(END,bookInfo[0,2])
+    textAuthor = Label(new, text=bookInfo[0,2])
     labelAuthor.grid(row=3, column=0, padx=20, pady=20)
     textAuthor.grid(row=3, column=1, padx=20, pady=20)
+
     labelBirth = Label(new, text="생년월일 : ") # "생년월일 : " 화면에 출력 
-    textBirth = Entry(new)
-    textBirth.insert(END,userInfo[0,2])
+    textBirth = Label(new, text=userInfo[0,2])
     labelBirth.grid(row=3, column=2, padx=20, pady=20)
     textBirth.grid(row=3, column=3, padx=20, pady=20)
 
     labelPub = Label(new, text="출판사 : ") # "출판사 : " 화면에 출력
-    textPub = Entry(new)
-    textPub.insert(END,bookInfo[0,3])
+    textPub = Label(new, text=bookInfo[0,3])
     labelPub.grid(row=4, column=0, padx=20)
     textPub.grid(row=4, column=1, padx=20)
+
     labelGender = Label(new, text="성별 : ") # "성별 : " 화면에 출력
-    textGender = Entry(new)
+    textGender = Label(new)
     if userInfo[0,3]:
-        textGender.insert(END,'남')
+        textGender = Label(new, text='남')
     else:
-        textGender.insert(END,'여')
+        textGender = Label(new, text='여')
     labelGender.grid(row=4, column=2, padx=20)
     textGender.grid(row=4, column=3, padx=20)
 
     labelPrice = Label(new, text="가격 : ") # "가격 : "  화면에 출력
-    textPrice = Entry(new)
-    textPrice.insert(END,bookInfo[0,4])
+    textPrice = Label(new, text=bookInfo[0,4])
     labelPrice.grid(row=5, column=0, padx=20, pady=20)
     textPrice.grid(row=5, column=1, padx=20, pady=20)
+
     labelEmail = Label(new, text="이메일 : ") # "이메일 : " 화면에 출력
-    textEmail = Entry(new)
-    textEmail.insert(END,userInfo[0,4])
+    textEmail = Label(new, text=userInfo[0,4])
     labelEmail.grid(row=5, column=2, padx=20, pady=20)
     textEmail.grid(row=5, column=3, padx=20, pady=20)
 
     labelUrl = Label(new, text="관련URL : ") # "관련URL : " 화면에 출력
-    textUrl = Entry(new)
-    textUrl.insert(END,bookInfo[0,5])
+    textUrl = Label(new, text=bookInfo[0,5])
     labelUrl.grid(row=6, column=0, padx=20)
     textUrl.grid(row=6, column=1, padx=20)
+
     labelRentDay = Label(new, text="대여일 : ")  # "대여일 : " 화면에 출력
-    textRentDay = Entry(new)
     d=dt.datetime.now()
-    textRentDay.insert(END,d.strftime('%Y.%m.%d'))
+    textRentDay = Label(new, text=d.strftime('%Y.%m.%d'))
     labelRentDay.grid(row=6, column=2, padx=20)
     textRentDay.grid(row=6, column=3, padx=20)
 
     labelISBN = Label(new, text="ISBN : ")
     labelISBN.grid(row=7, column=0, padx=20, pady=20)
-    textISBN = Entry(new)
-    textISBN.insert(END,bookInfo[0,0])
+    textISBN = Label(new, text=bookInfo[0,0])
     textISBN.grid(row=7, column=1, padx=20, pady=20)
 
     labelBackDay = Label(new, text="반납 예정일 : ") # "반납 예정일 : " 화면에 출력
-    textBackDay = Entry(new)
     d=d+dt.timedelta(days=14)
-    textBackDay.insert(END,d.strftime('%Y.%m.%d'))
+    textBackDay = Label(new, text=d.strftime('%Y.%m.%d'))
     labelBackDay.grid(row=7, column=2, padx=20, pady=20)
     textBackDay.grid(row=7, column=3, padx=20, pady=20)
 
     labelBackCheck = Label(new, text="반납 여부 : ") # "반납 여부 : "  화면에 출력
-    textBackCheck = Entry(new)
-    textBackCheck.insert(END,'X')
+    textBackCheck = Label(new, text="x")
     labelBackCheck.grid(row=8, column=2, padx=20)
     textBackCheck.grid(row=8, column=3, padx=20)
 
