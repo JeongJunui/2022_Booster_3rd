@@ -287,7 +287,7 @@ def Book_Add():
         add_book_list=np.append(add_book_list,textPub.get())
         add_book_list=np.append(add_book_list,textPrice.get())
         add_book_list=np.append(add_book_list,textUrl.get())
-        add_book_list=np.append(add_book_list,textDesc.get())
+        add_book_list=np.append(add_book_list,textDesc.get("1.0", "end"))
         add_book_list=np.append(add_book_list,True) # 대출 여부 초기값 True
         BO.add_Book_Info(add_book_list) # add_book_list를 book_list에 추가
         messagebox.showinfo("알림","도서 등록이 완료되었습니다.") # 팝업창
@@ -303,28 +303,28 @@ def Book_Add():
 
     labelISBN = Label(panedwindow1, text="ISBN : ") # ' ISBN: ' 화면에 출력
     labelISBN.grid(row=1, column=0, padx=50, pady=10)
-    textISBN = Entry(panedwindow1) # ISBN 넣는 텍스트박스
+    textISBN = Entry(panedwindow1, width=50) # ISBN 넣는 텍스트박스
     textISBN.grid(row=1, column=1, padx=0, pady=10)
     btn_check_dup = Button(panedwindow1, text="중복확인", command=get_user) # "중복확인"버튼을 눌렀을 시에 get_user함수 호출
     btn_check_dup.grid(row=1, column=2, padx=50, pady=10) #화면을 표처럼 나눈다고 생각했을 때, 첫행, 두번째 열에 x축 공백을 50, y축 공백을 10으로 설정합니다
 
     labelBookName = Label(panedwindow1, text="도서명 : ") # ' 도서명: ' 화면에 출력
-    textBookName = Entry(panedwindow1) #도서명 넣는 텍스트박스
+    textBookName = Entry(panedwindow1, width=50) #도서명 넣는 텍스트박스
     labelBookName.grid(row=2, column=0, padx=50, pady=10) #화면을 표처럼 나눈다고 생각했을 때, 두번째행, 0번째 열에 x축 공백을 50, y축 공백을 10으로 설정합니다
     textBookName.grid(row=2, column=1, padx=0, pady=10) #화면을 표처럼 나눈다고 생각했을 때, 두번째행, 1번째 줄에 x축 공백을 0, y축 공백을 10으로 설정합니다
 
     labelAuthor = Label(panedwindow1, text="저자 : ") # ' 저자: ' 화면에 출력
-    textAuthor = Entry(panedwindow1) #저자 넣는 텍스트박스
+    textAuthor = Entry(panedwindow1, width=50) #저자 넣는 텍스트박스
     labelAuthor.grid(row=3, column=0, padx=50) #화면을 표처럼 나눈다고 생각했을 때, 세번째행, 0번째 줄에 x축 공백을 50, y축 공백을 10으로 설정합니다
     textAuthor.grid(row=3, column=1, padx=0) #화면을 표처럼 나눈다고 생각했을 때, 세번째행, 1번째 줄에 x축 공백을 0으로 설정합니다
 
     labelPub = Label(panedwindow1, text="출판사 : ") # ' 출판사: ' 화면에 출력
-    textPub = Entry(panedwindow1) #출판사 넣는 텍스트박스
+    textPub = Entry(panedwindow1, width=50) #출판사 넣는 텍스트박스
     labelPub.grid(row=4, column=0, padx=50, pady=10) #화면을 표처럼 나눈다고 생각했을 때, 4번째행, 0번째 줄에 x축 공백을 50, y축 공백을 10으로 설정합니다
     textPub.grid(row=4, column=1, padx=0, pady=10) #화면을 표처럼 나눈다고 생각했을 때, 4번째행, 1번째 줄에 x축 공백을 0, y축 공백을 10으로 설정
 
     labelPrice = Label(panedwindow1, text="가격 : ") # ' 가격: ' 화면에 출력
-    textPrice = Entry(panedwindow1) #가격 넣는 텍스트박스
+    textPrice = Entry(panedwindow1, width=50) #가격 넣는 텍스트박스
     labelPrice.grid(row=5, column=0, padx=50) #화면을 표처럼 나눈다고 생각했을 때, 5번째행, 0번째 줄에 x축 공백을 50으로 설정
     textPrice.grid(row=5, column=1, padx=0) #화면을 표처럼 나눈다고 생각했을 때, 5번째행, 1번째 줄에 x축 공백을 0으로 설정
     label_price_msg = Label(panedwindow1, text="가격은 쉼표 없이 숫자만 입력하세요!", fg = "red")  # 가격 입력 경고 문자
@@ -332,12 +332,12 @@ def Book_Add():
 
 
     labelUrl = Label(panedwindow1, text="관련URL : ") # ' 관련URL: ' 화면에 출력
-    textUrl = Entry(panedwindow1) #URL 넣는 텍스트박스
+    textUrl = Entry(panedwindow1, width=50) #URL 넣는 텍스트박스
     labelUrl.grid(row=7, column=0, padx=50, pady=10)
     textUrl.grid(row=7, column=1, padx=0, pady=10)
 
     labelDesc = Label(panedwindow1, text="도서설명 : ") # ' 도서설명: ' 화면에 출력
-    textDesc = Entry(panedwindow1) #도서설명 넣는 텍스트박스
+    textDesc = Text(panedwindow1, width=50, height=10) #도서설명 넣는 텍스트박스
     labelDesc.grid(row=8, column=0, padx=50)
     textDesc.grid(row=8, column=1, padx=0)
 
@@ -490,8 +490,8 @@ def Book_Show():
         modify_list=np.append(modify_list,textPub.get())
         modify_list=np.append(modify_list,textPrice.get())
         modify_list=np.append(modify_list,textUrl.get())
-        modify_list=np.append(modify_list,textInfo.get())
-        if textRent.get() == 'O':
+        modify_list=np.append(modify_list,textInfo.get("1.0", "end"))
+        if textRent.cget() == 'O':
             modify_list=np.append(modify_list, False)
         else:
             modify_list=np.append(modify_list, True)
@@ -514,52 +514,52 @@ def Book_Show():
     
     labelISBN = Label(new, text="ISBN : ")  # "ISBN : " 화면에 출력
     labelISBN.grid(row=1, column=0, padx=20, pady=20)
-    textISBN = Entry(new)
+    textISBN = Entry(new, width=50)
     textISBN.insert(END,bookInfo[0,0])
     textISBN.grid(row=1, column=1, padx=20, pady=20)
 
     labelBookName = Label(new, text="도서명 : ") # "도서명 : " 화면에 출력
-    textBookName = Entry(new)
+    textBookName = Entry(new, width=50)
     textBookName.insert(END,bookInfo[0,1])
     labelBookName.grid(row=2, column=0, padx=20)
     textBookName.grid(row=2, column=1, padx=20)
 
     labelAuthor = Label(new, text="저자 : ") # "저자 : " 화면에 출력
-    textAuthor = Entry(new)
+    textAuthor = Entry(new, width=50)
     textAuthor.insert(END,bookInfo[0,2])
     labelAuthor.grid(row=3, column=0, padx=20, pady=20)
     textAuthor.grid(row=3, column=1, padx=20, pady=20)
 
     labelPub = Label(new, text="출판사 : ") # "출판사 : " 화면에 출력
-    textPub = Entry(new)
+    textPub = Entry(new, width=50)
     textPub.insert(END,bookInfo[0,3])
     labelPub.grid(row=4, column=0, padx=20)
     textPub.grid(row=4, column=1, padx=20)
 
     labelPrice = Label(new, text="가격 : ")  # "가격 : " 화면에 출력
-    textPrice = Entry(new)
+    textPrice = Entry(new, width=50)
     textPrice.insert(END,bookInfo[0,4])
     labelPrice.grid(row=5, column=0, padx=20, pady=20)
     textPrice.grid(row=5, column=1, padx=20, pady=20)
 
     labelUrl = Label(new, text="관련URL : ") # "관련URL : " 화면에 출력
-    textUrl = Entry(new)
+    textUrl = Entry(new, width=50)
     textUrl.insert(END,bookInfo[0,5])
     labelUrl.grid(row=6, column=0, padx=20)
     textUrl.grid(row=6, column=1, padx=20)
 
     labelInfo = Label(new, text="설명 : ") # "설명 : " 화면에 출력 
-    textInfo = Entry(new)
+    textInfo = Text(new, width=50, height=10)
     textInfo.insert(END,bookInfo[0,6])
     labelInfo.grid(row=7, column=0, padx=20, pady=20)
     textInfo.grid(row=7, column=1, padx=20, pady=20)
     
     labelRent = Label(new, text="대출여부 : ") # "대출여부 : " 화면에 출력
-    textRent = Entry(new)
+    textRent = Label(new, width=50)
     if bookInfo[0,7]:
-        textRent.insert(END,'X')
+        textRent = Label(new, text='X')
     else:
-        textRent.insert(END,'O')
+        textRent = Label(new, text='O')
     #textRent.insert(END,bookInfo[0,7])
     labelRent.grid(row=8, column=0, padx=20)
     textRent.grid(row=8, column=1, padx=20)
