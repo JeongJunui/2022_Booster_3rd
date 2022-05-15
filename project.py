@@ -491,7 +491,7 @@ def Book_Show():
         modify_list=np.append(modify_list,textPrice.get())
         modify_list=np.append(modify_list,textUrl.get())
         modify_list=np.append(modify_list,textInfo.get("1.0", "end"))
-        if textRent.cget() == 'O':
+        if textRent.cget("text") == 'O':
             modify_list=np.append(modify_list, False)
         else:
             modify_list=np.append(modify_list, True)
