@@ -83,8 +83,8 @@ class Book:
         search_list=np.reshape(search_list,(int(search_list.size/8),8))
         return search_list # 반환 값 : 도서 목록
     
-    def set_Book_Info(self,inf): # 도서 수정 (IF-005)
-        ind=np.where(self.__book[:,0]==int(inf[0])) # 내부 인덱스를 찾아냄
+    def set_Book_Info(self,inf,isbn): # 도서 수정 (IF-005)
+        ind=np.where(self.__book[:,0]==int(isbn)) # 내부 인덱스를 찾아냄
         self.__book[ind,:]=inf# 인덱스 값에 해당하는 책 정보 삽입
         self.save_to_csv()
    
@@ -159,8 +159,8 @@ class User:
         search_list=np.reshape(search_list,(int(search_list.size/8),8))
         return search_list# 반환 값 : 회원 목록
     
-    def set_User_Info(self,inf): # 회원 수정 (IF-014)
-        ind=np.where(self.__user[:,0]==inf[0]) # 내부 인덱스를 찾아냄
+    def set_User_Info(self,inf,hp): # 회원 수정 (IF-014)
+        ind=np.where(self.__user[:,0]==hp) # 내부 인덱스를 찾아냄
         self.__user[ind,:]=inf # 인덱스 값에 해당하는 회원 정보 삽입
         self.save_to_csv()
 
@@ -495,7 +495,7 @@ def Book_Show():
             modify_list=np.append(modify_list, False)
         else:
             modify_list=np.append(modify_list, True)
-        BO.set_Book_Info(modify_list) # set_Book_Info함수를 호출해 modify_list를 추가
+        BO.set_Book_Info(modify_list,orig_isbn) # set_Book_Info함수를 호출해 modify_list를 추가
         messagebox.showinfo("알림","도서 수정이 완료되었습니다.") # 팝업창
         bookInfo=BO.get_Book_info(textISBN.get())[0,:]
         orig_isbn=bookInfo[0,0]
@@ -899,7 +899,7 @@ def User_Show():
         else:
             modify_user_list=np.append(modify_user_list,userInfo[0,6])
         modify_user_list=np.append(modify_user_list,userInfo[0,7])
-        US.set_User_Info(modify_user_list) # set_User_Info 함수를 호출해 modify_user_list를 추가
+        US.set_User_Info(modify_user_list,orig_hp) # set_User_Info 함수를 호출해 modify_user_list를 추가
         messagebox.showinfo("알림","회원 수정이 완료되었습니다.") # 팝업창
         userInfo=US.get_User_info(textHP.get())[0]
         orig_hp=userInfo[0,0]
