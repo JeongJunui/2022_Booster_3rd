@@ -484,7 +484,7 @@ def Book_Show():
                 messagebox.showinfo("중복확인결과"," 이미 등록된 도서입니다.")
                 return 0
                 
-        modify_list=np.append(modify_list,textISBN.get()) # modify_list에 값들 저장 / ISBN은 애초에 수정되지 않게 해야됨
+        modify_list=np.append(modify_list,textISBN.get()) # modify_list에 값들 저장
         modify_list=np.append(modify_list,textBookName.get())
         modify_list=np.append(modify_list,textAuthor.get())
         modify_list=np.append(modify_list,textPub.get())
@@ -584,7 +584,7 @@ def User_Add():
         global isConfirmed
         global confirmedHP
         checkHp=textHP.get()
-        checkHp=checkHp.replace('.','-')
+
         splitHp=checkHp.split('-')
         if len(checkHp)!=13 or len(splitHp)!=3: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
             messagebox.showinfo("경고","전화번호는 '-'을 포함한 13자리를 입력해야 합니다.") # 팝업창
@@ -723,14 +723,18 @@ def User_Search():
         User_Show()
     def get_user(): # 회원 정보를 불러오는 메소드
         searched_list=np.array([])
+        
+        checkHp=text_phone.get()
+        splitHp=checkHp.split('-')
+
         if text_user_name.get(): # 사용자 이름으로 조회할 경우 
             searched_list=US.search_User_ByName(text_user_name.get())
             if not searched_list.any(): # 해당 사용자가 없을 경우
                 messagebox.showinfo("경고","해당되는 사용자가 없습니다.")
                 return 0
-        
+
         elif text_phone.get(): # 사용자 폰번호로 조회할 경우
-            if len(text_phone.get())!=13: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
+            if len(text_phone.get())!=13 or len(splitHp)!=3: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
                 messagebox.showinfo("경고","전화번호는 '-'을 포함한 13자리를 입력해야 합니다.") # 팝업창
                 return 0
             searched_list=US.search_User_ByPhone(text_phone.get())
@@ -850,7 +854,6 @@ def User_Show():
             return 0
        
         checkHp=textHP.get()
-        checkHp=checkHp.replace('.','-')
         splitHp=checkHp.split('-')
         if len(checkHp)!=13 or len(splitHp)!=3: # 전화번호가 '-'을 포함한 13자리가 아닐 경우
             messagebox.showinfo("경고","전화번호는 '-'을 포함한 13자리를 입력해야 합니다.") # 팝업창
