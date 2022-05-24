@@ -971,9 +971,10 @@ def User_Show():
         modify_user_list=np.append(modify_user_list,userInfo[0,5])
         modify_user_list=np.append(modify_user_list,'0')
         modify_user_list=np.append(modify_user_list,userInfo[0,7])
-        US.set_User_Info(modify_user_list) # set_User_Info 함수를 호출해 modify_user_list를 추가
+        US.set_User_Info(modify_user_list, textHP.get()) # set_User_Info 함수를 호출해 modify_user_list를 추가
         messagebox.showinfo("알림","회원 재가입이 완료되었습니다.") # 팝업창
         userInfo=US.get_User_info(textHP.get())[0]
+        
 
     def delete_user(): # 삭제 버튼을 눌렀을 때 해당 회원 정보가 원래의 회원 리스트에서 삭제되어 회원 리스트에 저장하기 위한 메소드
         phone=textHP.get()
